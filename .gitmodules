@@ -1,0 +1,3 @@
+[submodule "dependencies/IfcOpenShell"]
+	path = dependencies/IfcOpenShell
+	url = https://github.com/IfcOpenShell/IfcOpenShell.git
