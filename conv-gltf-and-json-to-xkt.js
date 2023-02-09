@@ -7,7 +7,7 @@
 // INPUTS
 const gltfFile = process.argv[2]; //"../PCE_JACKET.gltf";
 const jsonFile = process.argv[3]; // = "../PCE_JACKET.json";
-const outxktFile = gltfFile.replace('.gltf','.xkt'); // "../PCE_JACKET_.xkt";
+const outxktFile = process.argv[4]; //gltfFile.replace('.gltf','.xkt'); // "../PCE_JACKET_.xkt";
 
 // LIBS
 const convert2xkt = require("@xeokit/xeokit-convert/dist/convert2xkt.cjs.js");

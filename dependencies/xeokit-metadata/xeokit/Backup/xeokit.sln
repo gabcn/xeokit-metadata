@@ -1,8 +1,5 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.3.32922.545
-MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xeokit-metadata", "xeokit-metadata\xeokit-metadata.csproj", "{3441B935-D5C5-4794-91C4-05D4F188E26C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{EF3B7AA5-1CA1-4996-A2D5-9FA6187BB307}"
@@ -21,11 +18,5 @@ Global
 		{EF3B7AA5-1CA1-4996-A2D5-9FA6187BB307}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF3B7AA5-1CA1-4996-A2D5-9FA6187BB307}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF3B7AA5-1CA1-4996-A2D5-9FA6187BB307}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {598FC379-5608-40B9-A639-2F3CF2873FE5}
 	EndGlobalSection
 EndGlobal

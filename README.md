@@ -3,6 +3,7 @@ Tools for BIM models
 
 # Dependencies:
     * Install Node.js (https://nodejs.org/en/download/)
+    * .NET 7.0 Runtime (https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/runtime-7.0.2-windows-x64-installer?cid=getdotnetcore)
     * xeokit/xeokit-convert (https://github.com/xeokit/xeokit-convert)
         - npm i @xeokit/xeokit-convert
     * ifcConvert (https://github.com/IfcOpenShell/IfcOpenShell)
