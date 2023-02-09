@@ -1,0 +1,6 @@
+[submodule "dependencies/IfcOpenShell"]
+	path = dependencies/IfcOpenShell
+	url = https://github.com/IfcOpenShell/IfcOpenShell.git
+[submodule "dependencies/xeokit-metadata"]
+	path = dependencies/xeokit-metadata
+	url = https://github.com/bimspot/xeokit-metadata.git
