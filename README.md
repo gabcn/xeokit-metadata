@@ -1,15 +1,19 @@
 # bim-tools
 Tools for BIM models
 
-
-
 # Dependencies:
     * Install Node.js (https://nodejs.org/en/download/)
+    * xeokit/xeokit-convert (https://github.com/xeokit/xeokit-convert)
+        - npm i @xeokit/xeokit-convert
     * ifcConvert (https://github.com/IfcOpenShell/IfcOpenShell)
     * COLLADA2GLTF (https://github.com/KhronosGroup/COLLADA2GLTF)
     * xeokit-metadata (https://github.com/bimspot/xeokit-metadata)
-    * xeokit/xeokit-convert (https://github.com/xeokit/xeokit-convert)
-        - npm i @xeokit/xeokit-convert
 
-    * 
-      
+# Converting IFC --> XKT:
+    * Requirements
+        - [ifcConvert](http://ifcopenshell.org/ifcconvert) (v0.6.0 or later) to convert IFC files to DAE
+        - [COLLADA2GLTF](https://github.com/KhronosGroup/COLLADA2GLTF) to convert DAE to glTF
+        - [xeokit-metadata](https://github.com/bimspot/xeokit-metadata) to extract the JSON metadata from the IFC
+        - [xeokit/xeokit-convert](https://xeokit.github.io/xeokit-convert/docs/) (convert2xkt) to convert glTF and JSON metadata into XKT
+
+![Conversion scheme](oss_xkt_conversion.png "Conversion scheme")
