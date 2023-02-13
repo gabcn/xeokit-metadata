@@ -6,7 +6,7 @@ Requer:
 """
 
 # INPUTS
-ifcFile = r'..\PCE_JACKET.ifc'
+ifcFile = r'..\..\PCE_JACKET_IFC2x3.ifc'
 ifcConvPath = r'dependencies\compiled\IfcConvert.exe'
 colladaPath = r'dependencies\compiled\COLLADA2GLTF-bin.exe'
 xeometaPath = r'dependencies\compiled\xeokit-metadata\xeokit-metadata.exe'
