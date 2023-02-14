@@ -11,12 +11,7 @@ file = r'C:\Temp\PCE_JACKET_IFC4.ifc'
 
 # LIBS
 import ifcopenshell
-#import ifcopenshell.api
-#import ifcopenshell.util.element as ifcelem
-#import ifcopenshell.util.placement
 import ifcopenshell.util.representation as ifcrep
-#import ifcopenshell.geom as ifcgeom
-#import ifcopenshell.util.attribute as ifcattr
 import ifcopenshell.util.unit as ifcunit
 import numpy as np
 
@@ -39,9 +34,8 @@ class bimBeam:
                  subcontext: str = None
                  ) -> None:        
         self.EndA = [0.,0.,0.] # in meters
-        self.EndB = [0.,0.,0.] # in meters
-        # creates identity matrix
-        np_matrix = np.identity(3)
+        self.EndB = [0.,0.,0.] # in meters        
+        np_matrix = np.identity(3) # creates identity matrix
         self.TransfMatrix = np_matrix.tolist()
 
         if ifcFile and ifcBeam and context:
@@ -131,11 +125,6 @@ class bimBeam:
             if mapOrigin.RefDirection: X = list(mapOrigin.RefDirection.DirectionRatios)
             else: X = [1.,0.,0.]
             self.__setTranfByXandZ(X, Z)
-            """
-            raise Exception(f'Error! Mapping origin axis or RefDirection not supported.' + \
-                f'\n {mapOrigin}'
-                )
-            """
 
         mapRep = mapSource.MappedRepresentation # MappedRepresentation attribute (IfcShapeRepresentation)
         if not mapRep.is_a('IfcShapeRepresentation'):
@@ -194,7 +183,6 @@ class bimBeam:
             # gets the property sets
             psets = ifcopenshell.util.element.get_psets(ifcBeam)
             # gets the beam length
-            #ifcLength = fconvL*psets['Pset_BeamCommon']['Span']
             ifcLength = fconvL*psets[psetKeys[0]][psetKeys[1]]
             calcLength = self.Length()
             # verify the length
@@ -215,16 +203,12 @@ def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_insta
     return instList.copy()
 
 def ImportBeamsFromIFC(ifcFile: ifcopenshell.file) -> list[bimBeam]:
-    #ifcBeams = ifcFile.by_type('IfcBeam')
     ifcBeams = GetMembersList(ifcFile)
 
     impList = list()
-    #beam = bimBeam()
     for ifcBeam in ifcBeams:
-        #print('\nBeam: ', ifcBeam)
         newBeam = bimBeam(ifcFile, ifcBeam, "Model", "Axis")
         if newBeam: impList.append(newBeam)
-        #print(' Length = ', beam.Length())
     
     print(f'{len(impList)} beams imported fom IFC file.')
 
