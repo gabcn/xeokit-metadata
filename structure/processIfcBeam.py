@@ -11,23 +11,41 @@ file = r'C:\Temp\PCE_JACKET_IFC4.ifc'
 
 # LIBS
 import ifcopenshell
-import ifcopenshell.api
-import ifcopenshell.util.element as ifcelem
-import ifcopenshell.util.placement
+#import ifcopenshell.api
+#import ifcopenshell.util.element as ifcelem
+#import ifcopenshell.util.placement
 import ifcopenshell.util.representation as ifcrep
-import ifcopenshell.geom as ifcgeom
-import ifcopenshell.util.attribute as ifcattr
+#import ifcopenshell.geom as ifcgeom
+#import ifcopenshell.util.attribute as ifcattr
 import ifcopenshell.util.unit as ifcunit
 import numpy as np
+
+# CONSTANTS
+_supportedIfcClasses = ['IfcBeam','IfcColumn','IfcMember']
 
 
 # CLASSES
 
 class bimBeam:
     lengthTol = 0.001 
-    def __init__(self) -> None:
+    # PredefinedType: pset dictionary key
+    __psetskey = {'BEAM': ['Pset_BeamCommon','Span'], 
+                  'COLUMN': None}
+
+    def __init__(self,
+                 ifcFile: ifcopenshell.file = None, 
+                 ifcBeam: ifcopenshell.entity_instance = None, 
+                 context: str = None, 
+                 subcontext: str = None
+                 ) -> None:        
         self.EndA = [0.,0.,0.] # in meters
         self.EndB = [0.,0.,0.] # in meters
+        # creates identity matrix
+        np_matrix = np.identity(3)
+        self.TransfMatrix = np_matrix.tolist()
+
+        if ifcFile and ifcBeam and context:
+            self.importFromIfc(ifcFile, ifcBeam, context, subcontext)
     
     def __setTranfByXandZ(self, X: list[float], Z: list[float]) -> None:
         """
@@ -36,7 +54,7 @@ class bimBeam:
         aX = np.array(X)
         aZ = np.array(Z)
         aY = np.cross(aZ,aX)
-        self.TransfMatrix = []
+        self.TransfMatrix.clear()
         for x, y, z in zip(aX, aY, aZ):
             row = [x, y, z]
             self.TransfMatrix.append(row.copy())
@@ -68,46 +86,46 @@ class bimBeam:
                       subcontext: str) -> None:
         """
         Imports the beam information from an IFC file
+        * ifcFile: IFC file loaded by ifcopenshell.open()
+        * ifcBeam: IFC beam instance to be imported
+        * context: Context of the representation to be imported
+        * subcontext: Subcontext of the representation to be imported
         """
 
-        fconvL = ifcunit.calculate_unit_scale(ifcFile)
+        fconvL = ifcunit.calculate_unit_scale(ifcFile) # conversion from the length unit of IFC file to S.I. (meters)
 
-
-        if not ifcBeam.is_a('IfcBeam'): 
+        # only for IfcBeam class
+        if not ifcBeam.is_a() in _supportedIfcClasses: 
             raise Exception(f'Error! The instance {ifcBeam} is not a IfcBeam class.')   
-        
+
+        # gets the  representation (IfcShapeRepresentation)
         representation = ifcrep.get_representation(ifcBeam, context, subcontext) 
         if not representation.is_a('IfcShapeRepresentation'):
             raise Exception(f'Representation type {representation.is_a()} not supported.')
 
-        repItems = representation.Items #IfcMapItem
-        repItem = repItems[0]
+        repItems = representation.Items # IfcRepresentationItem list
+        repItem = repItems[0] # 1st item (IfcMappedItem)
         if not repItem.is_a('IfcMappedItem'):
             raise Exception(f'Representation item type {repItem.is_a()} not supported.')
 
-        mapSource = repItem.MappingSource
-        mapOrigin = mapSource.MappingOrigin
-        mapTarget = repItem.MappingTarget
+        mapSource = repItem.MappingSource # MappingSource attribute (IfcRepresentationMap)
+        mapOrigin = mapSource.MappingOrigin # MappingOrigin attribute (IfcAxis2Placement3D)
+        mapTarget = repItem.MappingTarget # MappingTarget attribute (IfcCartesianTransformationOperator3D)
         if not mapTarget.is_a('IfcCartesianTransformationOperator3D'):
             raise Exception(f'Mapping target type {mapTarget.is_a()} not supported.')
         if mapTarget.Axis1 or mapTarget.Axis2 or mapTarget.Scale != 1. or mapTarget.Axis3:
             raise Exception(f'Axis 1, 2, 3 or scale attribuites of ' + \
                 'IfcCartesianTransformationOperator3D not implemented.')
-        TransfOrigin = mapTarget.LocalOrigin[0]
+        TransfOrigin = mapTarget.LocalOrigin[0] # LocalOrigin list 1st item (IfcCartesionPoint)
         if TransfOrigin[0] != 0 or TransfOrigin[1] != 0 or TransfOrigin[2] != 0:
-            raise Exception(f'Error! Transformation origin not equal to (0,0,0).')
+            raise Exception(f'Error! Transformation origin not equal to (0,0,0).') # TODO: include transformation for translation
 
         if not mapOrigin.is_a('IfcAxis2Placement3D'):
             raise Exception(f'Error! Mapping origin type {mapOrigin.is_a()} not supported.')
 
-        mapOriginLoc = mapOrigin.Location[0]
-        '''
-        if mapOriginLoc[0] != 0 or mapOriginLoc[1] != 0 or mapOriginLoc[2] != 0:
-            raise Exception(f'Error! Mapping origin location '+\
-                f'({mapOriginLoc[0]},{mapOriginLoc[1]},{mapOriginLoc[2]}) ' + \
-                'not equal to (0,0,0).')
-        '''
-        if mapOrigin.Axis or mapOrigin.RefDirection:
+        mapOriginLoc = mapOrigin.Location[0] # Location attribute (IfcCartesionPoint)
+
+        if mapOrigin.Axis or mapOrigin.RefDirection: # Axis and RefDirection attributes (IfcDirection)        
             if mapOrigin.Axis: Z = list(mapOrigin.Axis.DirectionRatios)
             else: Z = [0.,0.,1.]
             if mapOrigin.RefDirection: X = list(mapOrigin.RefDirection.DirectionRatios)
@@ -119,32 +137,33 @@ class bimBeam:
                 )
             """
 
-        mapRep = mapSource.MappedRepresentation
+        mapRep = mapSource.MappedRepresentation # MappedRepresentation attribute (IfcShapeRepresentation)
         if not mapRep.is_a('IfcShapeRepresentation'):
             raise Exception(f'Error! Mapping source representation {mapRep.is_a()} not supported.')
         
-        c = mapRep.ContextOfItems.ContextIdentifier
-        if subcontext != c:
-            raise Exception(f'Error! Subcontext not equal to the representation items context ({c}).')
+        citems = mapRep.ContextOfItems # ContextOfItems attribute (IfcRepresentationContext)
+        cid = citems.ContextIdentifier # ContextIdentifier (IfcLabel)
+        if subcontext != cid:
+            raise Exception(f'Error! Subcontext not equal to the representation items context ({cid}).')
 
-        mapRepItems = mapRep.Items
+        mapRepItems = mapRep.Items # Items attributes (list of IfcRepresentationItem)
         if len(mapRepItems) > 1:
             raise Exception('Error! Number of Mapping representation items greater then 1 ' + \
                             f'({len(mapRepItems)}) not supported.')
 
-        mapRepItem = mapRepItems[0]
+        mapRepItem = mapRepItems[0] # 1st item (IfcTrimmedCurve)
         if not mapRepItem.is_a('IfcTrimmedCurve'):
             raise Exception(f'Error! Representation item type ({mapRepItem.is_a()}) not supported.')
 
-        basisCurve = mapRepItem.BasisCurve
+        basisCurve = mapRepItem.BasisCurve # BasisCurve attribute (IfcCurve -> IfcLine)
         if not basisCurve.is_a('IfcLine'):
             raise Exception(f'Error! Basis curve type ({basisCurve.is_a()}) not supported.')
 
-        masterRep = mapRepItem.MasterRepresentation
+        masterRep = mapRepItem.MasterRepresentation # MasterRepresentation attribute (IfcTrimmingPreference)
         if masterRep != 'CARTESIAN':
             raise Exception(f'Error! Master representation {masterRep} not supported.')
 
-        trim1, trim2 = mapRepItem.Trim1, mapRepItem.Trim2
+        trim1, trim2 = mapRepItem.Trim1, mapRepItem.Trim2 # Trimming points (IfcTrimmingSelect -> IfcCartesianPoint)
         if len(trim1) > 1 or len(trim2) > 1:
             raise Exception(f'Error! Number of trimming points for Trim1 ({len(trim1)}) ' + \
                 f'or Trim2({len(trim1)}) greater than 1.'
@@ -158,29 +177,63 @@ class bimBeam:
         
         EndA, EndB = [0.,0.,0.], [0.,0.,0.]
         for i in range(3):
+            # adds the origin coordinates to the mapping represantation
             EndA[i], EndB[i] = t1[0][i] + mapOriginLoc[i], t2[0][i] + mapOriginLoc[i]
+            # converts units
             EndA[i] *= fconvL
             EndB[i] *= fconvL
 
-        self.EndA = EndA.copy()
-        self.EndB = EndB.copy()
+        # applies the coord. transformation (Mapping Target) and stores the results
+        self.EndA = self.__TransfCoords(EndA.copy())
+        self.EndB = self.__TransfCoords(EndB.copy())
 
-        psets = ifcopenshell.util.element.get_psets(ifcBeam)
-        #ifcLength = fconvL*psets['Qto_BeamBaseQuantities']['Length']
-        ifcLength = fconvL*psets['Pset_BeamCommon']['Span']
-        calcLength = self.Length()
-        if abs(calcLength-ifcLength)/ifcLength > self.lengthTol:
-            print(f'Warning! Calculated length {calcLength}m different of the IFC pset data length {ifcLength}m.')
+        # gets the pset key
+        predefType = ifcBeam.PredefinedType        
+        psetKeys = self.__psetskey[predefType]
+        if psetKeys:
+            # gets the property sets
+            psets = ifcopenshell.util.element.get_psets(ifcBeam)
+            # gets the beam length
+            #ifcLength = fconvL*psets['Pset_BeamCommon']['Span']
+            ifcLength = fconvL*psets[psetKeys[0]][psetKeys[1]]
+            calcLength = self.Length()
+            # verify the length
+            if abs(calcLength-ifcLength)/ifcLength > self.lengthTol:
+                print(f'Warning! Calculated length {calcLength}m different of the IFC pset data length {ifcLength}m.')
         
+
+def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_instance]:
+    """
+    Returns the list of instances type 'ifcBeam', 'ifcColumn', and 'ifcMember'
+    """
+    instList = list()
+    for ifcClass in _supportedIfcClasses:
+        add = ifcFile.by_type(ifcClass)
+        if add:
+            instList.extend(add)
+    print(f'{len(instList)} beams found in IFC file.')
+    return instList.copy()
+
+def ImportBeamsFromIFC(ifcFile: ifcopenshell.file) -> list[bimBeam]:
+    #ifcBeams = ifcFile.by_type('IfcBeam')
+    ifcBeams = GetMembersList(ifcFile)
+
+    impList = list()
+    #beam = bimBeam()
+    for ifcBeam in ifcBeams:
+        #print('\nBeam: ', ifcBeam)
+        newBeam = bimBeam(ifcFile, ifcBeam, "Model", "Axis")
+        if newBeam: impList.append(newBeam)
+        #print(' Length = ', beam.Length())
+    
+    print(f'{len(impList)} beams imported fom IFC file.')
+
+    return impList
+
 
 # MAIN
 print(f'Reading file {file} ...', flush=True)
 ifcFile = ifcopenshell.open(file)
-ifcBeams = ifcFile.by_type('IfcBeam')
-beam = bimBeam()
-for ifcBeam in ifcBeams:
-    #print('\nBeam: ', ifcBeam)
-    beam.importFromIfc(ifcFile, ifcBeam, "Model", "Axis")
-    #print(' Length = ', beam.Length())
+beamList = ImportBeamsFromIFC(ifcFile)
 
 
