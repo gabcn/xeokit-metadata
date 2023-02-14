@@ -1,31 +1,36 @@
 """
-Retrives the beam geometry
+Retrives the beam geometry from IFC file
+IFC4x version
 
 Required packages:
     * ifcopenshell: pip install ifcopenshell
 """
 
-# INPUTS
-file = r'C:\Temp\PCE_JACKET_IFC4.ifc'
-
-
 # LIBS
 import ifcopenshell
 import ifcopenshell.util.representation as ifcrep
 import ifcopenshell.util.unit as ifcunit
+import ifcopenshell.util.placement as ifcplace
 import numpy as np
+from structure.conceptmodel import classBeam
+
+
 
 # CONSTANTS
 _supportedIfcClasses = ['IfcBeam','IfcColumn','IfcMember']
 
 
 # CLASSES
-
-class bimBeam:
+class bimBeam(classBeam):
     lengthTol = 0.001 
     # PredefinedType: pset dictionary key
-    __psetskey = {'BEAM': ['Pset_BeamCommon','Span'], 
-                  'COLUMN': None}
+    __psetskeyLength = {'BEAM': ['Pset_BeamCommon','Span'], 
+                        'COLUMN': None
+                        }
+    __psetskeyId = {'BEAM': ['Pset_BeamCommon','id'], 
+                    'COLUMN': ['Pset_ColumnCommon','id'],
+                    'MEMBER': ['Pset_MemberCommon','id'],
+                    }
 
     def __init__(self,
                  ifcFile: ifcopenshell.file = None, 
@@ -33,45 +38,69 @@ class bimBeam:
                  context: str = None, 
                  subcontext: str = None
                  ) -> None:        
-        self.EndA = [0.,0.,0.] # in meters
-        self.EndB = [0.,0.,0.] # in meters        
+        super().__init__()
+        self.L_EndA = [0.,0.,0.] # in meters (local coordinates)
+        self.L_EndB = [0.,0.,0.] # in meters (local coordinates)
         np_matrix = np.identity(3) # creates identity matrix
-        self.TransfMatrix = np_matrix.tolist()
+        self.MapTransfMatrix = np_matrix.tolist()
+        self.guid = ''
+        self.PropSet = {}
 
         if ifcFile and ifcBeam and context:
             self.importFromIfc(ifcFile, ifcBeam, context, subcontext)
     
     def __setTranfByXandZ(self, X: list[float], Z: list[float]) -> None:
         """
-        Calculates the tranformation matrix (local to global coordinates)
+        Calculates the tranformation matrix (Mapping target for representation)
         """
         aX = np.array(X)
         aZ = np.array(Z)
         aY = np.cross(aZ,aX)
-        self.TransfMatrix.clear()
+        self.MapTransfMatrix.clear()
         for x, y, z in zip(aX, aY, aZ):
             row = [x, y, z]
-            self.TransfMatrix.append(row.copy())
+            self.MapTransfMatrix.append(row.copy())
 
-    def __TransfCoords(self, localCoords: list[float]) -> list[float]:
+    def __MapTransfCoords(self, sourceCoords: list[float]) -> list[float]:
         """
-        Apply the transformation matrix to convert from local coordinates (lx, ly, lz)
-        to global coordinates
-        * input: local coordinates list (lx, ly, lz)
-        * return: gloobal coordinate list
+        Apply the transformation matrix to obtain the representation (source -> target)
+        * input: mapping source coordinate list (sx, sy, sz)
+        * return: target coordinate list
         """
-        M = np.array(self.TransfMatrix)
-        lV = np.array(localCoords)
-        gV = np.matmul(M, lV)
-        return [gV[0], gV[1], gV[2]]
+        M = np.array(self.MapTransfMatrix)
+        sV = np.array(sourceCoords)
+        tV = np.matmul(M, sV)
+        return [tV[0], tV[1], tV[2]]
+
+    def __LocalToGlobal(self, locCoords: list[float]) -> list[float]:
+        """
+        Converts from the local to global coordinates
+        """
+        lC = locCoords.copy()
+        lC.append(1) # for the translation
+        alC = np.array(lC)
+        agC = np.matmul(self.locPlacMtx, alC)
+        return agC.tolist()[:3]
+
+    def getGlobalEndA(self): return self.__LocalToGlobal(self.L_EndA)
+    def getGlobalEndB(self): return self.__LocalToGlobal(self.L_EndB)
+
+    EndA = property(getGlobalEndA) 
+    """(global coordinates)"""
+
+    EndB = property(getGlobalEndB) 
+    """(global coordinates)"""
 
 
-    def Length(self) -> float:
+    def __fGetLength(self) -> float:
         """
         Returns the beam length (meters)
         """
-        V = np.array(self.EndA) - np.array(self.EndB)
+        V = np.array(self.L_EndA) - np.array(self.L_EndB)
         return np.linalg.norm(V)
+
+    length = property(__fGetLength)
+
 
     def importFromIfc(self, 
                       ifcFile: ifcopenshell.file, 
@@ -91,6 +120,11 @@ class bimBeam:
         # only for IfcBeam class
         if not ifcBeam.is_a() in _supportedIfcClasses: 
             raise Exception(f'Error! The instance {ifcBeam} is not a IfcBeam class.')   
+
+        # gets the object placement matrix
+        self.locPlacMtx = ifcplace.get_local_placement(ifcBeam.ObjectPlacement)
+        # convert the translational terms to S.I.
+        for i in range(3): self.locPlacMtx[i,3] *= fconvL
 
         # gets the  representation (IfcShapeRepresentation)
         representation = ifcrep.get_representation(ifcBeam, context, subcontext) 
@@ -164,31 +198,40 @@ class bimBeam:
                 'not supported.'
                 )
         
-        EndA, EndB = [0.,0.,0.], [0.,0.,0.]
+        _EndA, _EndB = [0.,0.,0.], [0.,0.,0.] # in local coordinates
         for i in range(3):
             # adds the origin coordinates to the mapping represantation
-            EndA[i], EndB[i] = t1[0][i] + mapOriginLoc[i], t2[0][i] + mapOriginLoc[i]
+            _EndA[i], _EndB[i] = t1[0][i] + mapOriginLoc[i], t2[0][i] + mapOriginLoc[i]
             # converts units
-            EndA[i] *= fconvL
-            EndB[i] *= fconvL
+            _EndA[i] *= fconvL
+            _EndB[i] *= fconvL
 
-        # applies the coord. transformation (Mapping Target) and stores the results
-        self.EndA = self.__TransfCoords(EndA.copy())
-        self.EndB = self.__TransfCoords(EndB.copy())
+        # applies the coord. transformation (Mapping Target) and stores the results (local coordinates)
+        self.L_EndA = self.__MapTransfCoords(_EndA.copy())
+        self.L_EndB = self.__MapTransfCoords(_EndB.copy())
+        self.IniPos = self.L_EndA
+        self.AddSegmentByEnd(self.L_EndB)
+        
+        self.PropSet = ifcopenshell.util.element.get_psets(ifcBeam) # gets the property sets
+        predefType = ifcBeam.PredefinedType # gets the pset key for length        
+        psetKeysL = self.__psetskeyLength[predefType] # gets the pset key for id        
+        psetKeysID = self.__psetskeyId[predefType]
 
-        # gets the pset key
-        predefType = ifcBeam.PredefinedType        
-        psetKeys = self.__psetskey[predefType]
-        if psetKeys:
-            # gets the property sets
-            psets = ifcopenshell.util.element.get_psets(ifcBeam)
+        if psetKeysL:
             # gets the beam length
-            ifcLength = fconvL*psets[psetKeys[0]][psetKeys[1]]
-            calcLength = self.Length()
+            ifcLength = fconvL*self.PropSet[psetKeysL[0]][psetKeysL[1]]
+            calcLength = self.length
             # verify the length
             if abs(calcLength-ifcLength)/ifcLength > self.lengthTol:
                 print(f'Warning! Calculated length {calcLength}m different of the IFC pset data length {ifcLength}m.')
         
+        id1 = self.PropSet[psetKeysID[0]][psetKeysID[1]]
+
+        id2 = ifcBeam.GlobalId
+        self.name = f'{id1} | {id2}'
+        self.guid = ifcBeam.GlobalId
+
+    
 
 def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_instance]:
     """
@@ -201,23 +244,34 @@ def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_insta
             instList.extend(add)
     print(f'{len(instList)} beams found in IFC file.')
     return instList.copy()
-
-def ImportBeamsFromIFC(ifcFile: ifcopenshell.file) -> list[bimBeam]:
-    ifcBeams = GetMembersList(ifcFile)
-
-    impList = list()
-    for ifcBeam in ifcBeams:
-        newBeam = bimBeam(ifcFile, ifcBeam, "Model", "Axis")
-        if newBeam: impList.append(newBeam)
     
-    print(f'{len(impList)} beams imported fom IFC file.')
 
-    return impList
+class ifcBeamList(list[bimBeam]):
+    def __init__(self, ifcFilePath: str):
+        """
+        * ifcFilePath: (str) path to the IFC file
+        """
+        super().__init__()
+        ifcFile = ifcopenshell.open(ifcFilePath)
+        self._ImportBeamsFromIFC(ifcFile)
+        
+    def _ImportBeamsFromIFC(self, ifcFile: ifcopenshell.file) -> None:
+        ifcBeams = GetMembersList(ifcFile)
+
+        for ifcBeam in ifcBeams:
+            newBeam = bimBeam(ifcFile, ifcBeam, "Model", "Axis")
+            if newBeam: self.append(newBeam)
+        
+        print(f'{len(self)} beams imported fom IFC file.')
+
+    def ByGUID(self, guid: str) -> bimBeam:
+        result = None
+        for beam in self:
+            if beam.guid == guid:
+                result = beam
+                break
+        return result
 
 
-# MAIN
-print(f'Reading file {file} ...', flush=True)
-ifcFile = ifcopenshell.open(file)
-beamList = ImportBeamsFromIFC(ifcFile)
 
 
