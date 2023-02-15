@@ -25,8 +25,8 @@ print(f'{len(sesamModel._Beams)} beams imported.')
 comparingList = [   ]
 
 columns = ['Coincidence level', 
-           'Beam A name', 'Beam A Length', 'Beam A EndA', 'Beam A EndB',
-           'Beam B name', 'Beam B Length', 'Beam B EndA', 'Beam B EndB', 'Beam B guid', 'Beam B Pset'
+           'Beam A name', 'Beam A Length', 'Beam A EndA', 'Beam A EndB', 'Beam A guid', 'Beam A Pset',
+           'Beam B name', 'Beam B Length', 'Beam B EndA', 'Beam B EndB'
            ]
 
 for bA in ifcBeamList:
