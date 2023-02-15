@@ -228,7 +228,7 @@ class bimBeam(classBeam):
         id1 = self.PropSet[psetKeysID[0]][psetKeysID[1]]
 
         id2 = ifcBeam.GlobalId
-        self.name = f'{id1} | {id2}'
+        self.name = ifcBeam.Name # f'{id1} | {id2}'
         self.guid = ifcBeam.GlobalId
 
     

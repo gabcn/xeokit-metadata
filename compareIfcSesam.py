@@ -6,11 +6,13 @@ include the id's from Sesam into the an IFC file
 # INPUTS
 ifcFilePath = r'C:\Temp\PCE_JACKET_IFC4_ComInfo.ifc'
 sesamFilePath = r'C:\Temp\2022.05.19.TRIDENT_PCE1_ULS.xml'
+outputTable = r'C:\Temp\ComparingIFCxSesam.xlsx'
 
 
 # LIBS
 import structure.ifcBeam as ifcBeam
 from structure.sesammodel import cSesamModel
+import pandas as pd
 
 # MAIN
 print(f'Reading file {ifcFilePath} ...', flush=True)
@@ -20,21 +22,29 @@ print(f'Reading Sesam file {sesamFilePath} ...', flush=True)
 sesamModel = cSesamModel(sesamFilePath)
 print(f'{len(sesamModel._Beams)} beams imported.')
 
+comparingList = [   ]
 
-for bA in sesamModel._Beams:
+columns = ['Coincidence level', 
+           'Beam A name', 'Beam A Length', 'Beam A EndA', 'Beam A EndB',
+           'Beam B name', 'Beam B Length', 'Beam B EndA', 'Beam B EndB', 'Beam B guid', 'Beam B Pset'
+           ]
+
+for bA in ifcBeamList:
     maxC = 0
-    idA, idB = '', ''
-    for bB in ifcBeamList:
+    for bB in sesamModel._Beams:
         coincidentLevel = bA.CoincidentLevel(bB)        
         if coincidentLevel > maxC:
             maxC = max(maxC, coincidentLevel)
-            #idA, idB = bA.name, bB.name
             beamA, beamB = bA, bB
     if maxC>0:
         print(f'Max. coincidence level {maxC:0.3f} calculated between {beamA.name} and {beamB.name}.')
-        print(beamB.PropSet)
+        comparingList.append([maxC, 
+                              beamA.name, beamA.length, beamA.EndA, beamA.EndB, beamA.guid, beamA.PropSet,
+                              beamB.name, beamB.length, beamB.EndA, beamB.EndB
+                              ])
 
-
+df = pd.DataFrame(comparingList, columns=columns)
+df.to_excel(outputTable)
 
 """
 
