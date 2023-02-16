@@ -39,8 +39,6 @@ class bimBeam(classBeam):
                  subcontext: str = None
                  ) -> None:        
         super().__init__()
-        self.L_EndA = [0.,0.,0.] # in meters (local coordinates)
-        self.L_EndB = [0.,0.,0.] # in meters (local coordinates)
         np_matrix = np.identity(3) # creates identity matrix
         self.MapTransfMatrix = np_matrix.tolist()
         self.guid = ''
@@ -72,34 +70,8 @@ class bimBeam(classBeam):
         tV = np.matmul(M, sV)
         return [tV[0], tV[1], tV[2]]
 
-    def __LocalToGlobal(self, locCoords: list[float]) -> list[float]:
-        """
-        Converts from the local to global coordinates
-        """
-        lC = locCoords.copy()
-        lC.append(1) # for the translation
-        alC = np.array(lC)
-        agC = np.matmul(self.locPlacMtx, alC)
-        return agC.tolist()[:3]
-
-    def getGlobalEndA(self): return self.__LocalToGlobal(self.L_EndA)
-    def getGlobalEndB(self): return self.__LocalToGlobal(self.L_EndB)
-
-    EndA = property(getGlobalEndA) 
-    """(global coordinates)"""
-
-    EndB = property(getGlobalEndB) 
-    """(global coordinates)"""
 
 
-    def __fGetLength(self) -> float:
-        """
-        Returns the beam length (meters)
-        """
-        V = np.array(self.L_EndA) - np.array(self.L_EndB)
-        return np.linalg.norm(V)
-
-    length = property(__fGetLength)
 
 
     def importFromIfc(self, 
@@ -122,9 +94,9 @@ class bimBeam(classBeam):
             raise Exception(f'Error! The instance {ifcBeam} is not a IfcBeam class.')   
 
         # gets the object placement matrix
-        self.locPlacMtx = ifcplace.get_local_placement(ifcBeam.ObjectPlacement)
+        self.locToGlobTransfMtx = ifcplace.get_local_placement(ifcBeam.ObjectPlacement)
         # convert the translational terms to S.I.
-        for i in range(3): self.locPlacMtx[i,3] *= fconvL
+        for i in range(3): self.locToGlobTransfMtx[i,3] *= fconvL
 
         # gets the  representation (IfcShapeRepresentation)
         representation = ifcrep.get_representation(ifcBeam, context, subcontext) 
@@ -207,10 +179,10 @@ class bimBeam(classBeam):
             _EndB[i] *= fconvL
 
         # applies the coord. transformation (Mapping Target) and stores the results (local coordinates)
-        self.L_EndA = self.__MapTransfCoords(_EndA.copy())
-        self.L_EndB = self.__MapTransfCoords(_EndB.copy())
-        self.IniPos = self.L_EndA
-        self.AddSegmentByEnd(self.L_EndB)
+        L_EndA = self.__MapTransfCoords(_EndA.copy())
+        L_EndB = self.__MapTransfCoords(_EndB.copy())
+        self.IniPos = L_EndA
+        self.AddSegmentByEnd(L_EndB)
         
         self.PropSet = ifcopenshell.util.element.get_psets(ifcBeam) # gets the property sets
         predefType = ifcBeam.PredefinedType # gets the pset key for length        

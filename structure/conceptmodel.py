@@ -539,30 +539,76 @@ class classSegmentList(list[classSegment]):
         self.append(seg)
 
 class classBeam:
-    def __init__(self, name: str = '', IniPos: list[float] = [0,0,0]):
+    def __init__(self, 
+                 name: str = '', 
+                 IniPos: list[float] = None # local coordinate system
+                 ):
         self.name = name  
-        self.IniPos = IniPos
+        #self.__IniPos = IniPos # in local coord. system
+        if not IniPos: self.__IniPos = [0,0,0]
+        else: self.__IniPos = IniPos.copy()
+
         #self.InitialPos = IniPos.copy()
-        self.LastPos = self.IniPos.copy()        
+        self.LastPos = self.__IniPos.copy() # in local coord. system
         self.ConnectionA, self.ConnectionB = ('Free',)*2        
         self.SegmentList = classSegmentList()
+        self.Description = ''
+        # transformation matrix from local beam coordinates to global coordinates
+        self.locToGlobTransfMtx = \
+            [[1.,0.,0.,0.],[0.,1.,0.,0.],[0.,0.,1.,0.],[0.,0.,0.,1.]]
+        #self.L_EndA = [0.,0.,0.] # in meters (local coordinates)
+        #self.L_EndB = [0.,0.,0.] # in meters (local coordinates)
+    
+    # encapsulate to ensure that if IniPos is changed before adding segment, LastPos also is
+    def __getIniPos(self): return self.__IniPos
+    def __setIniPos(self, pos: list[float]): 
+        if self.Nsegs>0: 
+            raise Exception('Error! The initial beam position (1st segment) '+\
+                            'can not be changed after adding segments.')
+        else:
+            _setVecValuesAtoB(pos, self.__IniPos)
+            _setVecValuesAtoB(pos, self.LastPos)
 
-    def fGetEndA(self): return self.IniPos
-    def fGetEndB(self): return self.LastPos
-    EndA = property(fGetEndA)
+    IniPos = property(__getIniPos, __setIniPos)
+
+    def __LocalToGlobal(self, locCoords: list[float]) -> list[float]:
+        """
+        Converts from the local to global coordinates
+        """
+        lC = locCoords.copy()
+        lC.append(1) # for the translation
+        alC = np.array(lC)
+        agC = np.matmul(self.locToGlobTransfMtx, alC)
+        return agC.tolist()[:3]
+
+    def getGlobalEndA(self): return self.__LocalToGlobal(self.IniPos) # self.L_EndA)
+    def getGlobalEndB(self): return self.__LocalToGlobal(self.LastPos) # self.L_EndB)
+
+    EndA = property(getGlobalEndA) 
     """(global coordinates)"""
-    EndB = property(fGetEndB)
+    EndB = property(getGlobalEndB) 
     """(global coordinates)"""
 
     def _GetNsegs(self):
         return len(self.SegmentList)
     Nsegs = property(_GetNsegs)
 
+    '''
+    def __fGetLength(self) -> float:
+        """
+        Returns the beam length (meters)
+        """
+        V = np.array(self.L_EndA) - np.array(self.L_EndB)
+        return np.linalg.norm(V)
+
+    length = property(__fGetLength)    
+    '''
     def _GetTotalLength(self):
         L = 0
         for seg in self.SegmentList: L += seg.length
         return L
     length = property(_GetTotalLength)
+    """"Total beam length"""
 
     def LengthToSeg(self, iseg: int) -> float:
         """Returns the cumulative length until the i-th segment"""
@@ -571,7 +617,17 @@ class classBeam:
             for i in range(iseg+1): L += self.SegmentList[i].length
         return L
 
-    def AddSegmentByEnd(self, EndPos: list[float], segprops: classSegProps = None) -> None:
+    def AddSegmentByEnd(self, 
+                        EndPos: list[float], 
+                        segprops: classSegProps = None
+                        ) -> None:
+        """
+        Adds a straight segment by the end coordinate (local system)
+        from the LastPos defined
+        * EndPos: [x,y,z] (local coordinate)
+        * segprops: properties defined by the classSegProps
+        """
+
         length = _CalcDist(self.LastPos, EndPos)
         self.__AddSegmentByLength(length, segprops)
         self.LastPos = EndPos.copy()
@@ -848,6 +904,11 @@ def IsDisconnected(connection: str) -> bool:
     else: 
         return False
 '''
+
+
+# === AUXILIAR METHODS ==== #
+def _setVecValuesAtoB(vecA: list[float], vecB: list[float]) -> None:
+    for i in range(len(vecA)): vecB[i] = vecA[i]
 
 
 # === ALGEBRIC CALCULATIONS ==== #

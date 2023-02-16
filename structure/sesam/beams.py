@@ -23,13 +23,17 @@ def __GetStraightSegments(xml_structure: ET.Element, sections: classSectionList,
             __ProcStraightSeg(seg, sections, beam, env)    
 
 
-def __ProcStraightSeg(segment: ET.Element, sections: classSectionList, beam: classBeam, env: classEnvironment):
+def __ProcStraightSeg(segment: ET.Element, 
+                      sections: classSectionList, 
+                      beam: classBeam, 
+                      env: classEnvironment):
     section = segment.get('section_ref')
     material = segment.get('material_ref')
     hydrocoeffs = segment.get('morison_coefficient_ref')
     airdragcoeffs = segment.get('air_drag_coefficient_ref')
     if section not in sections.SectionNames():
-        print(f'Warning! A segment of the structure {beam.name} is defined with the section {section}, which could not be imported.')
+        print(f'Warning! A segment of the structure {beam.name} is defined ' +\
+              f'with the section {section}, which could not be imported.')
     else:
         EndA, EndB = _GetCoordsABfromSeg(segment)
         if (EndA[0], EndA[1], EndA[2]) != (beam.LastPos[0], beam.LastPos[1], beam.LastPos[2]):
@@ -42,6 +46,23 @@ def __ProcStraightSeg(segment: ET.Element, sections: classSectionList, beam: cla
         segprops = classSegProps(section, material, selectedhydrocoeffs)
         beam.AddSegmentByEnd(EndB, segprops)
 
+def __GetCurveLocalSys(beam: classBeam,
+                       xml_structure: ET.Element):                       
+    xml_curve_orientation = xml_structure.find('curve_orientation')
+    custom_curve_orient = xml_curve_orientation.find('customizable_curve_orientation')
+    orientation = custom_curve_orient.find('orientation')
+    lsys = orientation.find('local_system')
+    xvec, yvec, zvec = \
+        lsys .find('xvector'), lsys .find('yvector'), lsys.find('zvector')   
+    # matrix with rotation and translation
+    M, row = [], []
+    for dir in ['x', 'y', 'z']:
+        row.clear()
+        for ivec in [xvec, yvec, zvec]: row.append(ivec.get(dir))
+        row.append(0) # translation
+        M.append(row.copy())
+    beam.locToGlobTransfMtx = M.copy()
+    
 
 def ImportStraightBeam(BeamList: classBeamList, 
                        xml_structure: ET.Element, 
@@ -66,6 +87,7 @@ def ImportStraightBeam(BeamList: classBeamList,
                   'within the limiting values selected.')
             BeamList.RemoveBeam(beam)  
         else:
+            beam.Description = beam.SegmentList[0].properties.section # sets the beam description as the section name of the fisrt segment
             for seg in beam.SegmentList:
                 if len(selections.ExcludeSections) > 0:
                     if seg.properties.section in selections.ExcludeSections:
@@ -73,6 +95,7 @@ def ImportStraightBeam(BeamList: classBeamList,
                             f'section was defined as excluded {seg.properties.section}.')
                         BeamList.RemoveBeam(beam)
                         break
+            
             
 
 

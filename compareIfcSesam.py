@@ -6,11 +6,11 @@ include the id's from Sesam into the an IFC file
 # INPUTS
 ifcFilePath = r'C:\Temp\PCE_JACKET_IFC4_ComInfo.ifc'
 sesamFilePath = r'C:\Temp\2022.05.19.TRIDENT_PCE1_ULS.xml'
-outputTable = r'C:\Temp\ComparingIFCxSesam.xlsx'
+outputTable = r'C:\Temp\ComparingIFCxSesam_incomplete.xlsx'
 
 
 # LIBS
-import structure.ifcBeam as ifcBeam
+import structure.ifcStructure as ifcBeam
 from structure.sesammodel import cSesamModel
 import pandas as pd
 
@@ -29,7 +29,7 @@ columns = ['Coincidence level',
            'Beam B name', 'Beam B Length', 'Beam B EndA', 'Beam B EndB'
            ]
 
-for bA in ifcBeamList:
+for bA in ifcBeamList[:10]:
     maxC = 0
     for bB in sesamModel._Beams:
         coincidentLevel = bA.CoincidentLevel(bB)        
