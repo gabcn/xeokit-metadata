@@ -543,6 +543,7 @@ class classBeam:
                  name: str = '', 
                  IniPos: list[float] = None # local coordinate system
                  ):
+        super().__init__()
         self.name = name  
         #self.__IniPos = IniPos # in local coord. system
         if not IniPos: self.__IniPos = [0,0,0]
@@ -588,6 +589,16 @@ class classBeam:
     """(global coordinates)"""
     EndB = property(getGlobalEndB) 
     """(global coordinates)"""
+
+    def getRefCoords(self) -> list[float]:
+        """Returns the reference coordinates (x, y, z)"""
+        M = self.locToGlobTransfMtx
+        coords = []
+        for i in range(3): coords.append(M[i][3])
+        return coords.copy()
+
+    RefCoords = property(getRefCoords)
+    """Reference coordinates"""
 
     def _GetNsegs(self):
         return len(self.SegmentList)

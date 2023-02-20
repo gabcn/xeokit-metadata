@@ -1,6 +1,6 @@
 # ========== LIBS =========== #
 import xml.etree.ElementTree as ET
-from structure.conceptmodel import classMorisonCoeffs, classDirections, classHPropsList, classMorCoeffPoint
+from structure.conceptmodel import classMorisonCoeffs, classDirections, classHPropsList, classMorCoeffPoint, classConceptModel
 
 # ======= CONSTANTS ========= #
 
@@ -45,7 +45,7 @@ def __ImpMorisonCoefsByD(coeffs: ET.Element) -> classMorisonCoeffs:
             newitem.points.append(pnt)    
     return newitem
 
-def __ImpHydroProps(coeffs: ET.Element, hproplist: classHPropsList):
+def __ImpHydroProps(coeffs: ET.Element, hproplist: classHPropsList, conceptModel: classConceptModel):
     name = coeffs.get('name')
     type = coeffs[0].tag
     if type == 'constant_air_drag_coefficient':
@@ -60,12 +60,12 @@ def __ImpHydroProps(coeffs: ET.Element, hproplist: classHPropsList):
 
     hproplist.append(newitem)
 
-def __ImportAllHydroCoeffs(morisoncoeffs: ET.Element, hproplist: classHPropsList):
+def __ImportAllHydroCoeffs(morisoncoeffs: ET.Element, hproplist: classHPropsList, conceptModel: classConceptModel):
     for coeffs in morisoncoeffs:
-        __ImpHydroProps(coeffs, hproplist)
+        __ImpHydroProps(coeffs, hproplist, conceptModel)
 
 
-def ImportHydroPropsFromSesam(xml_model: ET.Element, hproplist: classHPropsList):
+def ImportHydroPropsFromSesam(xml_model: ET.Element, hproplist: classHPropsList, conceptModel: classConceptModel):
     """
     Import Hydrodynamic properties from a Sesam model
     * xml_model: Sesam model in xml element object
@@ -76,7 +76,7 @@ def ImportHydroPropsFromSesam(xml_model: ET.Element, hproplist: classHPropsList)
     for hprop in hydroprops:
         if hprop.tag == 'morison_coefficients' or \
            hprop.tag == 'air_drag_coefficients':
-            __ImportAllHydroCoeffs(hprop, hproplist)
+            __ImportAllHydroCoeffs(hprop, hproplist, conceptModel)
         else:
-            print(f'Warning! The hydrodynamic property type {hprop.tag} '
+            conceptModel._Message(f'Warning! The hydrodynamic property type {hprop.tag} '
                     +'is not supported by the current version and will be skipped.')

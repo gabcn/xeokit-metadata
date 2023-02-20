@@ -38,8 +38,8 @@ class cSesamModel(classConceptModel):
 
         self.Units = classSesamUnits(xml_model)
         ImportMaterialsFromSesam(self._MaterialList, xml_model, self.Units)
-        ImporSectionstFromSesam(xml_model, self._SectionList)
-        ImportHydroPropsFromSesam(xml_model, self._HydroProps)
+        ImporSectionstFromSesam(xml_model, self._SectionList, self)
+        ImportHydroPropsFromSesam(xml_model, self._HydroProps, self)
 
         structure_domain = xml_model.find('structure_domain')
         structures = structure_domain.find('structures')   
@@ -51,7 +51,13 @@ class cSesamModel(classConceptModel):
         for child in xml_structures:
             for structure in child:
                 if structure.tag == 'straight_beam':                    
-                    ImportStraightBeam(self._Beams, structure, self._SectionList, self.Environment, selections)                    
+                    ImportStraightBeam(self._Beams, 
+                        structure, 
+                        self._SectionList, 
+                        self.Environment, 
+                        selections, 
+                        self
+                        )                    
                 elif structure.tag == 'support_point':
                     ImportSupport(self.Supports, structure)
                 else:

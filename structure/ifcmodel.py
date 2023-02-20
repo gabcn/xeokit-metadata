@@ -32,13 +32,15 @@ class bimBeam(classBeam):
                     'MEMBER': ['Pset_MemberCommon','id'],
                     }
 
-    def __init__(self,
+    def __init__(self, 
+                 name: str = '', 
+                 IniPos: list[float] = None,
                  ifcFile: ifcopenshell.file = None, 
                  ifcBeam: ifcopenshell.entity_instance = None, 
                  context: str = None, 
                  subcontext: str = None
                  ) -> None:        
-        super().__init__()
+        super().__init__(name, IniPos)
         np_matrix = np.identity(3) # creates identity matrix
         self.MapTransfMatrix = np_matrix.tolist()
         self.guid = ''
@@ -203,18 +205,36 @@ class bimBeam(classBeam):
         self.name = ifcBeam.Name # f'{id1} | {id2}'
         self.guid = ifcBeam.GlobalId
     
-
+    # export to IFC file
     def exportBeamToIfc(
             self, 
             #beam: classBeam,
-            ifcFile: ifcopenshell.file
+            ifcFile: ifcopenshell.file,
+            globalRef: ifcopenshell.entity_instance = None, # global (building) origin
+            refPosition: ifcopenshell.entity_instance = None # rerefence (e.g., storey) position
+            #relPos: 
             ) -> ifcopenshell.entity_instance:
         """
         Export beam to Ifc
         * return: entity_instance of the objecte created
         """
         #ifcObjPlace = _createIfcObjPlace(beam, ifcFile)
-        ifcObjPlace = _createIfcObjPlace(self, ifcFile)
+        if not globalRef: 
+            point = _createCartesianPnt(ifcFile, [0.,0.,0.])
+            globalRef = _createAxis2Place3D(ifcFile, point) # TODO: handle the orientation (Axis and RefDirection)
+        if not refPosition: 
+            point = _createCartesianPnt(ifcFile, self.RefCoords)
+            refPosition = _createAxis2Place3D(ifcFile, point) # TODO: handle the orientation (Axis and RefDirection)
+        #refPos = _createCartesianPnt(ifcFile, [0,0,0])
+        point = _createCartesianPnt(ifcFile, self.IniPos)
+        Position = _createAxis2Place3D(ifcFile, point)
+        
+        ifcObjPlace = _createIfcObjPlace(self, 
+                                         ifcFile,
+                                         globalRef,
+                                         refPosition,
+                                         Position                                        
+                                         )
 
         ifcBeam = ifcFile.create_entity(
             type='IfcBeam',
@@ -247,7 +267,10 @@ class ifcBeamList(list[bimBeam]):
         ifcBeams = GetMembersList(ifcFile)
 
         for ifcBeam in ifcBeams:
-            newBeam = bimBeam(ifcFile, ifcBeam, "Model", "Axis")
+            newBeam = bimBeam(ifcFile=ifcFile, 
+                              ifcBeam=ifcBeam, 
+                              context="Model", 
+                              subcontext="Axis")
             if newBeam: self.append(newBeam)
         
         print(f'{len(self)} beams imported fom IFC file.')
@@ -284,16 +307,73 @@ def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_insta
     return instList.copy()
 
 
+def _createIfcLocPlace(ifcFile: ifcopenshell.file,
+                        RelTo: ifcopenshell.entity_instance = None,
+                        RelPlace: ifcopenshell.entity_instance = None
+                       ) -> ifcopenshell.entity_instance:
+
+    data = {}
+    if RelTo: data['PlacementRelTo'] = RelTo
+    if RelPlace: data['RelativePlacement'] = RelPlace
+
+    result = ifcFile.create_entity(
+        type = 'IfcLocalPlacement',
+        **data
+        )
+
+    return result   
+
+def _createCartesianPnt(ifcFile: ifcopenshell.file,
+                         Coordinates: list[float] = None
+                        ) -> ifcopenshell.entity_instance:
+    data = {}
+    if Coordinates: data['Coordinates'] = Coordinates
+    return ifcFile.create_entity(type='IfcCartesianPoint', **data)    
+
+
+def _createAxis2Place3D(ifcFile: ifcopenshell.file,
+                         Location: ifcopenshell.entity_instance = None, # (IfcCartesianPoint)
+                         Axis: ifcopenshell.entity_instance = None,
+                         RefDirection: ifcopenshell.entity_instance = None,
+                        ) -> ifcopenshell.entity_instance:
+    
+    data = {}
+    if Location: data['Location'] = Location
+    if Axis: data['Axis'] = Axis
+    if RefDirection: data['RefDirection'] = RefDirection    
+    result = ifcFile.create_entity(type='ifcAxis2Placement3D', **data)
+    return result
+
+
 def _createIfcObjPlace(beam: classBeam,
-                      ifcFile: ifcopenshell.file
+                       ifcFile: ifcopenshell.file,
+                       globalOrigin: ifcopenshell.entity_instance, # (IfcAxis2Place3D) 
+                       refPosition:  ifcopenshell.entity_instance, # (IfcAxis2Place3D) position of the group reference (e.g., storey)
+                       Position: ifcopenshell.entity_instance, # (IfcAxis2Place3D) position of the entity (relative to refPosition and globalOrigin)
                       ) -> ifcopenshell.entity_instance:
     """
     Creates the IfcObjectPlacement based on the beam information
     * return: entity_instance of the objecte created
     """
+    prevPlace = None
+    for i in range(4): # same scheme of Revit IFC exported
+        if i == 0: # global origin
+            RelPlace = globalOrigin
+        elif i == 1: # global origin
+            RelPlace = globalOrigin
+        elif i == 2: # Reference position (e.g., Storey, group, set)
+            RelPlace = refPosition
+        elif i == 3: # position relative to ref pos. relative to global origin
+            RelPlace = Position
+        else:
+            #Location = None
+            RelPlace = _createAxis2Place3D(ifcFile)
 
-    ifcLocPlace = ifcFile.create_entity(type = 'IfcLocalPlacement')
-    return ifcLocPlace
+        prevPlace = _createIfcLocPlace(ifcFile, prevPlace, RelPlace)
+
+    #ifcLocPlace = ifcFile.create_entity(type = 'IfcLocalPlacement')
+    #ifcLocPlace = __createIfcLocPlace(ifcFile)
+    return prevPlace
 
     
 

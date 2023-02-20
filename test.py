@@ -20,4 +20,14 @@ model = structure.ifcsesam.modelIfcSesam(xmlSesamFile=sesamFilePath)
 
 import ifcopenshell as ifc
 ifcFile = ifc.file(schema='IFC4')
-model._Beams[0].exportBeamToIfc(ifcFile)
+
+for i, beam in enumerate(model._Beams):
+    found = None
+    name = 'Bm581'
+    if beam.name == name:
+        found = beam
+        break
+    if not found: raise Exception(f'Beam {name} not found')
+
+model._Beams[i].exportBeamToIfc(ifcFile)
+ifcFile.write(outIfcFilePath)

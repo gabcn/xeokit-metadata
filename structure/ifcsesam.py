@@ -8,9 +8,7 @@ from structure.ifcmodel import bimBeam, ifcModel, ifcBeamList
 
 
 
-class beamIfcSesam(bimBeam, classBeam):
-    def __init__(self, ifcFile: ifcopenshell.file = None, ifcBeam: ifcopenshell.entity_instance = None, context: str = None, subcontext: str = None) -> None:
-        super().__init__(ifcFile, ifcBeam, context, subcontext)
+class beamIfcSesam(bimBeam, classBeam):    
     pass
 
 class beamListIfcSesam(list[beamIfcSesam]):

@@ -1,3 +1,39 @@
+Warning! The beam section "AutoCone" type is "cone_section", which is not recognized.
+Warning! The beam section "C250X22_8" type is "channel_section", which is not recognized.
+Warning! The beam section "C250X30" type is "channel_section", which is not recognized.
+Warning! The beam section "CELLAR_SEC_3PSRF77" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "CELLAR_SEC_3PSRF78" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "CONVC47" type is "general_section", which is not recognized.
+Warning! The beam section "DefaultCone" type is "cone_section", which is not recognized.
+Warning! The beam section "GENEXP2C100X8" type is "channel_section", which is not recognized.
+Warning! The beam section "GENEXP2C200X17" type is "channel_section", which is not recognized.
+Warning! The beam section "I_1200X355_reinf1" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "I_1200X355_reinf2" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "MODULE_COMPLETION_T210X886X9X8" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "MODULE_COMPLETION_T310X886X9X8" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "MODULE_COMPLETION_T460X886X9X9" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "MODULE_COMPRESSIONC200X17_1" type is "channel_section", which is not recognized.
+Warning! The beam section "SEC_painel5C100X8" type is "channel_section", which is not recognized.
+Warning! The beam section "T_1000x470x12_5x37_5" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "T_100x8_3" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "T_220x22_7" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "T_500x700x12_5x37_5" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "T_558x700x12_5x37_5" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "T_700x700x12_5x37_5" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "T_900x600x12_5x37_5" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "T_900x600x16x31_5" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "_NEW_COMPLETIONC200X27_9" type is "channel_section", which is not recognized.
+Warning! The beam section "_NEW_COMPLETIONT200X21_5" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "_NEW_COMPLETIONT300X29_4" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "_NEW_COMPLETIONT450X51_5" type is "unsymmetrical_i_section", which is not recognized.
+Warning! The beam section "_NEW_GENERATIONC200X17_1" type is "channel_section", which is not recognized.
+Warning! The hydrodynamic property type morison_diameters is not supported by the current version and will be skipped.
+Warning! The hydrodynamic property type buoyancy_areas is not supported by the current version and will be skipped.
+Warning! The hydrodynamic property type hydro_element_refinements is not supported by the current version and will be skipped.
+Warning! The hydrodynamic property type flooding_coefficients is not supported by the current version and will be skipped.
+Warning! The hydrodynamic property type marine_growths is not supported by the current version and will be skipped.
+Warning! The hydrodynamic property type hydro_permeabilities is not supported by the current version and will be skipped.
+Warning! The hydrodynamic property type conductor_shieldings is not supported by the current version and will be skipped.
 Warning! The structure "Bm2432" type is "curved_beam", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Bm2433" type is "curved_beam", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Bm2434" type is "curved_beam", which is not supported by the current version of the converter and will be skipped.
@@ -343,6 +379,12 @@ Warning! The structure "Pile6" type is "pile", which is not supported by the cur
 Warning! The structure "Pile7" type is "pile", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Pile8" type is "pile", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Pile9" type is "pile", which is not supported by the current version of the converter and will be skipped.
+Warning! A segment of the structure BAL3e4_Bm18 is defined with the section C250X30, which could not be imported.
+Warning! The structure BAL3e4_Bm18 has no segments and will be ignored.
+Warning! A segment of the structure BAL3e4_Bm27 is defined with the section C250X30, which could not be imported.
+Warning! The structure BAL3e4_Bm27 has no segments and will be ignored.
+Warning! A segment of the structure Bm1810 is defined with the section CONVC47, which could not be imported.
+Warning! The structure Bm1810 has no segments and will be ignored.
 Warning! The structure "Pile42" type is "pile", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Pile43" type is "pile", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Pile44" type is "pile", which is not supported by the current version of the converter and will be skipped.
@@ -375,6 +417,664 @@ Warning! The structure "Pile70" type is "pile", which is not supported by the cu
 Warning! The structure "Pile71" type is "pile", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Pile72" type is "pile", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Pile74" type is "pile", which is not supported by the current version of the converter and will be skipped.
+Warning! A segment of the structure CELLAR_SEC_3Bm3498 is defined with the section CELLAR_SEC_3PSRF77, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3498 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3499 is defined with the section CELLAR_SEC_3PSRF77, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3499 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3500 is defined with the section CELLAR_SEC_3PSRF77, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3500 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3501 is defined with the section CELLAR_SEC_3PSRF77, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3501 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3502 is defined with the section CELLAR_SEC_3PSRF77, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3502 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3503 is defined with the section CELLAR_SEC_3PSRF77, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3503 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3504 is defined with the section CELLAR_SEC_3PSRF77, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3504 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3675 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3675 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3676 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3676 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3677 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3677 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3678 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3678 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3679 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3679 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3680 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3680 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3681 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3681 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3682 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3682 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3683 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3683 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3684 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3684 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3685 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3685 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3686 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3686 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3687 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3687 has no segments and will be ignored.
+Warning! A segment of the structure CELLAR_SEC_3Bm3688 is defined with the section CELLAR_SEC_3PSRF78, which could not be imported.
+Warning! The structure CELLAR_SEC_3Bm3688 has no segments and will be ignored.
+Warning! A segment of the structure SEC_painel5Bm4722 is defined with the section SEC_painel5C100X8, which could not be imported.
+Warning! The structure SEC_painel5Bm4722 has no segments and will be ignored.
+Warning! A segment of the structure SEC_painel5Bm4723 is defined with the section SEC_painel5C100X8, which could not be imported.
+Warning! The structure SEC_painel5Bm4723 has no segments and will be ignored.
+Warning! A segment of the structure SEC_painel5Bm4724 is defined with the section SEC_painel5C100X8, which could not be imported.
+Warning! The structure SEC_painel5Bm4724 has no segments and will be ignored.
+Warning! A segment of the structure SEC_painel5Bm4725 is defined with the section SEC_painel5C100X8, which could not be imported.
+Warning! The structure SEC_painel5Bm4725 has no segments and will be ignored.
+Warning! A segment of the structure SEC_painel5Bm4726 is defined with the section SEC_painel5C100X8, which could not be imported.
+Warning! The structure SEC_painel5Bm4726 has no segments and will be ignored.
+Warning! A segment of the structure SEC_painel5Bm4727 is defined with the section SEC_painel5C100X8, which could not be imported.
+Warning! The structure SEC_painel5Bm4727 has no segments and will be ignored.
+Warning! A segment of the structure Bm12543 is defined with the section I_1200X355_reinf1, which could not be imported.
+Warning! The structure Bm12543 has no segments and will be ignored.
+Warning! A segment of the structure Bm460 is defined with the section I_1200X355_reinf1, which could not be imported.
+Warning! The structure Bm460 has no segments and will be ignored.
+Warning! A segment of the structure Bm459 is defined with the section I_1200X355_reinf2, which could not be imported.
+Warning! The structure Bm459 has no segments and will be ignored.
+Warning! A segment of the structure Bm465 is defined with the section T_1000x470x12_5x37_5, which could not be imported.
+Warning! The structure Bm465 has no segments and will be ignored.
+Warning! A segment of the structure Bm472 is defined with the section T_500x700x12_5x37_5, which could not be imported.
+Warning! The structure Bm472 has no segments and will be ignored.
+Warning! A segment of the structure Bm462 is defined with the section T_558x700x12_5x37_5, which could not be imported.
+Warning! The structure Bm462 has no segments and will be ignored.
+Warning! A segment of the structure Bm463 is defined with the section T_558x700x12_5x37_5, which could not be imported.
+Warning! The structure Bm463 has no segments and will be ignored.
+Warning! A segment of the structure Bm468 is defined with the section T_558x700x12_5x37_5, which could not be imported.
+Warning! The structure Bm468 has no segments and will be ignored.
+Warning! A segment of the structure Bm469 is defined with the section T_558x700x12_5x37_5, which could not be imported.
+Warning! The structure Bm469 has no segments and will be ignored.
+Warning! A segment of the structure Bm467 is defined with the section T_700x700x12_5x37_5, which could not be imported.
+Warning! The structure Bm467 has no segments and will be ignored.
+Warning! A segment of the structure Bm473 is defined with the section T_900x600x12_5x37_5, which could not be imported.
+Warning! The structure Bm473 has no segments and will be ignored.
+Warning! A segment of the structure Bm476 is defined with the section T_900x600x12_5x37_5, which could not be imported.
+Warning! The structure Bm476 has no segments and will be ignored.
+Warning! A segment of the structure Bm474 is defined with the section T_900x600x16x31_5, which could not be imported.
+Warning! The structure Bm474 has no segments and will be ignored.
+Warning! A segment of the structure Bm475 is defined with the section T_900x600x16x31_5, which could not be imported.
+Warning! The structure Bm475 has no segments and will be ignored.
+Warning! A segment of the structure Bm503 is defined with the section T_900x600x12_5x37_5, which could not be imported.
+Warning! The structure Bm503 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_GENERATIONGENEXP2Bm2359 is defined with the section _NEW_GENERATIONC200X17_1, which could not be imported.
+Warning! The structure _NEW_GENERATIONGENEXP2Bm2359 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_GENERATIONGENEXP2Bm2360 is defined with the section _NEW_GENERATIONC200X17_1, which could not be imported.
+Warning! The structure _NEW_GENERATIONGENEXP2Bm2360 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502505 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502505 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502506 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502506 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502507 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502507 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502509 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502509 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502510 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502510 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502511 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502511 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502516 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502516 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502517 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502517 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502518 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502518 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502519 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502519 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502520 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502520 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502521 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502521 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502524 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502524 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502526 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502526 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502527 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502527 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502530 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502530 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502532 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502532 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502534 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502534 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502536 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502536 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502537 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502537 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502538 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502538 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502539 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502539 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502540 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502540 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502541 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502541 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502542 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502542 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502544 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502544 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502545 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502545 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502546 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502546 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502547 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502547 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502548 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502548 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502549 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502549 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502550 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502550 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502551 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502551 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502552 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502552 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502553 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502553 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502554 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502554 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502555 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502555 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502556 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502556 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502557 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502557 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502558 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502558 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502559 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502559 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502560 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502560 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502561 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502561 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502562 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502562 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502563 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502563 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502564 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502564 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502565 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502565 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502566 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502566 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502567 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502567 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502568 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502568 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502570 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502570 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502571 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502571 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502572 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502572 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502573 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502573 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502574 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502574 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502576 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502576 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502577 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502577 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502578 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502578 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502579 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502579 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502580 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502580 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502582 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502582 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502583 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502583 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502584 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502584 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502585 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502585 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502586 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502586 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502588 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502588 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502589 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502589 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502590 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502590 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502591 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502591 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502592 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502592 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502594 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502594 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502596 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502596 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502597 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502597 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502598 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502598 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502599 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502599 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502600 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502600 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502602 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502602 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502603 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502603 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502604 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502604 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502605 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502605 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502606 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502606 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502608 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502608 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502609 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502609 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502610 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502610 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502612 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502612 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502614 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502614 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502615 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502615 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502616 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502616 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502618 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502618 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502620 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502620 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502621 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502621 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502770 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502770 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502803 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502803 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502805 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502805 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502807 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502807 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502809 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502809 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502825 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502825 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502826 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502826 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502827 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502827 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502870 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502870 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502871 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502871 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502872 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502872 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502873 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502873 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502875 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502875 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502912 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502912 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505058 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505058 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505133 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505133 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505135 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505135 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505136 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505136 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505137 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505137 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505138 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505138 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505139 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505139 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505140 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505140 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505141 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505141 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505142 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505142 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505143 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505143 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505144 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505144 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505145 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505145 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505146 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505146 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505147 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505147 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505148 is defined with the section _NEW_COMPLETIONT200X21_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm505148 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502512 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502512 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502513 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502513 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502514 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502514 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502515 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502515 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502522 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502522 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502525 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502525 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502543 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502543 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502569 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502569 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502575 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502575 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502581 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502581 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502587 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502587 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502593 is defined with the section _NEW_COMPLETIONT300X29_4, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502593 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502529 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502529 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502531 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502531 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502533 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502533 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502535 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502535 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502595 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502595 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502601 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502601 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502607 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502607 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502611 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502611 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502613 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502613 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502617 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502617 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502619 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502619 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502828 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502828 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502829 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502829 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502830 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502830 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502918 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502918 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502919 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502919 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502920 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502920 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502921 is defined with the section _NEW_COMPLETIONT450X51_5, which could not be imported.
+Warning! The structure _NEW_COMPLETIONMODULE_COMPLETION_Bm502921 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_GENERATIONGENEXP2Bm3037 is defined with the section _NEW_GENERATIONC200X17_1, which could not be imported.
+Warning! The structure _NEW_GENERATIONGENEXP2Bm3037 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_GENERATIONGENEXP2Bm3040 is defined with the section _NEW_GENERATIONC200X17_1, which could not be imported.
+Warning! The structure _NEW_GENERATIONGENEXP2Bm3040 has no segments and will be ignored.
+Warning! A segment of the structure Bm1106 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1106 has no segments and will be ignored.
+Warning! A segment of the structure Bm1107 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1107 has no segments and will be ignored.
+Warning! A segment of the structure Bm1108 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1108 has no segments and will be ignored.
+Warning! A segment of the structure Bm1109 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1109 has no segments and will be ignored.
+Warning! A segment of the structure Bm1110 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1110 has no segments and will be ignored.
+Warning! A segment of the structure Bm1112 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1112 has no segments and will be ignored.
+Warning! A segment of the structure Bm1113 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1113 has no segments and will be ignored.
+Warning! A segment of the structure Bm1114 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1114 has no segments and will be ignored.
+Warning! A segment of the structure Bm1115 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1115 has no segments and will be ignored.
+Warning! A segment of the structure Bm1116 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1116 has no segments and will be ignored.
+Warning! A segment of the structure Bm1117 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1117 has no segments and will be ignored.
+Warning! A segment of the structure Bm1118 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1118 has no segments and will be ignored.
+Warning! A segment of the structure Bm1142 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1142 has no segments and will be ignored.
+Warning! A segment of the structure Bm1143 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1143 has no segments and will be ignored.
+Warning! A segment of the structure Bm1144 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1144 has no segments and will be ignored.
+Warning! A segment of the structure Bm1145 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1145 has no segments and will be ignored.
+Warning! A segment of the structure Bm1146 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1146 has no segments and will be ignored.
+Warning! A segment of the structure Bm1147 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1147 has no segments and will be ignored.
+Warning! A segment of the structure Bm1148 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1148 has no segments and will be ignored.
+Warning! A segment of the structure Bm1534 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1534 has no segments and will be ignored.
+Warning! A segment of the structure Bm1535 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1535 has no segments and will be ignored.
+Warning! A segment of the structure Bm1536 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1536 has no segments and will be ignored.
+Warning! A segment of the structure Bm1537 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1537 has no segments and will be ignored.
+Warning! A segment of the structure Bm1538 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1538 has no segments and will be ignored.
+Warning! A segment of the structure Bm1539 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1539 has no segments and will be ignored.
+Warning! A segment of the structure Bm1540 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1540 has no segments and will be ignored.
+Warning! A segment of the structure Bm1541 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1541 has no segments and will be ignored.
+Warning! A segment of the structure Bm1542 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1542 has no segments and will be ignored.
+Warning! A segment of the structure Bm1549 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1549 has no segments and will be ignored.
+Warning! A segment of the structure Bm1550 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1550 has no segments and will be ignored.
+Warning! A segment of the structure Bm1551 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1551 has no segments and will be ignored.
+Warning! A segment of the structure Bm1552 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1552 has no segments and will be ignored.
+Warning! A segment of the structure Bm1553 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1553 has no segments and will be ignored.
+Warning! A segment of the structure Bm1554 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1554 has no segments and will be ignored.
+Warning! A segment of the structure Bm1555 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1555 has no segments and will be ignored.
+Warning! A segment of the structure Bm1556 is defined with the section T_100x8_3, which could not be imported.
+Warning! The structure Bm1556 has no segments and will be ignored.
+Warning! A segment of the structure Bm1086 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1086 has no segments and will be ignored.
+Warning! A segment of the structure Bm1087 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1087 has no segments and will be ignored.
+Warning! A segment of the structure Bm1088 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1088 has no segments and will be ignored.
+Warning! A segment of the structure Bm1092 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1092 has no segments and will be ignored.
+Warning! A segment of the structure Bm1093 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1093 has no segments and will be ignored.
+Warning! A segment of the structure Bm1094 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1094 has no segments and will be ignored.
+Warning! A segment of the structure Bm1095 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1095 has no segments and will be ignored.
+Warning! A segment of the structure Bm1096 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1096 has no segments and will be ignored.
+Warning! A segment of the structure Bm1097 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1097 has no segments and will be ignored.
+Warning! A segment of the structure Bm1099 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1099 has no segments and will be ignored.
+Warning! A segment of the structure Bm1100 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1100 has no segments and will be ignored.
+Warning! A segment of the structure Bm1101 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1101 has no segments and will be ignored.
+Warning! A segment of the structure Bm1102 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1102 has no segments and will be ignored.
+Warning! A segment of the structure Bm1103 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1103 has no segments and will be ignored.
+Warning! A segment of the structure Bm1104 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1104 has no segments and will be ignored.
+Warning! A segment of the structure Bm1105 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1105 has no segments and will be ignored.
+Warning! A segment of the structure Bm1119 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1119 has no segments and will be ignored.
+Warning! A segment of the structure Bm1121 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1121 has no segments and will be ignored.
+Warning! A segment of the structure Bm1122 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1122 has no segments and will be ignored.
+Warning! A segment of the structure Bm1123 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1123 has no segments and will be ignored.
+Warning! A segment of the structure Bm1124 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1124 has no segments and will be ignored.
+Warning! A segment of the structure Bm1125 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1125 has no segments and will be ignored.
+Warning! A segment of the structure Bm1126 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1126 has no segments and will be ignored.
+Warning! A segment of the structure Bm1127 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1127 has no segments and will be ignored.
+Warning! A segment of the structure Bm1128 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1128 has no segments and will be ignored.
+Warning! A segment of the structure Bm1129 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1129 has no segments and will be ignored.
+Warning! A segment of the structure Bm1130 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1130 has no segments and will be ignored.
+Warning! A segment of the structure Bm1131 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1131 has no segments and will be ignored.
+Warning! A segment of the structure Bm1583 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1583 has no segments and will be ignored.
+Warning! A segment of the structure Bm1584 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm1584 has no segments and will be ignored.
+Warning! A segment of the structure Bm529 is defined with the section T_220x22_7, which could not be imported.
+Warning! The structure Bm529 has no segments and will be ignored.
+Warning! A segment of the structure MODULE_COMPRESSIONBm6291 is defined with the section MODULE_COMPRESSIONC200X17_1, which could not be imported.
+Warning! The structure MODULE_COMPRESSIONBm6291 has no segments and will be ignored.
+Warning! A segment of the structure _NEW_COMPLETIONBm20 is defined with the section _NEW_COMPLETIONC200X27_9, which could not be imported.
+Warning! The structure _NEW_COMPLETIONBm20 has no segments and will be ignored.
+Warning! A segment of the structure Bm1 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1060 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1060 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1063 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1063 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1064 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1064 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1218 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1219 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1221 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1222 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1223 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1374 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1374 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1375 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1375 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1376 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1376 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1380 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1380 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1381 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1381 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1382 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1382 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1383 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1386 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1389 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1397 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1399 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1509 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1509 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1510 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1510 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1514 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1514 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm16 is defined with the section AutoCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm16 is defined with the section AutoCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm180 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1882 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm1883 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm191 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm2 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm22 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm226 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm23 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm230 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm231 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm232 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm530 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm531 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm532 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm541 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm545 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm589 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm6 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm631 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm7 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm729 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm747 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm752 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm9 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm972 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
+Warning! A segment of the structure Bm972 is defined with the section DefaultCone, which could not be imported.
+Warning! Discontinuities between segments will be disregarded.
 Warning! The structure "Jt134" type is "frame_joint", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Jt1340" type is "frame_joint", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Jt1341" type is "frame_joint", which is not supported by the current version of the converter and will be skipped.

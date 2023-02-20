@@ -1,10 +1,10 @@
 # ========== LIBS =========== #
 import xml.etree.ElementTree as ET
-from structure.conceptmodel import classPipeSection, classISection, classSectionList, classBoxSection
+from structure.conceptmodel import classPipeSection, classISection, classSectionList, classBoxSection, classConceptModel
 
 
 # ======== CLASSES ========== #
-def ImporSectionstFromSesam(xml_model: ET.Element, seclist: classSectionList):
+def ImporSectionstFromSesam(xml_model: ET.Element, seclist: classSectionList, conceptModel: classConceptModel):
     """
     Import sections from a Sesam model to an OrcaFlex model
     * xml_model: Sesam model in xml element object
@@ -13,10 +13,10 @@ def ImporSectionstFromSesam(xml_model: ET.Element, seclist: classSectionList):
     structure_domain = xml_model.find('structure_domain')
     properties = structure_domain.find('properties')
     xml_sections = properties.find('sections')
-    __ProcessSections(xml_sections, seclist)   
+    __ProcessSections(xml_sections, seclist, conceptModel)
 
 
-def __ProcessSections(xml_sections: ET.Element, seclist: classSectionList):
+def __ProcessSections(xml_sections: ET.Element, seclist: classSectionList, conceptModel: classConceptModel):
     for section in xml_sections.findall('section'):
         secname = section.get('name')
         SecType = _GetSectionType(section)
@@ -26,7 +26,7 @@ def __ProcessSections(xml_sections: ET.Element, seclist: classSectionList):
         elif SecType == 'bar_section': sectionobj = __ProcBarSection(section)
         elif SecType == 'box_section': sectionobj = __ProcBoxSection(section)
         elif SecType == 'pgb_section': sectionobj = __ProcBoxSection(section)   # double box
-        else: print(f'Warning! The beam section "{secname}" type is "{SecType}", which is not recognized.')   
+        else: conceptModel._Message(f'Warning! The beam section "{secname}" type is "{SecType}", which is not recognized.')   
 
         props = section[0]
         genpropmethod = props.get('general_properties_method')
@@ -37,7 +37,7 @@ def __ProcessSections(xml_sections: ET.Element, seclist: classSectionList):
             #sectionobj.SetGeneralSection(A, Ixx, Iyy, Izz)
             sectionobj.SetGeneralSection(A, Iyy, Izz, Ixx) # sequence changed to be compatible with the OrcaFlex reference
         else:
-            print(f'Warning! general_properties_method = {genpropmethod} not supported') # TODO: include what to in this case
+            conceptModel._Message(f'Warning! general_properties_method = {genpropmethod} not supported') # TODO: include what to in this case
 
         seclist.Add(sectionobj)
 
