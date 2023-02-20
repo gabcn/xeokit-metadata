@@ -12,7 +12,7 @@ import ifcopenshell.util.representation as ifcrep
 import ifcopenshell.util.unit as ifcunit
 import ifcopenshell.util.placement as ifcplace
 import numpy as np
-from structure.conceptmodel import classBeam
+from structure.conceptmodel import classBeam, classConceptModel
 
 
 
@@ -202,32 +202,48 @@ class bimBeam(classBeam):
         id2 = ifcBeam.GlobalId
         self.name = ifcBeam.Name # f'{id1} | {id2}'
         self.guid = ifcBeam.GlobalId
-
     
 
-def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_instance]:
-    """
-    Returns the list of instances type 'ifcBeam', 'ifcColumn', and 'ifcMember'
-    """
-    instList = list()
-    for ifcClass in _supportedIfcClasses:
-        add = ifcFile.by_type(ifcClass)
-        if add:
-            instList.extend(add)
-    print(f'{len(instList)} beams found in IFC file.')
-    return instList.copy()
-    
+    def exportBeamToIfc(
+            self, 
+            #beam: classBeam,
+            ifcFile: ifcopenshell.file
+            ) -> ifcopenshell.entity_instance:
+        """
+        Export beam to Ifc
+        * return: entity_instance of the objecte created
+        """
+        #ifcObjPlace = _createIfcObjPlace(beam, ifcFile)
+        ifcObjPlace = _createIfcObjPlace(self, ifcFile)
 
+        ifcBeam = ifcFile.create_entity(
+            type='IfcBeam',
+            GlobalId = ifcopenshell.guid.new(),
+            # TODO: OwnerHistory
+            Name = self.name, #beam.name,
+            Description = self.Description, # beam.Description,
+            # TODO: ObjectType
+            ObjectPlacement = ifcObjPlace
+            # TODO: Representation
+            # TODO: Tag    
+            # TODO: PredefinedType
+            )
+        return ifcBeam
+
+
+# ==== ifcBeamList CLASS DEFINITION ==== #
 class ifcBeamList(list[bimBeam]):
-    def __init__(self, ifcFilePath: str):
+    def __init__(self, conceptModel: classConceptModel, ifcFilePath: str = None):
         """
         * ifcFilePath: (str) path to the IFC file
         """
         super().__init__()
-        ifcFile = ifcopenshell.open(ifcFilePath)
-        self._ImportBeamsFromIFC(ifcFile)
+        self.conceptModel = conceptModel
+        if ifcFilePath:
+            ifcFile = ifcopenshell.open(ifcFilePath)
+            self.ImportFromIFC(ifcFile)
         
-    def _ImportBeamsFromIFC(self, ifcFile: ifcopenshell.file) -> None:
+    def ImportFromIFC(self, ifcFile: ifcopenshell.file) -> None:
         ifcBeams = GetMembersList(ifcFile)
 
         for ifcBeam in ifcBeams:
@@ -243,6 +259,44 @@ class ifcBeamList(list[bimBeam]):
                 result = beam
                 break
         return result
+
+
+# ==== ifcModel CLASS DEFINITION ==== #
+class ifcModel(classConceptModel):
+    def __init__(self, ifcFilePath: str = None) -> None:
+        super().__init__()
+        self._Beams = ifcBeamList(self, ifcFilePath)
+
+
+
+# ==== AUXILIARY METHODS ==== #
+
+def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_instance]:
+    """
+    Returns the list of instances type 'ifcBeam', 'ifcColumn', and 'ifcMember'
+    """
+    instList = list()
+    for ifcClass in _supportedIfcClasses:
+        add = ifcFile.by_type(ifcClass)
+        if add:
+            instList.extend(add)
+    print(f'{len(instList)} beams found in IFC file.')
+    return instList.copy()
+
+
+def _createIfcObjPlace(beam: classBeam,
+                      ifcFile: ifcopenshell.file
+                      ) -> ifcopenshell.entity_instance:
+    """
+    Creates the IfcObjectPlacement based on the beam information
+    * return: entity_instance of the objecte created
+    """
+
+    ifcLocPlace = ifcFile.create_entity(type = 'IfcLocalPlacement')
+    return ifcLocPlace
+
+    
+
 
 
 

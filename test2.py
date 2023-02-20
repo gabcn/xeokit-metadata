@@ -4,7 +4,7 @@ sesamFilePath = r'C:\Temp\2022.05.19.TRIDENT_PCE1_ULS.xml'
 
 
 # LIBS
-import structure.ifcStructure as structBeam
+import structure.ifcmodel as structBeam
 from structure.sesammodel import cSesamModel
 import ifcopenshell as ifc
 

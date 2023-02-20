@@ -10,13 +10,14 @@ outputTable = r'C:\Temp\ComparingIFCxSesam_incomplete.xlsx'
 
 
 # LIBS
-import structure.ifcStructure as ifcBeam
+import structure.ifcmodel as ifcmodel
 from structure.sesammodel import cSesamModel
 import pandas as pd
 
 # MAIN
 print(f'Reading file {ifcFilePath} ...', flush=True)
-ifcBeamList = ifcBeam.ifcBeamList(ifcFilePath)
+#ifcBeamList = ifcmodel.ifcBeamList(ifcFilePath)
+ifcModel = ifcmodel.ifcModel(ifcFilePath)
 
 print(f'Reading Sesam file {sesamFilePath} ...', flush=True)
 sesamModel = cSesamModel(sesamFilePath)
@@ -29,7 +30,7 @@ columns = ['Coincidence level',
            'Beam B name', 'Beam B Length', 'Beam B EndA', 'Beam B EndB'
            ]
 
-for bA in ifcBeamList[:10]:
+for bA in ifcModel._Beams:
     maxC = 0
     for bB in sesamModel._Beams:
         coincidentLevel = bA.CoincidentLevel(bB)        
@@ -46,8 +47,10 @@ for bA in ifcBeamList[:10]:
 df = pd.DataFrame(comparingList, columns=columns)
 df.to_excel(outputTable)
 
-"""
 
+
+
+"""
 for b in sesamModel._Beams:
     if b.name == 'Bm2416':
         beamB = b

@@ -10,13 +10,14 @@ from structure.sesam.supports import ImportSupport
 import xml.etree.ElementTree as ET
 
 class cSesamModel(classConceptModel):
-    def __init__(self, xmlFile: str) -> None:
+    def __init__(self, xmlFile: str = None) -> None:
         """
         Import Sesam concept model
         * xmlFile: input .xml file path
         """
         super().__init__()
-        self.ImportFromSesamConceptModel(xmlFile)
+        if xmlFile:
+            self.ImportFromSesamConceptModel(xmlFile)
 
     def _OpenXmlFile(self, xmlfile: str) -> ET.Element:        
         tree = ET.parse(xmlfile)
