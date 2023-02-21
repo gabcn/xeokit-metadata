@@ -205,36 +205,46 @@ class bimBeam(classBeam):
         self.name = ifcBeam.Name # f'{id1} | {id2}'
         self.guid = ifcBeam.GlobalId
     
-    # export to IFC file
+    # ==== export to IFC file ==== #
     def exportBeamToIfc(
             self, 
-            #beam: classBeam,
             ifcFile: ifcopenshell.file,
-            globalRef: ifcopenshell.entity_instance = None, # global (building) origin
-            refPosition: ifcopenshell.entity_instance = None # rerefence (e.g., storey) position
-            #relPos: 
+            WorldOrigin: ifcopenshell.entity_instance, # (ifcCartesianPoint)
+            WorldCoordSys: ifcopenshell.entity_instance, # (IfcAxis2Placement3D)
+            WorldCartesianOp: ifcopenshell.entity_instance, # (ifcCartesianTransformationOperator3D)
+            Context: ifcopenshell.entity_instance, # (IfcGeometricRepresentationContext)
+            AxisSubContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
+            BodySubContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
+            refPosition: ifcopenshell.entity_instance = None # (IfcAxis2Placement3D) rerefence (e.g., storey) position
             ) -> ifcopenshell.entity_instance:
         """
         Export beam to Ifc
         * return: entity_instance of the objecte created
         """
-        #ifcObjPlace = _createIfcObjPlace(beam, ifcFile)
-        if not globalRef: 
-            point = _createCartesianPnt(ifcFile, [0.,0.,0.])
-            globalRef = _createAxis2Place3D(ifcFile, point) # TODO: handle the orientation (Axis and RefDirection)
-        if not refPosition: 
-            point = _createCartesianPnt(ifcFile, self.RefCoords)
-            refPosition = _createAxis2Place3D(ifcFile, point) # TODO: handle the orientation (Axis and RefDirection)
-        #refPos = _createCartesianPnt(ifcFile, [0,0,0])
-        point = _createCartesianPnt(ifcFile, self.IniPos)
-        Position = _createAxis2Place3D(ifcFile, point)
+
+        if not refPosition:
+            refPoint = _createCartesianPnt(ifcFile, self.RefCoords) # TODO: evaluate the possibility to consider a reference location (e.g., groups, sets, storeys)
+            refPosition = _createAxis2Place3D(ifcFile, refPoint) # TODO: handle the orientation (Axis and RefDirection)
+
+        # creates the ObjectPlacement
+        ifcObjPlace = self.__createPlacement(ifcFile, WorldCoordSys, refPosition)
+
+        # creates the object 'Axis' representation
+        AxisRep = _createAxisRep(
+            ifcFile, 
+            WorldOrigin, 
+            WorldCartesianOp, 
+            self.IniPos, 
+            self.LastPos, 
+            Context
+        )
+
+        ifcProdDefShape = ifcFile.create_entity(
+            type='ifcProductDefinitionShape',
+            Representations=[AxisRep], # TODO: include body representation
+        )
         
-        ifcObjPlace = _createIfcObjPlace(self, 
-                                         ifcFile,
-                                         globalRef,
-                                         refPosition,
-                                         Position                                        
-                                         )
+
 
         ifcBeam = ifcFile.create_entity(
             type='IfcBeam',
@@ -243,12 +253,29 @@ class bimBeam(classBeam):
             Name = self.name, #beam.name,
             Description = self.Description, # beam.Description,
             # TODO: ObjectType
-            ObjectPlacement = ifcObjPlace
-            # TODO: Representation
+            ObjectPlacement = ifcObjPlace,
+            Representation = ifcProdDefShape,
             # TODO: Tag    
             # TODO: PredefinedType
             )
         return ifcBeam
+
+    def __createPlacement(self, 
+                          ifcFile: ifcopenshell.file,
+                          WorldCoordSys: ifcopenshell.entity_instance, # global (building) origin
+                          refPosition: ifcopenshell.entity_instance, # (IfcAxis2Placement3D) reference coordinate system
+                         ) -> ifcopenshell.entity_instance:
+
+        point = _createCartesianPnt(ifcFile, self.IniPos)
+        Position = _createAxis2Place3D(ifcFile, point)
+        
+        return _createIfcObjPlace(self, 
+                                  ifcFile, 
+                                  WorldCoordSys, 
+                                  refPosition, 
+                                  Position)
+
+
 
 
 # ==== ifcBeamList CLASS DEFINITION ==== #
@@ -290,6 +317,42 @@ class ifcModel(classConceptModel):
         super().__init__()
         self._Beams = ifcBeamList(self, ifcFilePath)
 
+    def ExportToIFC(self, ifcFilePath: str, beamIndexes: slice = None) -> None:
+        ifcFile = ifcopenshell.file(schema='IFC4')
+
+        WorldOrigin = _createCartesianPnt(ifcFile, [0.,0.,0.])
+        WorldCoordSys = _createAxis2Place3D(ifcFile, WorldOrigin) # TODO: handle the orientation (Axis and RefDirection)
+        WorldCartesianOp = ifcFile.create_entity(type='ifcCartesianTransformationOperator3D',
+            LocalOrigin=WorldOrigin, Scale=1.)
+
+        ModelContext = _createModelContext(ifcFile, WorldCoordSys) # TODO: handle the precision
+        AxisSubContext = _createSubContext(ifcFile, 'Axis', ModelContext, 'GRAPH_VIEW')
+        BodySubContext = _createSubContext(ifcFile, 'Body', ModelContext, 'MODEL_VIEW')
+        
+       
+
+        if beamIndexes == None: 
+            for beam in self._Beams:
+                beam.exportBeamToIfc(ifcFile, 
+                                     WorldOrigin,
+                                     WorldCoordSys,
+                                     WorldCartesianOp,
+                                     ModelContext, 
+                                     AxisSubContext, 
+                                     BodySubContext)
+        else: 
+            for beam in self._Beams[beamIndexes]:
+                beam.exportBeamToIfc(ifcFile, 
+                                     WorldOrigin,
+                                     WorldCoordSys, 
+                                     WorldCartesianOp,
+                                     ModelContext, 
+                                     AxisSubContext, 
+                                     BodySubContext)
+
+
+        ifcFile.write(ifcFilePath)
+
 
 
 # ==== AUXILIARY METHODS ==== #
@@ -306,6 +369,36 @@ def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_insta
     print(f'{len(instList)} beams found in IFC file.')
     return instList.copy()
 
+def _createModelContext(ifcFile: ifcopenshell.file,
+                        WorldCoordSys: ifcopenshell.entity_instance, #(IfcAxis2Placement)
+                        CoordSysDim: int = 3,
+                        ContextType: str = 'Model', # (e.g., 'Model')
+                        Precision: float = None,
+                        TrueNorth: ifcopenshell.entity_instance = None,
+                        ) -> ifcopenshell.entity_instance:
+
+    data = {}
+    data['WorldCoordinateSystem'] = WorldCoordSys
+    data['CoordinateSpaceDimension'] = CoordSysDim
+    data['ContextType'] = ContextType
+    if Precision: data['Precision'] = Precision
+    if TrueNorth: data['TrueNorth'] = TrueNorth
+
+    return ifcFile.create_entity(type='IfcGeometricRepresentationContext', **data) 
+
+def _createSubContext(ifcFile: ifcopenshell.file,
+                      Identifier: str,
+                      ParentContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationContext)
+                      TargetView: str, # (IfcGeometricProjectionEnum) e.g., MODEL_VIEW, GRAPH_VIEW
+                      Type: str = 'Model',
+                      ) -> ifcopenshell.entity_instance:    
+
+    return ifcFile.create_entity(type='IfcGeometricRepresentationSubContext',
+                                 ContextIdentifier=Identifier,
+                                 ContextType=Type,
+                                 ParentContext=ParentContext,
+                                 TargetView=TargetView,
+                                 )                             
 
 def _createIfcLocPlace(ifcFile: ifcopenshell.file,
                         RelTo: ifcopenshell.entity_instance = None,
@@ -341,13 +434,13 @@ def _createAxis2Place3D(ifcFile: ifcopenshell.file,
     if Location: data['Location'] = Location
     if Axis: data['Axis'] = Axis
     if RefDirection: data['RefDirection'] = RefDirection    
-    result = ifcFile.create_entity(type='ifcAxis2Placement3D', **data)
+    result = ifcFile.create_entity(type='IfcAxis2Placement3D', **data)
     return result
 
 
 def _createIfcObjPlace(beam: classBeam,
                        ifcFile: ifcopenshell.file,
-                       globalOrigin: ifcopenshell.entity_instance, # (IfcAxis2Place3D) 
+                       WorldOrigin: ifcopenshell.entity_instance, # (IfcAxis2Place3D) 
                        refPosition:  ifcopenshell.entity_instance, # (IfcAxis2Place3D) position of the group reference (e.g., storey)
                        Position: ifcopenshell.entity_instance, # (IfcAxis2Place3D) position of the entity (relative to refPosition and globalOrigin)
                       ) -> ifcopenshell.entity_instance:
@@ -358,9 +451,9 @@ def _createIfcObjPlace(beam: classBeam,
     prevPlace = None
     for i in range(4): # same scheme of Revit IFC exported
         if i == 0: # global origin
-            RelPlace = globalOrigin
+            RelPlace = WorldOrigin
         elif i == 1: # global origin
-            RelPlace = globalOrigin
+            RelPlace = WorldOrigin
         elif i == 2: # Reference position (e.g., Storey, group, set)
             RelPlace = refPosition
         elif i == 3: # position relative to ref pos. relative to global origin
@@ -375,7 +468,86 @@ def _createIfcObjPlace(beam: classBeam,
     #ifcLocPlace = __createIfcLocPlace(ifcFile)
     return prevPlace
 
+'''    
+def _createProdDefShape(ifcFile: ifcopenshell.file,
+                        name: str = None,
+                        description: str = None
+                       ) -> ifcopenshell.entity_instance:
+    """Creates the product definition shape"""
+    return
+
+'''
+def _createIfcLine(ifcFile: ifcopenshell.file,
+                   pointA: list[float],
+                   pointB: list[float]
+                  ) -> tuple[ifcopenshell.entity_instance,
+                             ifcopenshell.entity_instance]:
+    pnt = _createCartesianPnt(ifcFile, pointA)
+    adir = np.array(pointB) - np.array(pointA)
+    length = np.linalg.norm(adir)
+    if length == 0: 
+        print(f'Warning! Beam with zero length')
+        length = 1
+    adirnorm = adir*(1./length)
+    dir = adirnorm.tolist()
+    ifcDir = ifcFile.create_entity(type='IfcDirection', DirectionRatios=dir)
+    ifcVec = ifcFile.create_entity(type='IfcVector',
+                                   Orientation=ifcDir,
+                                   Magnitude=length)
+    ifcLine = ifcFile.create_entity(type='IfcLine', Pnt=pnt, Dir=ifcVec)
+    return ifcLine, pnt
+
+def _createAxisRep(
+                   ifcFile: ifcopenshell.file,
+                   WorldOrigin: ifcopenshell.entity_instance, # (ifcCartesianPoint)
+                   WorldCartesianOp: ifcopenshell.entity_instance, # (ifcCartesianTransformationOperator3D)
+                   pointA: list[float],
+                   pointB: list[float],
+                   context: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
+                   ) -> ifcopenshell.entity_instance:
     
+    
+    ifcLine, trimm1 = _createIfcLine(ifcFile, pointA, pointB)
+    trimm2 = _createCartesianPnt(ifcFile, pointB)
+    trimmedCurve = ifcFile.create_entity(
+        type='IfcTrimmedCurve',
+        BasisCurve = ifcLine,
+        Trim1 = [trimm1],
+        Trim2 = [trimm2],
+        SenseAgreement = True, #'T',
+        MasterRepresentation = 'CARTESIAN'
+    )
+
+    ifcShapeRep = ifcFile.create_entity(
+        type='ifcShapeRepresentation',
+        ContextOfItems= context,
+        RepresentationIdentifier='Axis',
+        RepresentationType= 'MappedRepresentation',
+        Items=[trimmedCurve]
+    )
+
+    MapOrigin = _createAxis2Place3D(ifcFile, WorldOrigin)
+    MapSource = ifcFile.create_entity(
+        type='ifcRepresentationMap',
+        MappingOrigin=MapOrigin,
+        MappedRepresentation=ifcShapeRep
+    )
+
+    MapItem = ifcFile.create_entity(
+        type='ifcMappedItem',
+        MappingSource=MapSource,
+        MappingTarget=WorldCartesianOp
+    )
+
+    ifcShapeRep = ifcFile.create_entity(
+        type='ifcShapeRepresentation',
+        ContextOfItems=context,
+        RepresentationIdentifier='Axis',
+        RepresentationType='MappedRepresentation',
+        Items=[MapItem]
+    )
+
+    return ifcShapeRep
 
 
 

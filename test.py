@@ -1,5 +1,5 @@
-sesamFilePath = r'C:\Temp\2022.05.19.TRIDENT_PCE1_ULS.xml'
-outIfcFilePath = r'C:\Temp\from_sesam.ifc'
+sesamFilePath = r'D:\Temp\2022.05.19.TRIDENT_PCE1_ULS.xml'
+outIfcFilePath = r'D:\Temp\from_sesam.ifc'
 
 #import structure.sesammodel as sesam
 import structure.ifcsesam
@@ -19,8 +19,9 @@ model = structure.ifcsesam.modelIfcSesam(xmlSesamFile=sesamFilePath)
 
 
 import ifcopenshell as ifc
-ifcFile = ifc.file(schema='IFC4')
+#ifcFile = ifc.file(schema='IFC4')
 
+"""
 for i, beam in enumerate(model._Beams):
     found = None
     name = 'Bm581'
@@ -28,6 +29,8 @@ for i, beam in enumerate(model._Beams):
         found = beam
         break
     if not found: raise Exception(f'Beam {name} not found')
+"""
+model.ExportToIFC(outIfcFilePath, slice(1))
 
-model._Beams[i].exportBeamToIfc(ifcFile)
-ifcFile.write(outIfcFilePath)
+#model._Beams[0].exportBeamToIfc(ifcFile)
+#ifcFile.write(outIfcFilePath)
