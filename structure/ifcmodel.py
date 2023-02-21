@@ -47,6 +47,7 @@ class bimBeam(classBeam):
         self.MapTransfMatrix = np_matrix.tolist()
         self.guid = ''
         self.PropSet = {}
+        self.IfcBeam: ifcopenshell.entity_instance
         
 
         if ifcFile and ifcBeam and context:
@@ -203,7 +204,6 @@ class bimBeam(classBeam):
                 print(f'Warning! Calculated length {calcLength}m different of the IFC pset data length {ifcLength}m.')
         
         id1 = self.PropSet[psetKeysID[0]][psetKeysID[1]]
-
         id2 = ifcBeam.GlobalId
         self.name = ifcBeam.Name # f'{id1} | {id2}'
         self.guid = ifcBeam.GlobalId
@@ -212,13 +212,6 @@ class bimBeam(classBeam):
     def exportBeamToIfc(
             self, 
             IfcInfo: ifcInfo,
-            ifcFile: ifcopenshell.file,
-            #WorldOrigin: ifcopenshell.entity_instance, # (ifcCartesianPoint)
-            #WorldCoordSys: ifcopenshell.entity_instance, # (IfcAxis2Placement3D)
-            #WorldCartesianOp: ifcopenshell.entity_instance, # (ifcCartesianTransformationOperator3D)
-            #Context: ifcopenshell.entity_instance, # (IfcGeometricRepresentationContext)
-            #AxisSubContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
-            #BodySubContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
             refPosition: ifcopenshell.entity_instance = None # (IfcAxis2Placement3D) rerefence (e.g., storey) position
             ) -> ifcopenshell.entity_instance:
         """
@@ -238,21 +231,17 @@ class bimBeam(classBeam):
             IfcInfo,
             self.IniPos, 
             self.LastPos, 
-            #IfcInfo.ModelContext
         )
 
         ifcProdDefShape = IfcInfo.ifcFile.create_entity(
             type='ifcProductDefinitionShape',
             Representations=[AxisRep], # TODO: include body representation
         )
-        
-
 
         ifcBeam = IfcInfo.ifcFile.create_entity(
             type='IfcBeam',
             GlobalId = ifcopenshell.guid.new(),
             OwnerHistory = IfcInfo.ownerHistory,
-            # TODO: OwnerHistory
             Name = self.name, #beam.name,
             Description = self.Description, # beam.Description,
             # TODO: ObjectType
@@ -261,6 +250,8 @@ class bimBeam(classBeam):
             # TODO: Tag    
             # TODO: PredefinedType
             )
+        
+        self.IfcBeam = ifcBeam
         return ifcBeam
 
     def __createPlacement(self, 
@@ -317,14 +308,21 @@ class ifcBeamList(list[bimBeam]):
 # ==== ifcModel CLASS DEFINITION ==== #
 class ifcInfo:
     def __init__(self) -> None:
-        self.ifcFile: ifcopenshell.file
-        self.ownerHistory: ifcopenshell.entity_instance
-        self.WorldOrigin: ifcopenshell.entity_instance
-        self.WorldCoordSys: ifcopenshell.entity_instance
-        self.WorldCartesianOp: ifcopenshell.entity_instance
-        self.ModelContext: ifcopenshell.entity_instance
-        self.AxisSubContext: ifcopenshell.entity_instance
-        self.BodySubContext: ifcopenshell.entity_instance
+        self.ifcFile: ifcopenshell.file 
+        self.ownerHistory: ifcopenshell.entity_instance # (IfcOwnerHistory)
+        self.WorldOrigin: ifcopenshell.entity_instance # (IfcCartesianPoint)
+        self.WorldCoordSys: ifcopenshell.entity_instance # (IfcAxis2Placement3D)
+        self.WorldCartesianOp: ifcopenshell.entity_instance # (ifcCartesianTransformationOperator3D)
+        self.WorldLocPlace: ifcopenshell.entity_instance # (ifcLocalPlacement)
+        self.ModelContext: ifcopenshell.entity_instance # (IfcGeometricRepresentationContext)
+        self.AxisSubContext: ifcopenshell.entity_instance # (IfcGeometricRepresentationSubContext)
+        self.BodySubContext: ifcopenshell.entity_instance # (IfcGeometricRepresentationSubContext)
+        self.unitsAssign: ifcopenshell.entity_instance # (IfcUnitAssignment)
+        self.Project: ifcopenshell.entity_instance  # (IfcProject)
+        self.Site: ifcopenshell.entity_instance # (IfcSite)
+        self.Building: ifcopenshell.entity_instance  # (IfcBuilding)
+        self.ExportedBeams = list() # list of IfcBeams
+        
 
 class ifcModel(classConceptModel):
     def __init__(self, ifcFilePath: str = None) -> None:
@@ -335,40 +333,58 @@ class ifcModel(classConceptModel):
     def ExportToIFC(self, ifcFilePath: str, beamIndexes: slice = None) -> None:
         self.IfcInfo.ifcFile = ifcopenshell.file(schema='IFC4')
 
-        self.IfcInfo.ownerHistory = self._writeProjectData(self.IfcInfo.ifcFile) # exports original model info
+        self.IfcInfo.unitsAssign = _writeIfcUnits(self.IfcInfo.ifcFile) # exports units
 
-        _writeIfcUnits(self.IfcInfo.ifcFile) # exports units
+        self.IfcInfo.WorldOrigin = _createCartesianPnt(
+            self.IfcInfo.ifcFile,
+            [0.,0.,0.]
+        )
 
-        self.IfcInfo.WorldOrigin = _createCartesianPnt(self.IfcInfo.ifcFile, [0.,0.,0.])
-        self.IfcInfo.WorldCoordSys = _createAxis2Place3D(self.IfcInfo.ifcFile, self.IfcInfo.WorldOrigin) # TODO: handle the orientation (Axis and RefDirection)
-        self.IfcInfo.WorldCartesianOp = self.IfcInfo.ifcFile.create_entity(type='ifcCartesianTransformationOperator3D',
-            LocalOrigin=self.IfcInfo.WorldOrigin, Scale=1.)
+        self.IfcInfo.WorldCoordSys = _createAxis2Place3D(
+            self.IfcInfo.ifcFile, 
+            self.IfcInfo.WorldOrigin
+        ) # TODO: handle the orientation (Axis and RefDirection)
 
-        self.IfcInfo.ModelContext = _createModelContext(self.IfcInfo.ifcFile, self.IfcInfo.WorldCoordSys) # TODO: handle the precision
-        self.IfcInfo.AxisSubContext = _createSubContext(self.IfcInfo.ifcFile, 'Axis', self.IfcInfo.ModelContext, 'GRAPH_VIEW')
-        self.IfcInfo.BodySubContext = _createSubContext(self.IfcInfo.ifcFile, 'Body', self.IfcInfo.ModelContext, 'MODEL_VIEW')
+        self.IfcInfo.WorldCartesianOp = self.IfcInfo.ifcFile.create_entity(
+            type='ifcCartesianTransformationOperator3D',
+            LocalOrigin=self.IfcInfo.WorldOrigin, 
+            Scale=1.
+        )
+
+        self.IfcInfo.WorldLocPlace = _createIfcLocPlace(
+            self.IfcInfo.ifcFile, 
+            RelPlace=self.IfcInfo.WorldCoordSys
+        )
+
+        self.IfcInfo.ModelContext = _createModelContext(self.IfcInfo) # TODO: handle the precision
+
+        self._writeProjectData(self.IfcInfo) # exports original model info
+        self.IfcInfo.Building = _createBuilding(self.IfcInfo)
+
+        self.IfcInfo.AxisSubContext = _createSubContext(
+            self.IfcInfo.ifcFile, 'Axis', 
+            self.IfcInfo.ModelContext, 
+            'GRAPH_VIEW'
+        )
+        self.IfcInfo.BodySubContext = _createSubContext(
+            self.IfcInfo.ifcFile, 
+            'Body', 
+            self.IfcInfo.ModelContext, 
+            'MODEL_VIEW'
+        )
 
         if beamIndexes == None: 
             for beam in self._Beams:
-                beam.exportBeamToIfc(self.IfcInfo,
-                                     self.IfcInfo.ifcFile, 
-                                     #ModelContext, 
-                                     #AxisSubContext, 
-                                     #BodySubContext
-                                     )
+                self.IfcInfo.ExportedBeams.append(beam.exportBeamToIfc(self.IfcInfo))
         else: 
             for beam in self._Beams[beamIndexes]:
-                beam.exportBeamToIfc(self.IfcInfo,
-                                     self.IfcInfo.ifcFile, 
-                                     #ModelContext, 
-                                     #AxisSubContext, 
-                                     #BodySubContext
-                                     )
+                self.IfcInfo.ExportedBeams.append(beam.exportBeamToIfc(self.IfcInfo))
+
+        _createContainment(self.IfcInfo)
 
         self.IfcInfo.ifcFile.write(ifcFilePath)
 
-    def _writeProjectData(self, ifcFile: ifcopenshell.file
-                         ) -> ifcopenshell.entity_instance:
+    def _writeProjectData(self, IfcInfo: ifcInfo) -> ifcopenshell.entity_instance:
 
         prog = str(self.OriginInfo['Program'])
         ver = str(self.OriginInfo['Version'])
@@ -376,14 +392,14 @@ class ifcModel(classConceptModel):
             f', version {ver} ' +\
             f'to IFC by NSG in {datetime.now()}'
 
-        org = ifcFile.create_entity(
+        org = self.IfcInfo.ifcFile.create_entity(
             type='IfcOrganization', 
             Name='NSG',
             Description=description,
             #Addresses=['http://www.nsg.eng.br']
         )
 
-        app = ifcFile.create_entity(
+        app = self.IfcInfo.ifcFile.create_entity(
             type='IfcApplication',
             ApplicationDeveloper=org,
             Version='1.0',
@@ -391,12 +407,12 @@ class ifcModel(classConceptModel):
             ApplicationIdentifier='bim-tools'
         )
 
-        person = ifcFile.create_entity(
+        person = self.IfcInfo.ifcFile.create_entity(
             type='IfcPerson',
             GivenName=self.OriginInfo['User']
         )
 
-        personAndOrg = ifcFile.create_entity(
+        personAndOrg = self.IfcInfo.ifcFile.create_entity(
             type='IfcPersonAndOrganization',
             ThePerson=person,
             TheOrganization=org
@@ -408,15 +424,38 @@ class ifcModel(classConceptModel):
         delta = d - epoch_time       
         dateInSeconds = int(delta.total_seconds()) # from 01/01/1970
 
-        ownerHistory = ifcFile.create_entity(
+        IfcInfo.ownerHistory = self.IfcInfo.ifcFile.create_entity(
             type='IfcOwnerHistory',
             OwningUser=personAndOrg,
             OwningApplication=app,
             ChangeAction='NOCHANGE',
             CreationDate=dateInSeconds
         )
+        
+        IfcInfo.Project = IfcInfo.ifcFile.create_entity(
+            type='IfcProject',
+            GlobalId=ifcopenshell.guid.new(),
+            OwnerHistory=IfcInfo.ownerHistory,
+            Name='0001',
+            LongName='Project name',
+            Phase='Project status',
+            RepresentationContexts=[IfcInfo.ModelContext],
+            UnitsInContext=IfcInfo.unitsAssign            
+        )
+        
+        IfcInfo.Site = IfcInfo.ifcFile.create_entity(
+            type = 'IfcSite',
+            GlobalId = ifcopenshell.guid.new(),
+            OwnerHistory = IfcInfo.ownerHistory,
+            Name = 'Site',
+            ObjectPlacement = IfcInfo.WorldLocPlace,
+            CompositionType = 'ELEMENT',
+            # TODO: RefLatitude,
+            # TODO: RefLongitude,
+            # TODO: RefElevation,
+        )
 
-        return ownerHistory
+        return IfcInfo.Project
 
 
 
@@ -437,6 +476,29 @@ def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_insta
     print(f'{len(instList)} beams found in IFC file.')
     return instList.copy()
 
+
+def _createContainment(IfcInfo: ifcInfo):
+    return IfcInfo.ifcFile.create_entity(
+        type='IfcRelContainedInSpatialStructure',
+        GlobalId=ifcopenshell.guid.new(),
+        OwnerHistory=IfcInfo.ownerHistory,
+        RelatedElements=IfcInfo.ExportedBeams,
+        RelatingStructure=IfcInfo.Building
+    )
+    
+
+def _createBuilding(IfcInfo: ifcInfo):
+    return IfcInfo.ifcFile.create_entity(
+        type='IfcBuilding',
+        GlobalId=ifcopenshell.guid.new(),
+        OwnerHistory=IfcInfo.ownerHistory,
+        Name='Platform Name', # TODO: get from model or input
+        ObjectType='Offshore platform', # TODO: get from model or input
+        ObjectPlacement=IfcInfo.WorldLocPlace,
+        LongName='',
+        CompositionType='ELEMENT',
+        # TODO: include "IfcPostalAddress" (geo location)
+    )
 
 def _createUnit(ifcFile: ifcopenshell.file,
                 UnitType: str, 
@@ -476,10 +538,11 @@ def _createDerivedUnit(ifcFile: ifcopenshell.file,
 
 
 
-
-
 def _writeIfcUnits(ifcFile: ifcopenshell.file) -> ifcopenshell.entity_instance:
-    """Write the units in the IFC file"""
+    """
+    Write the units in the IFC file
+    * return: IfcUnitAssignment
+    """
     units = {}
     units['LENGTHUNIT'] = _createUnit(ifcFile,'LENGTHUNIT','METRE')
     units['AREAUNIT'] = _createUnit(ifcFile,'AREAUNIT','SQUARE_METRE')
@@ -509,8 +572,9 @@ def _writeIfcUnits(ifcFile: ifcopenshell.file) -> ifcopenshell.entity_instance:
     return ifcFile.create_entity(type='IfcUnitAssignment', Units=unitList)
     
 
-def _createModelContext(ifcFile: ifcopenshell.file,
-                        WorldCoordSys: ifcopenshell.entity_instance, #(IfcAxis2Placement)
+def _createModelContext(IfcInfo: ifcInfo,
+                        #ifcFile: ifcopenshell.file,
+                        #WorldCoordSys: ifcopenshell.entity_instance, #(IfcAxis2Placement)
                         CoordSysDim: int = 3,
                         ContextType: str = 'Model', # (e.g., 'Model')
                         Precision: float = None,
@@ -518,13 +582,16 @@ def _createModelContext(ifcFile: ifcopenshell.file,
                         ) -> ifcopenshell.entity_instance:
 
     data = {}
-    data['WorldCoordinateSystem'] = WorldCoordSys
+    data['WorldCoordinateSystem'] = IfcInfo.WorldCoordSys
     data['CoordinateSpaceDimension'] = CoordSysDim
     data['ContextType'] = ContextType
     if Precision: data['Precision'] = Precision
     if TrueNorth: data['TrueNorth'] = TrueNorth
 
-    return ifcFile.create_entity(type='IfcGeometricRepresentationContext', **data) 
+    return IfcInfo.ifcFile.create_entity(
+        type='IfcGeometricRepresentationContext', 
+        **data
+    ) 
 
 def _createSubContext(ifcFile: ifcopenshell.file,
                       Identifier: str,
@@ -538,7 +605,7 @@ def _createSubContext(ifcFile: ifcopenshell.file,
                                  ContextType=Type,
                                  ParentContext=ParentContext,
                                  TargetView=TargetView,
-                                 )                             
+                                 )
 
 def _createIfcLocPlace(ifcFile: ifcopenshell.file,
                         RelTo: ifcopenshell.entity_instance = None,
@@ -604,8 +671,6 @@ def _createIfcObjPlace(beam: classBeam,
 
         prevPlace = _createIfcLocPlace(ifcFile, prevPlace, RelPlace)
 
-    #ifcLocPlace = ifcFile.create_entity(type = 'IfcLocalPlacement')
-    #ifcLocPlace = __createIfcLocPlace(ifcFile)
     return prevPlace
 
 '''    
@@ -639,12 +704,8 @@ def _createIfcLine(ifcFile: ifcopenshell.file,
 
 def _createAxisRep(
                    ifcInfo: ifcInfo,
-                   #ifcFile: ifcopenshell.file,
-                   #WorldOrigin: ifcopenshell.entity_instance, # (ifcCartesianPoint)
-                   #WorldCartesianOp: ifcopenshell.entity_instance, # (ifcCartesianTransformationOperator3D)
                    pointA: list[float],
                    pointB: list[float],
-                   #context: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
                    ) -> ifcopenshell.entity_instance:
     
     

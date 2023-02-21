@@ -21,6 +21,13 @@ model = structure.ifcsesam.modelIfcSesam(xmlSesamFile=sesamFilePath)
 import ifcopenshell as ifc
 #ifcFile = ifc.file(schema='IFC4')
 
+
+
+
+
+
+
+
 """
 for i, beam in enumerate(model._Beams):
     found = None
