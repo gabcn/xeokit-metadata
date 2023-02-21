@@ -1148,6 +1148,8 @@ class classConceptModel():
         self._MaterialList = classMatList()
         self._HydroProps = classHPropsList()
         self.LogFile = open('log.txt', 'w')
+        self.OriginInfo = {} # e.g., 'Program', 'Version', 'User'
+        self.ConversionInfo = {} # e.g., 'Date'
 
    
     def _Message(self, text: str, end: str = '\n') -> None:

@@ -7,12 +7,14 @@ Required packages:
 """
 
 # LIBS
+from __future__ import annotations
 import ifcopenshell
 import ifcopenshell.util.representation as ifcrep
 import ifcopenshell.util.unit as ifcunit
 import ifcopenshell.util.placement as ifcplace
 import numpy as np
 from structure.conceptmodel import classBeam, classConceptModel
+from datetime import datetime
 
 
 
@@ -45,6 +47,7 @@ class bimBeam(classBeam):
         self.MapTransfMatrix = np_matrix.tolist()
         self.guid = ''
         self.PropSet = {}
+        
 
         if ifcFile and ifcBeam and context:
             self.importFromIfc(ifcFile, ifcBeam, context, subcontext)
@@ -208,13 +211,14 @@ class bimBeam(classBeam):
     # ==== export to IFC file ==== #
     def exportBeamToIfc(
             self, 
+            IfcInfo: ifcInfo,
             ifcFile: ifcopenshell.file,
-            WorldOrigin: ifcopenshell.entity_instance, # (ifcCartesianPoint)
-            WorldCoordSys: ifcopenshell.entity_instance, # (IfcAxis2Placement3D)
-            WorldCartesianOp: ifcopenshell.entity_instance, # (ifcCartesianTransformationOperator3D)
-            Context: ifcopenshell.entity_instance, # (IfcGeometricRepresentationContext)
-            AxisSubContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
-            BodySubContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
+            #WorldOrigin: ifcopenshell.entity_instance, # (ifcCartesianPoint)
+            #WorldCoordSys: ifcopenshell.entity_instance, # (IfcAxis2Placement3D)
+            #WorldCartesianOp: ifcopenshell.entity_instance, # (ifcCartesianTransformationOperator3D)
+            #Context: ifcopenshell.entity_instance, # (IfcGeometricRepresentationContext)
+            #AxisSubContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
+            #BodySubContext: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
             refPosition: ifcopenshell.entity_instance = None # (IfcAxis2Placement3D) rerefence (e.g., storey) position
             ) -> ifcopenshell.entity_instance:
         """
@@ -223,32 +227,31 @@ class bimBeam(classBeam):
         """
 
         if not refPosition:
-            refPoint = _createCartesianPnt(ifcFile, self.RefCoords) # TODO: evaluate the possibility to consider a reference location (e.g., groups, sets, storeys)
-            refPosition = _createAxis2Place3D(ifcFile, refPoint) # TODO: handle the orientation (Axis and RefDirection)
+            refPoint = _createCartesianPnt(IfcInfo.ifcFile, self.RefCoords) # TODO: evaluate the possibility to consider a reference location (e.g., groups, sets, storeys)
+            refPosition = _createAxis2Place3D(IfcInfo.ifcFile, refPoint) # TODO: handle the orientation (Axis and RefDirection)
 
         # creates the ObjectPlacement
-        ifcObjPlace = self.__createPlacement(ifcFile, WorldCoordSys, refPosition)
+        ifcObjPlace = self.__createPlacement(IfcInfo.ifcFile, IfcInfo.WorldCoordSys, refPosition)
 
         # creates the object 'Axis' representation
         AxisRep = _createAxisRep(
-            ifcFile, 
-            WorldOrigin, 
-            WorldCartesianOp, 
+            IfcInfo,
             self.IniPos, 
             self.LastPos, 
-            Context
+            #IfcInfo.ModelContext
         )
 
-        ifcProdDefShape = ifcFile.create_entity(
+        ifcProdDefShape = IfcInfo.ifcFile.create_entity(
             type='ifcProductDefinitionShape',
             Representations=[AxisRep], # TODO: include body representation
         )
         
 
 
-        ifcBeam = ifcFile.create_entity(
+        ifcBeam = IfcInfo.ifcFile.create_entity(
             type='IfcBeam',
             GlobalId = ifcopenshell.guid.new(),
+            OwnerHistory = IfcInfo.ownerHistory,
             # TODO: OwnerHistory
             Name = self.name, #beam.name,
             Description = self.Description, # beam.Description,
@@ -312,46 +315,111 @@ class ifcBeamList(list[bimBeam]):
 
 
 # ==== ifcModel CLASS DEFINITION ==== #
+class ifcInfo:
+    def __init__(self) -> None:
+        self.ifcFile: ifcopenshell.file
+        self.ownerHistory: ifcopenshell.entity_instance
+        self.WorldOrigin: ifcopenshell.entity_instance
+        self.WorldCoordSys: ifcopenshell.entity_instance
+        self.WorldCartesianOp: ifcopenshell.entity_instance
+        self.ModelContext: ifcopenshell.entity_instance
+        self.AxisSubContext: ifcopenshell.entity_instance
+        self.BodySubContext: ifcopenshell.entity_instance
+
 class ifcModel(classConceptModel):
     def __init__(self, ifcFilePath: str = None) -> None:
         super().__init__()
         self._Beams = ifcBeamList(self, ifcFilePath)
+        self.IfcInfo = ifcInfo()        
 
     def ExportToIFC(self, ifcFilePath: str, beamIndexes: slice = None) -> None:
-        ifcFile = ifcopenshell.file(schema='IFC4')
+        self.IfcInfo.ifcFile = ifcopenshell.file(schema='IFC4')
 
-        WorldOrigin = _createCartesianPnt(ifcFile, [0.,0.,0.])
-        WorldCoordSys = _createAxis2Place3D(ifcFile, WorldOrigin) # TODO: handle the orientation (Axis and RefDirection)
-        WorldCartesianOp = ifcFile.create_entity(type='ifcCartesianTransformationOperator3D',
-            LocalOrigin=WorldOrigin, Scale=1.)
+        self.IfcInfo.ownerHistory = self._writeProjectData(self.IfcInfo.ifcFile) # exports original model info
 
-        ModelContext = _createModelContext(ifcFile, WorldCoordSys) # TODO: handle the precision
-        AxisSubContext = _createSubContext(ifcFile, 'Axis', ModelContext, 'GRAPH_VIEW')
-        BodySubContext = _createSubContext(ifcFile, 'Body', ModelContext, 'MODEL_VIEW')
-        
-       
+        _writeIfcUnits(self.IfcInfo.ifcFile) # exports units
+
+        self.IfcInfo.WorldOrigin = _createCartesianPnt(self.IfcInfo.ifcFile, [0.,0.,0.])
+        self.IfcInfo.WorldCoordSys = _createAxis2Place3D(self.IfcInfo.ifcFile, self.IfcInfo.WorldOrigin) # TODO: handle the orientation (Axis and RefDirection)
+        self.IfcInfo.WorldCartesianOp = self.IfcInfo.ifcFile.create_entity(type='ifcCartesianTransformationOperator3D',
+            LocalOrigin=self.IfcInfo.WorldOrigin, Scale=1.)
+
+        self.IfcInfo.ModelContext = _createModelContext(self.IfcInfo.ifcFile, self.IfcInfo.WorldCoordSys) # TODO: handle the precision
+        self.IfcInfo.AxisSubContext = _createSubContext(self.IfcInfo.ifcFile, 'Axis', self.IfcInfo.ModelContext, 'GRAPH_VIEW')
+        self.IfcInfo.BodySubContext = _createSubContext(self.IfcInfo.ifcFile, 'Body', self.IfcInfo.ModelContext, 'MODEL_VIEW')
 
         if beamIndexes == None: 
             for beam in self._Beams:
-                beam.exportBeamToIfc(ifcFile, 
-                                     WorldOrigin,
-                                     WorldCoordSys,
-                                     WorldCartesianOp,
-                                     ModelContext, 
-                                     AxisSubContext, 
-                                     BodySubContext)
+                beam.exportBeamToIfc(self.IfcInfo,
+                                     self.IfcInfo.ifcFile, 
+                                     #ModelContext, 
+                                     #AxisSubContext, 
+                                     #BodySubContext
+                                     )
         else: 
             for beam in self._Beams[beamIndexes]:
-                beam.exportBeamToIfc(ifcFile, 
-                                     WorldOrigin,
-                                     WorldCoordSys, 
-                                     WorldCartesianOp,
-                                     ModelContext, 
-                                     AxisSubContext, 
-                                     BodySubContext)
+                beam.exportBeamToIfc(self.IfcInfo,
+                                     self.IfcInfo.ifcFile, 
+                                     #ModelContext, 
+                                     #AxisSubContext, 
+                                     #BodySubContext
+                                     )
+
+        self.IfcInfo.ifcFile.write(ifcFilePath)
+
+    def _writeProjectData(self, ifcFile: ifcopenshell.file
+                         ) -> ifcopenshell.entity_instance:
+
+        prog = str(self.OriginInfo['Program'])
+        ver = str(self.OriginInfo['Version'])
+        description = f'Model exported from {prog}' + \
+            f', version {ver} ' +\
+            f'to IFC by NSG in {datetime.now()}'
+
+        org = ifcFile.create_entity(
+            type='IfcOrganization', 
+            Name='NSG',
+            Description=description,
+            #Addresses=['http://www.nsg.eng.br']
+        )
+
+        app = ifcFile.create_entity(
+            type='IfcApplication',
+            ApplicationDeveloper=org,
+            Version='1.0',
+            ApplicationFullName='BIM conversion tools',
+            ApplicationIdentifier='bim-tools'
+        )
+
+        person = ifcFile.create_entity(
+            type='IfcPerson',
+            GivenName=self.OriginInfo['User']
+        )
+
+        personAndOrg = ifcFile.create_entity(
+            type='IfcPersonAndOrganization',
+            ThePerson=person,
+            TheOrganization=org
+        )
+
+        date = self.OriginInfo['Date']
+        d = datetime.strptime(date, r'%d-%b-%Y')
+        epoch_time = datetime(1970, 1, 1)
+        delta = d - epoch_time       
+        dateInSeconds = int(delta.total_seconds()) # from 01/01/1970
+
+        ownerHistory = ifcFile.create_entity(
+            type='IfcOwnerHistory',
+            OwningUser=personAndOrg,
+            OwningApplication=app,
+            ChangeAction='NOCHANGE',
+            CreationDate=dateInSeconds
+        )
+
+        return ownerHistory
 
 
-        ifcFile.write(ifcFilePath)
+
 
 
 
@@ -368,6 +436,78 @@ def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_insta
             instList.extend(add)
     print(f'{len(instList)} beams found in IFC file.')
     return instList.copy()
+
+
+def _createUnit(ifcFile: ifcopenshell.file,
+                UnitType: str, 
+                Name: str, 
+                Prefix: str = None
+                ) -> ifcopenshell.entity_instance:
+    data = {}
+    data['UnitType'] = UnitType
+    data['Name'] = Name
+    if Prefix: data['Prefix'] = Prefix
+
+    return ifcFile.create_entity(type='IfcSIUnit', **data)
+
+def _createDerivedUnit(ifcFile: ifcopenshell.file,
+                       UnitType: str,
+                       BaseUnits: list[ifcopenshell.entity_instance],
+                       Exponents: list[float],
+                       ) -> ifcopenshell.entity_instance:
+    Elements = []
+    if len(BaseUnits) != len(Exponents):
+        raise Exception('Error! Number of items in BaseUnits '+\
+            'different of Expoents')
+    for unit, exp in zip(BaseUnits, Exponents):
+        Elements.append(
+            ifcFile.create_entity(
+                type='IfcDerivedUnitElement',
+                Unit=unit,
+                Exponent=exp
+            )
+        )
+    
+    return ifcFile.create_entity(
+        Elements=Elements,
+        type='IfcDerivedUnit',        
+        UnitType=UnitType
+    )
+
+
+
+
+
+def _writeIfcUnits(ifcFile: ifcopenshell.file) -> ifcopenshell.entity_instance:
+    """Write the units in the IFC file"""
+    units = {}
+    units['LENGTHUNIT'] = _createUnit(ifcFile,'LENGTHUNIT','METRE')
+    units['AREAUNIT'] = _createUnit(ifcFile,'AREAUNIT','SQUARE_METRE')
+    units['VOLUMEUNIT'] = _createUnit(ifcFile,'VOLUMEUNIT','CUBIC_METRE')
+    units['PLANEANGLEUNIT'] = _createUnit(ifcFile, 'PLANEANGLEUNIT','RADIAN')
+    units['MASSUNIT'] = _createUnit(ifcFile, 'MASSUNIT','GRAM','KILO')
+    units['MASSDENSITYUNIT'] = _createDerivedUnit(
+        ifcFile, 'MASSDENSITYUNIT' ,
+        [units['MASSUNIT'], units['LENGTHUNIT']], 
+        [1,-3]
+        )
+    
+    units['MOMENTOFINERTIAUNIT'] = _createDerivedUnit(
+        ifcFile, 'MOMENTOFINERTIAUNIT',
+        [units['LENGTHUNIT']],
+        [4]
+        )
+
+    units['TIMEUNIT'] = _createUnit(ifcFile,'TIMEUNIT','SECOND')
+    units['FREQUENCYUNIT'] = _createUnit(ifcFile,'FREQUENCYUNIT','HERTZ')
+    units['THERMODYNAMICTEMPERATUREUNIT'] = _createUnit(
+        ifcFile, 'THERMODYNAMICTEMPERATUREUNIT', 'DEGREE_CELSIUS')
+
+    unitList = []
+    for unit in units.values(): unitList.append(unit)
+
+    return ifcFile.create_entity(type='IfcUnitAssignment', Units=unitList)
+    
 
 def _createModelContext(ifcFile: ifcopenshell.file,
                         WorldCoordSys: ifcopenshell.entity_instance, #(IfcAxis2Placement)
@@ -498,18 +638,19 @@ def _createIfcLine(ifcFile: ifcopenshell.file,
     return ifcLine, pnt
 
 def _createAxisRep(
-                   ifcFile: ifcopenshell.file,
-                   WorldOrigin: ifcopenshell.entity_instance, # (ifcCartesianPoint)
-                   WorldCartesianOp: ifcopenshell.entity_instance, # (ifcCartesianTransformationOperator3D)
+                   ifcInfo: ifcInfo,
+                   #ifcFile: ifcopenshell.file,
+                   #WorldOrigin: ifcopenshell.entity_instance, # (ifcCartesianPoint)
+                   #WorldCartesianOp: ifcopenshell.entity_instance, # (ifcCartesianTransformationOperator3D)
                    pointA: list[float],
                    pointB: list[float],
-                   context: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
+                   #context: ifcopenshell.entity_instance, # (IfcGeometricRepresentationSubContext)
                    ) -> ifcopenshell.entity_instance:
     
     
-    ifcLine, trimm1 = _createIfcLine(ifcFile, pointA, pointB)
-    trimm2 = _createCartesianPnt(ifcFile, pointB)
-    trimmedCurve = ifcFile.create_entity(
+    ifcLine, trimm1 = _createIfcLine(ifcInfo.ifcFile, pointA, pointB)
+    trimm2 = _createCartesianPnt(ifcInfo.ifcFile, pointB)
+    trimmedCurve = ifcInfo.ifcFile.create_entity(
         type='IfcTrimmedCurve',
         BasisCurve = ifcLine,
         Trim1 = [trimm1],
@@ -518,30 +659,30 @@ def _createAxisRep(
         MasterRepresentation = 'CARTESIAN'
     )
 
-    ifcShapeRep = ifcFile.create_entity(
+    ifcShapeRep = ifcInfo.ifcFile.create_entity(
         type='ifcShapeRepresentation',
-        ContextOfItems= context,
+        ContextOfItems= ifcInfo.AxisSubContext,
         RepresentationIdentifier='Axis',
         RepresentationType= 'MappedRepresentation',
         Items=[trimmedCurve]
     )
 
-    MapOrigin = _createAxis2Place3D(ifcFile, WorldOrigin)
-    MapSource = ifcFile.create_entity(
+    MapOrigin = _createAxis2Place3D(ifcInfo.ifcFile, ifcInfo.WorldOrigin)
+    MapSource = ifcInfo.ifcFile.create_entity(
         type='ifcRepresentationMap',
         MappingOrigin=MapOrigin,
         MappedRepresentation=ifcShapeRep
     )
 
-    MapItem = ifcFile.create_entity(
+    MapItem = ifcInfo.ifcFile.create_entity(
         type='ifcMappedItem',
         MappingSource=MapSource,
-        MappingTarget=WorldCartesianOp
+        MappingTarget=ifcInfo.WorldCartesianOp
     )
 
-    ifcShapeRep = ifcFile.create_entity(
+    ifcShapeRep = ifcInfo.ifcFile.create_entity(
         type='ifcShapeRepresentation',
-        ContextOfItems=context,
+        ContextOfItems=ifcInfo.AxisSubContext,
         RepresentationIdentifier='Axis',
         RepresentationType='MappedRepresentation',
         Items=[MapItem]

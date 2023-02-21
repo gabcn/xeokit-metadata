@@ -1,6 +1,6 @@
-s = slice()
+d = {}
+d['a'] = 1
+d['b'] = 2
 
-group = [1,2,3,4,5,6,7]
-
-for i in group[s]:
+for i in d.values():
     print(i)

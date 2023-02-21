@@ -1,5 +1,5 @@
-sesamFilePath = r'D:\Temp\2022.05.19.TRIDENT_PCE1_ULS.xml'
-outIfcFilePath = r'D:\Temp\from_sesam.ifc'
+sesamFilePath = r'C:\Temp\2022.05.19.TRIDENT_PCE1_ULS.xml'
+outIfcFilePath = r'C:\Temp\from_sesam.ifc'
 
 #import structure.sesammodel as sesam
 import structure.ifcsesam
