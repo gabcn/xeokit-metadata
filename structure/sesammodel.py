@@ -20,10 +20,9 @@ class cSesamModel(classConceptModel):
             self.ImportFromSesamConceptModel(xmlFile)
 
     def _OpenXmlFile(self, xmlfile: str) -> ET.Element:        
-        tree = ET.parse(xmlfile)
-        root = tree.getroot()
-        xml_model = root.find('model')  
-        return xml_model     
+        xml_tree = ET.parse(xmlfile)
+        xml_root= xml_tree.getroot()
+        return xml_root     
 
     def ImportFromSesamConceptModel(self, xmlfile: str) -> None:
         """
@@ -33,8 +32,10 @@ class cSesamModel(classConceptModel):
         """    
 
         # TODO: Handle units (assuming, for now, S.I.)
+        xml_root = self._OpenXmlFile(xmlfile)
+        self._ImportAdmInfo(xml_root)
 
-        xml_model = self._OpenXmlFile(xmlfile)
+        xml_model = xml_root.find('model')
 
         self.Units = classSesamUnits(xml_model)
         ImportMaterialsFromSesam(self._MaterialList, xml_model, self.Units)
@@ -46,6 +47,23 @@ class cSesamModel(classConceptModel):
         self._ImportStructures(structures, self.Selections)        
         #self._Beams.DetectIntersections()        
         #self._Connections.print()
+
+    def _ImportAdmInfo(self, xml_root: ET.Element):
+        xml_adm = xml_root.find('administrative')
+        xml_prog = xml_adm.find('program')
+        program = xml_prog.get('program')
+        version = xml_prog.get('version')
+        xml_session = xml_adm.find('session_info')
+        user = xml_session.get('user')
+        xml_model = xml_root.find('model')
+        modelName = xml_model.get('name')
+        date = xml_session.get('date')
+        
+        self.OriginInfo['Program'] = program
+        self.OriginInfo['Version'] = version
+        self.OriginInfo['User'] = user
+        self.OriginInfo['Model'] = modelName
+        self.OriginInfo['Date'] = date
 
     def _ImportStructures(self, xml_structures: ET.Element, selections: classOptions):
         for child in xml_structures:

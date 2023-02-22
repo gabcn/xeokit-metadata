@@ -48,13 +48,20 @@ def __ProcStraightSeg(segment: ET.Element,
         EndA, EndB = _GetCoordsABfromSeg(segment)
         if (EndA[0], EndA[1], EndA[2]) != (beam.LastPos[0], beam.LastPos[1], beam.LastPos[2]):
             #print(f'Warning! Discontinuities between segments will be disregarded.')
-            conceptModel._Message(f'Warning! Discontinuities between segments will be disregarded.')
+            conceptModel._Message(
+                f'Warning! Discontinuities between segments will be disregarded. ' + \
+                '\nEnd position of the previous segment: ' + \
+                f'{beam.LastPos[0]}, {beam.LastPos[1]}, {beam.LastPos[2]}' + \
+                '\nStart position of the current segment: ' + \
+                f'{EndA[0]}, {EndA[1]}, {EndA[2]}'                
+            )
 
         if (EndA[2]+EndB[2]) > env.WaterSurfaceZ + env.MaxWaveHeight:
             selectedhydrocoeffs = airdragcoeffs
         else:
             selectedhydrocoeffs = hydrocoeffs
-        segprops = classSegProps(section, material, selectedhydrocoeffs)
+        sectionPntr = sections.Find(section)
+        segprops = classSegProps(section, material, selectedhydrocoeffs, sectionPointer=sectionPntr)
         beam.AddSegmentByEnd(EndB, segprops)
 
 def __GetCurveLocalSys(beam: classBeam,

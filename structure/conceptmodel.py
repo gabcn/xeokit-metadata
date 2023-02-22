@@ -105,6 +105,8 @@ class classSegProps:
     #morison_coef: str = None # TODO: import hydrodynamic coefficients
     #air_drag_coef: str = None # TODO: import air drag coefficient
     hydro_coefs: str = None
+    sectionPointer: __classSection = None
+
     def copy(self):
         return replace(self)
     def EncodeLineTypeName(self) -> str:
@@ -339,7 +341,7 @@ class classSectionList(list[__classSection]):
     def Index(self, name: str) -> int:
         return self.names().index(name)
         
-    def Find(self, name: str) -> classISection:
+    def Find(self, name: str) -> __classSection: #classISection:
         i = self.Index(name)
         return self[i]
     
@@ -528,10 +530,11 @@ class classSupportList(list[classSupport]):
 class classSegment:
     length: float
     properties: classSegProps = None
+    IniPos: list[float] = None # in local coordinate system
+    Direction: list[float] = None # in local coordinate system
     flooding: str = '' # TODO: import flooding condition
     def copy(self):
         return replace(self)
-
     
 class classSegmentList(list[classSegment]):
     def Add(self, length: float, segprops: classSegProps):
@@ -639,12 +642,30 @@ class classBeam:
         * segprops: properties defined by the classSegProps
         """
 
-        length = _CalcDist(self.LastPos, EndPos)
-        self.__AddSegmentByLength(length, segprops)
+        #length = _CalcDist(self.LastPos, EndPos)
+        direction, length = _CalcDirection(self.LastPos, EndPos)
+        self.__AddSegmentByLength(
+            length, 
+            segprops, 
+            self.LastPos.copy(),
+            direction
+            )
         self.LastPos = EndPos.copy()
 
-    def __AddSegmentByLength(self, length: float, segprops: classSegProps):
-        self.SegmentList.append(classSegment(length, segprops))
+    def __AddSegmentByLength(self, 
+                             length: float, 
+                             segprops: classSegProps,
+                             IniPos: list[float] = None,
+                             Direction: list[float] = None
+                             ):
+        self.SegmentList.append(
+            classSegment(
+                length, 
+                segprops,
+                IniPos,
+                Direction
+            )
+        )
 
     def copy(self) -> classBeam:        
         newbeam = classBeam(self.name, self.IniPos)
@@ -1061,7 +1082,14 @@ def _CalcSimpDist(Pa: np.ndarray, Pb: np.ndarray) -> float:
     absdelta = abs(delta)
     return max(absdelta)
 
-
+def _CalcDirection(
+        Pa: list[float], Pb: list[float]
+        ) -> tuple[list[float],float]:
+    """Calculates the direction vector (normalized) from Pa to Pb"""
+    V = np.array(Pb) - np.array(Pa)
+    length = np.linalg.norm(V)
+    normV = V*(1./length)
+    return normV.tolist().copy(), length
 
 
 class classLineTypeList(list[classSegProps]):
@@ -1148,6 +1176,8 @@ class classConceptModel():
         self._MaterialList = classMatList()
         self._HydroProps = classHPropsList()
         self.LogFile = open('log.txt', 'w')
+        self.OriginInfo = {} # e.g., 'Program', 'Version', 'User'
+        self.ConversionInfo = {} # e.g., 'Date'
 
    
     def _Message(self, text: str, end: str = '\n') -> None:

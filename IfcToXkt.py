@@ -1,12 +1,11 @@
 """
-Script para conversão de arquivo .ifc para .xkt
-Requer:
+Class to convert .ifc file to .xkt (xeo-bim-viewer)
+Requires:
         * Node.js (https://nodejs.org/en/download/)
         * .NET 7.0 Runtime (https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/runtime-7.0.2-windows-x64-installer?cid=getdotnetcore)
 """
 
-# INPUTS
-ifcFile = r'..\..\PCE_JACKET_IFC4_ComInfo.ifc'
+# CONSTANTS
 ifcConvPath = r'dependencies\compiled\IfcConvert.exe'
 colladaPath = r'dependencies\compiled\COLLADA2GLTF-bin.exe'
 xeometaPath = r'dependencies\compiled\xeokit-metadata\xeokit-metadata.exe'
@@ -15,52 +14,86 @@ tempDir = r'C:\Temp\dependencies'
 # LIBS
 import os
 
-# CONSTANTS
-daeFile = ifcFile.replace('.ifc', '.dae')
-gltfFile = ifcFile.replace('.ifc', '.gltf') 
-jsonFile = ifcFile.replace('.ifc', '.json')
-xktFile = ifcFile.replace('.ifc', '.xkt')
-
 # FUNCTION
-def checkfile(file: str) -> bool:
-        if not os.path.isfile(file):
-                print(f'ERROR! File {file} not created.')
-                return False
-        else:
-                return True
+class ConvIfcToXkt:
+        """Conversion from .IFC file to .XKT"""
+        def __init__(self, ifcFile: str) -> None:
+                self.ifcFile = ifcFile
+                self.daeFile = ifcFile.replace('.ifc', '.dae')
+                self.gltfFile = ifcFile.replace('.ifc', '.gltf') 
+                self.jsonFile = ifcFile.replace('.ifc', '.json')
+                self.xktFile = ifcFile.replace('.ifc', '.xkt')
+                if self.__convIfcToXkt():
+                        print('Successfull file conversion .')
+                else:
+                        print('Erro converting file.')
 
-print('\n\nConverting from .ifc to .dae (COLLADA)')
-cmdline = f'"{ifcConvPath}" --use-element-guids {ifcFile} {daeFile} --exclude=entities IfcOpeningElement'
-os.system(cmdline)
-if not checkfile(daeFile): exit()
+        def __checkfile(self, file: str) -> bool:
+                if not os.path.isfile(file):
+                        print(f'ERROR! File {file} not created.')
+                        return False
+                else:
+                        return True
 
-print('\n\nConverting from .dae (COLLADA) to .gltf (GL transmission format)')
-cmdline = rf'"{colladaPath}" --materialsCommon' + \
-          f' -i {daeFile} -o {gltfFile}'
-os.system(cmdline)
-if not checkfile(gltfFile): exit()
+        def __convIfcToDae(self) -> bool:
+                print('\n\n==== Converting from .ifc to .dae (COLLADA) ====')
+                cmdline = f'"{ifcConvPath}" --use-element-guids '+\
+                          f'{self.ifcFile} {self.daeFile} --exclude=entities IfcOpeningElement'
+                os.system(cmdline)
+                if self.__checkfile(self.daeFile):
+                        return True
+                else:
+                        raise Exception(f'Error!')
+                
+        def __convDaeToGltf(self) -> bool:
+                print('\n\n==== Converting from .dae (COLLADA) to .gltf (GL transmission format) ====')
+                cmdline = rf'"{colladaPath}" --materialsCommon' + \
+                        f' -i {self.daeFile} -o {self.gltfFile}'
+                os.system(cmdline)
+                if self.__checkfile(self.gltfFile): 
+                        return True
+                else:
+                        raise Exception(f'Error!')
 
-print('\n\nConverting from .ifc to .json (metadata)')
-cmdline = fr'"{xeometaPath}" {ifcFile} {jsonFile}'
-os.system(cmdline)
-if not checkfile(jsonFile): exit()
+        def __convIfcToJson(self) -> bool:
+                print('\n\n==== Converting from .ifc to .json (metadata) ====')
+                cmdline = fr'"{xeometaPath}" {self.ifcFile} {self.jsonFile}'
+                os.system(cmdline)
+                if self.__checkfile(self.jsonFile):
+                        return True
+                else:
+                        raise Exception(f'Error!')
 
-# install the required package
-print('\n\nInstalling xeokit-convert package')
-cmdline = 'npm i @xeokit/xeokit-convert'
-os.system(cmdline)
+        def __installXeoKit(self):
+                """install the required package"""
+                print('\n\nInstalling xeokit-convert package')
+                cmdline = 'npm i @xeokit/xeokit-convert'
+                os.system(cmdline)
 
-# convert .gltf and .json to .xkt
-print('\n\nConverting from .gltf () and .json (metadata) to .xkt')
-cmdline =  fr'node.exe conv-gltf-and-json-to-xkt.js {gltfFile} {jsonFile} {xktFile} -l'
-os.system(cmdline)
-checkfile(xktFile)
+        def __convGltfJsonToXkt(self) -> bool:
+                # convert .gltf and .json to .xkt
+                print('\n\n==== Converting from .gltf () and .json (metadata) to .xkt ====')
+                cmdline =  'node.exe conv-gltf-and-json-to-xkt.js '+\
+                           f'{self.gltfFile} {self.jsonFile} {self.xktFile} -l'
+                os.system(cmdline)
+                return self.__checkfile(self.xktFile)
 
-# node.exe conv-gltf-and-json-to-xkt.js -s ..\PCE_JACKET.gltf -m ..\PCE_JACKET.json -o ..\PCE_JACKET.xkt -l
+        def __uninstallXeoKit(self):
+                # delete the installed package
+                print('\n\nUnistalling the package')
+                cmdline = 'npm uninstall @xeokit/xeokit-convert'
+                os.system(cmdline)
 
-# delete the installed package
-print('\n\nUnistalling the package')
-cmdline = 'npm uninstall @xeokit/xeokit-convert'
-os.system(cmdline)
+        def __convIfcToXkt(self) -> bool:
+                self.__convIfcToDae()
+                self.__convDaeToGltf()
+                self.__convIfcToJson()
+                self.__installXeoKit()
+                ok = self.__convGltfJsonToXkt()
+                self.__uninstallXeoKit()
+                return ok
+
+
+
 
 
