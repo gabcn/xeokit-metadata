@@ -950,131 +950,257 @@ Warning! The structure MODULE_COMPRESSIONBm6291 has no segments and will be igno
 Warning! A segment of the structure _NEW_COMPLETIONBm20 is defined with the section _NEW_COMPLETIONC200X27_9, which could not be imported.
 Warning! The structure _NEW_COMPLETIONBm20 has no segments and will be ignored.
 Warning! A segment of the structure Bm1 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -2.865, -13.50000095, -114.4000092
+Start position of the current segment: -3.864999999, -13.50000095, -114.4000092
 Warning! A segment of the structure Bm1060 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 13.50000095, -26.51800336, 14.10000038
+Start position of the current segment: 13.50000095, -25.51800336, 14.10000038
 Warning! A segment of the structure Bm1060 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 13.50000095, -19.72800335, 14.10000038
+Start position of the current segment: 13.50000095, -18.72800335, 14.10000038
 Warning! A segment of the structure Bm1063 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, -26.08000183, 14.10000038
+Start position of the current segment: 30.00000191, -25.08000183, 14.10000038
 Warning! A segment of the structure Bm1063 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, -20.94000191, 14.10000038
+Start position of the current segment: 30.00000191, -19.94000183, 14.10000038
 Warning! A segment of the structure Bm1064 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, -3.685000952, 14.10000038
+Start position of the current segment: 30.00000191, -2.685000952, 14.10000038
 Warning! A segment of the structure Bm1064 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, 2.684999046, 14.10000038
+Start position of the current segment: 30.00000191, 3.684999046, 14.10000038
 Warning! A segment of the structure Bm1218 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 3.950000953, -38.47000122, -63.00000381
+Start position of the current segment: 2.750000953, -38.47000122, -63.00000381
 Warning! A segment of the structure Bm1219 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -2.9, 13.50000095, -63.00000381
+Start position of the current segment: -3.899999999, 13.50000095, -63.00000381
 Warning! A segment of the structure Bm1221 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -2.75, -38.47000122, -63.00000381
+Start position of the current segment: -3.950000001, -38.47000122, -63.00000381
 Warning! A segment of the structure Bm1222 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 4.210000954, 13.50000095, -63.00000381
+Start position of the current segment: 3.210000954, 13.50000095, -63.00000381
 Warning! A segment of the structure Bm1223 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 3.955500953, 38.47000122, -63.00000381
+Start position of the current segment: 2.755500953, 38.47000122, -63.00000381
 Warning! A segment of the structure Bm1374 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, -25.64400122, -114.4000092
+Start position of the current segment: -30.00000191, -24.79400122, -114.4000092
 Warning! A segment of the structure Bm1374 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, -21.75400122, -114.4000092
+Start position of the current segment: -30.00000191, -20.90400122, -114.4000092
 Warning! A segment of the structure Bm1375 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, 20.90000095, -114.4000092
+Start position of the current segment: -30.00000191, 21.75000095, -114.4000092
 Warning! A segment of the structure Bm1375 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, 24.79000095, -114.4000092
+Start position of the current segment: -30.00000191, 25.64000095, -114.4000092
 Warning! A segment of the structure Bm1376 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, -2.215000952, -114.4000092
+Start position of the current segment: -30.00000191, -1.365000953, -114.4000092
 Warning! A segment of the structure Bm1376 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, 1.364999046, -114.4000092
+Start position of the current segment: -30.00000191, 2.214999046, -114.4000092
 Warning! A segment of the structure Bm1380 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, -25.64400122, -114.4000092
+Start position of the current segment: 30.00000191, -24.79400122, -114.4000092
 Warning! A segment of the structure Bm1380 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, -21.75400122, -114.4000092
+Start position of the current segment: 30.00000191, -20.90400122, -114.4000092
 Warning! A segment of the structure Bm1381 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, 20.90000095, -114.4000092
+Start position of the current segment: 30.00000191, 21.75000095, -114.4000092
 Warning! A segment of the structure Bm1381 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, 24.79000096, -114.4000092
+Start position of the current segment: 30.00000191, 25.64000096, -114.4000092
 Warning! A segment of the structure Bm1382 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, -2.215000952, -114.4000092
+Start position of the current segment: 30.00000191, -1.365000953, -114.4000092
 Warning! A segment of the structure Bm1382 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, 1.364999046, -114.4000092
+Start position of the current segment: 30.00000191, 2.214999046, -114.4000092
 Warning! A segment of the structure Bm1383 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -2.555, 39.97000122, -114.4000092
+Start position of the current segment: -3.755, 39.97000122, -114.4000092
 Warning! A segment of the structure Bm1386 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 3.755000953, -39.97000122, -114.4000092
+Start position of the current segment: 2.555000955, -39.97000122, -114.4000092
 Warning! A segment of the structure Bm1389 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -2.555, -39.97000122, -114.4000092
+Start position of the current segment: -3.755, -39.97000122, -114.4000092
 Warning! A segment of the structure Bm1397 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -2.865, 13.50000095, -114.4000092
+Start position of the current segment: -3.864999999, 13.50000095, -114.4000092
 Warning! A segment of the structure Bm1399 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 3.865000952, 13.50000095, -114.4000092
+Start position of the current segment: 2.865000953, 13.50000095, -114.4000092
 Warning! A segment of the structure Bm1509 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, -26.07300336, 14.10000038
+Start position of the current segment: -30.00000191, -25.07300336, 14.10000038
 Warning! A segment of the structure Bm1509 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, -20.93300191, 14.10000038
+Start position of the current segment: -30.00000191, -19.93300336, 14.10000038
 Warning! A segment of the structure Bm1510 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, -3.685000952, 14.10000038
+Start position of the current segment: -30.00000191, -2.685000952, 14.10000038
 Warning! A segment of the structure Bm1510 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, 2.684999046, 14.10000038
+Start position of the current segment: -30.00000191, 3.684999046, 14.10000038
 Warning! A segment of the structure Bm1514 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, 19.93000095, 14.10000038
+Start position of the current segment: -30.00000191, 20.93000095, 14.10000038
 Warning! A segment of the structure Bm1514 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -30.00000191, 25.07000095, 14.10000038
+Start position of the current segment: -30.00000191, 26.07000095, 14.10000038
 Warning! A segment of the structure Bm16 is defined with the section AutoCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -13.50000095, -26.46800346, 14.10000038
+Start position of the current segment: -13.50000095, -25.56800325, 14.10000038
 Warning! A segment of the structure Bm16 is defined with the section AutoCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -13.50000095, -19.67800346, 14.10000038
+Start position of the current segment: -13.50000095, -18.77800325, 14.10000038
 Warning! A segment of the structure Bm180 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 4.055000953, -36.98000336, -11.60000038
+Start position of the current segment: 3.055000953, -36.98000336, -11.60000038
 Warning! A segment of the structure Bm1882 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -31.25895511, -24.94487509, 14.10000038
+Start position of the current segment: -31.03005253, -24.50034882, 14.10000038
 Warning! A segment of the structure Bm1883 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -23.28845707, -37.50794618, 14.10000038
+Start position of the current segment: -22.90386136, -37.1884755, 14.10000038
 Warning! A segment of the structure Bm191 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 4.095000952, 36.98000336, -11.60000038
+Start position of the current segment: 3.095000952, 36.98000336, -11.60000038
 Warning! A segment of the structure Bm2 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 3.865000952, -13.50000095, -114.4000092
+Start position of the current segment: 2.865000953, -13.50000095, -114.4000092
 Warning! A segment of the structure Bm22 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 4.315000953, -13.50000095, -11.60000038
+Start position of the current segment: 3.315000953, -13.50000095, -11.60000038
 Warning! A segment of the structure Bm226 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -3.055000002, -36.98000336, -11.60000038
+Start position of the current segment: -4.055000002, -36.98000336, -11.60000038
 Warning! A segment of the structure Bm23 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -3.085, -13.50000095, -11.60000038
+Start position of the current segment: -4.085, -13.50000095, -11.60000038
 Warning! A segment of the structure Bm230 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -3.055000002, 36.98000336, -11.60000038
+Start position of the current segment: -4.055000002, 36.98000336, -11.60000038
 Warning! A segment of the structure Bm231 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 4.315000953, 13.50000095, -11.60000038
+Start position of the current segment: 3.315000953, 13.50000095, -11.60000038
 Warning! A segment of the structure Bm232 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -3.085, 13.50000095, -11.60000038
+Start position of the current segment: -4.085, 13.50000095, -11.60000038
 Warning! A segment of the structure Bm530 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -33.55405686, -39.72105686, 26.03003019
+Start position of the current segment: -33.82173321, -39.98873321, 26.35667793
 Warning! A segment of the structure Bm531 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -37.93538335, -44.10238335, 31.37660033
+Start position of the current segment: -38.14952443, -44.31652443, 31.63791852
 Warning! A segment of the structure Bm532 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -42.93129475, -49.09829475, 37.47315368
+Start position of the current segment: -43.09190056, -49.25890056, 37.66914232
 Warning! A segment of the structure Bm541 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -38.53320703, -38.11570903, 16.31139628
+Start position of the current segment: -38.74924153, -38.37549387, 16.67996233
 Warning! A segment of the structure Bm545 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -52.92240119, -55.41893795, 40.86010642
+Start position of the current segment: -53.00881499, -55.52285189, 41.00753284
 Warning! A segment of the structure Bm589 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -60.04419464, -63.98300492, 53.01025473
+Start position of the current segment: -60.30343604, -64.29474673, 53.45253399
 Warning! A segment of the structure Bm6 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -2.9, -13.50000095, -63.00000381
+Start position of the current segment: -3.899999999, -13.50000095, -63.00000381
 Warning! A segment of the structure Bm631 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -31.94870903, -44.70020703, 16.31139628
+Start position of the current segment: -32.20849387, -44.91624153, 16.67996233
 Warning! A segment of the structure Bm7 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 4.210000954, -13.50000095, -63.00000381
+Start position of the current segment: 3.210000954, -13.50000095, -63.00000381
 Warning! A segment of the structure Bm729 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 3.755000958, 39.97000122, -114.4000092
+Start position of the current segment: 2.555000962, 39.97000122, -114.4000092
 Warning! A segment of the structure Bm747 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -49.25193795, -59.08940119, 40.86010642
+Start position of the current segment: -49.35585189, -59.17581499, 41.00753284
 Warning! A segment of the structure Bm752 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -57.81600492, -66.21119464, 53.01025473
+Start position of the current segment: -58.12774673, -66.47043604, 53.45253399
 Warning! A segment of the structure Bm9 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: -2.750000001, 38.47000122, -63.00000381
+Start position of the current segment: -3.950000001, 38.47000122, -63.00000381
 Warning! A segment of the structure Bm972 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, 19.93000095, 14.10000038
+Start position of the current segment: 30.00000191, 20.93000095, 14.10000038
 Warning! A segment of the structure Bm972 is defined with the section DefaultCone, which could not be imported.
-Warning! Discontinuities between segments will be disregarded.
+Warning! Discontinuities between segments will be disregarded. 
+End position of the previous segment: 30.00000191, 25.07000191, 14.10000038
+Start position of the current segment: 30.00000191, 26.07000096, 14.10000038
 Warning! The structure "Jt134" type is "frame_joint", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Jt1340" type is "frame_joint", which is not supported by the current version of the converter and will be skipped.
 Warning! The structure "Jt1341" type is "frame_joint", which is not supported by the current version of the converter and will be skipped.

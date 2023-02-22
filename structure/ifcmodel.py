@@ -13,7 +13,7 @@ import ifcopenshell.util.representation as ifcrep
 import ifcopenshell.util.unit as ifcunit
 import ifcopenshell.util.placement as ifcplace
 import numpy as np
-from structure.conceptmodel import classBeam, classConceptModel
+from structure.conceptmodel import classBeam, classConceptModel, SectionType, classSegment
 from datetime import datetime
 
 
@@ -233,9 +233,13 @@ class bimBeam(classBeam):
             self.LastPos, 
         )
 
+        # creates the object 'Body' represenation
+        BodyRep = _createBodyRep(IfcInfo, self)
+
+        # creates the product definition shape
         ifcProdDefShape = IfcInfo.ifcFile.create_entity(
             type='ifcProductDefinitionShape',
-            Representations=[AxisRep], # TODO: include body representation
+            Representations=[AxisRep, BodyRep], # TODO: include body representation
         )
 
         ifcBeam = IfcInfo.ifcFile.create_entity(
@@ -752,6 +756,141 @@ def _createAxisRep(
     return ifcShapeRep
 
 
+def _createBodyRep(
+                   IfcInfo: ifcInfo,
+                   beam: bimBeam
+                   ) -> ifcopenshell.entity_instance:
+    # solids
+    solids = []
+    for segment in beam.SegmentList:
+        solids.append(_createSegBodyRep(IfcInfo, segment))
+    
+    while solids.count(None)>0: solids.remove(None)
+
+    # shape representation (IfcShapeRepresentation)
+    MapRep = IfcInfo.ifcFile.create_entity(
+        type = 'IfcShapeRepresentation',
+        ContextOfItems = IfcInfo.BodySubContext,
+        RepresentationIdentifier = 'Body',
+        RepresentationType = 'SweptSolid',
+        Items = solids
+    )
+
+    MapOrigin = IfcInfo.WorldCoordSys
+
+    # MappingSource (ifcRepresentationMap)
+    MapSource = IfcInfo.ifcFile.create_entity(
+        type = 'ifcRepresentationMap',
+        MappingOrigin = MapOrigin,
+        MappedRepresentation = MapRep
+    )
+
+    # MappingTarget (ifcCartesianTransformationOperator3D)
+    MapTarget = IfcInfo.WorldCartesianOp
+
+    # MappedItem (ifcMappedItem)
+    MapItem = IfcInfo.ifcFile.create_entity(
+        type = 'ifcMappedItem',
+        MappingSource = MapSource,
+        MappingTarget = MapTarget
+    )
+
+    # (ifcShapeRepresentation)
+    Representation = IfcInfo.ifcFile.create_entity(
+        type = 'ifcShapeRepresentation',
+        ContextOfItems = IfcInfo.BodySubContext,
+        RepresentationIdentifier = 'Body',
+        RepresentationType = 'MappedRepresentation',
+        Items = [MapItem]
+    )
+
+    return Representation
 
 
+
+def _createSegBodyRep(
+                      IfcInfo: ifcInfo,
+                      segment: classSegment
+                     ) -> ifcopenshell.entity_instance:
+
+    sectype = segment.properties.sectionPointer.sectype
+
+    # cross section
+    if sectype == SectionType.pipe_section:
+        CrossSection = __createCircleHollowProfile(IfcInfo, segment)
+    else:
+        print(f'Section type {sectype} not supported yet.')
+        return None
+    
+    # position and direction
+    ExtrudAreaPosLoc = _createCartesianPnt(
+        IfcInfo.ifcFile,
+        segment.IniPos
+        )
+    
+    vecA = np.array(segment.Direction)
+    if segment.Direction[0] != 0 or segment.Direction[2] != 0:
+        vecB = np.array([0.,1.,0])
+    else:
+        vecB = np.array([0.,0.,-1.])
+
+    RefDir = np.cross(vecB,vecA).tolist()
+    RefDirection = _createDirection(IfcInfo, RefDir)
+
+    Axis = _createDirection(IfcInfo, segment.Direction)
+
+    ExtrudAreaPos = _createAxis2Place3D(
+        IfcInfo.ifcFile,
+        ExtrudAreaPosLoc,
+        Axis,
+        RefDirection
+    )
+
+    ExtrudAreaDir = _createDirection(IfcInfo, [0.,0.,1.])
+
+    # Extruded Area (IfcExtrudedAreaSolid)
+    ExtrudArea = IfcInfo.ifcFile.create_entity(
+        type = 'IfcExtrudedAreaSolid',
+        SweptArea = CrossSection,
+        Position = ExtrudAreaPos,
+        ExtrudedDirection = ExtrudAreaDir,
+        Depth = segment.length
+    )
+
+    return ExtrudArea
+
+def __createCircleHollowProfile(
+                      IfcInfo: ifcInfo,
+                      segment: classSegment
+                     ) -> ifcopenshell.entity_instance:
+
+    section = segment.properties.sectionPointer
+    ExtrudAreaCircleLoc = _createCartesianPnt(IfcInfo.ifcFile, [0.,0.,0.])
+    ExtrudAreaCircleDir = _createDirection(IfcInfo, [1.,0.])
+    ExtredAreaCirclePos = IfcInfo.ifcFile.create_entity(
+        type='IfcAxis2Placement2D',
+        Location=ExtrudAreaCircleLoc,
+        RefDirection=ExtrudAreaCircleDir
+    )
+
+    CircleHollowProf = IfcInfo.ifcFile.create_entity(
+        type='IfcCircleHollowProfileDef',
+        ProfileType='AREA',
+        ProfileName=f'Pipe {section.OD*1e3}mm x {section.th}mm',
+        Position=ExtredAreaCirclePos,
+        Radius=section.OD/2.,
+        WallThickness=section.th
+    )
+
+    return CircleHollowProf
+    
+
+
+def _createDirection(ifcInfo: ifcInfo, dirRatios: list[float]
+                        ) -> ifcopenshell.entity_instance:
+
+    return ifcInfo.ifcFile.create_entity(
+        type='IfcDirection',
+        DirectionRatios = dirRatios
+    )
 
