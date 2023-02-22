@@ -8,21 +8,40 @@ Required packages:
 
 # LIBS
 from __future__ import annotations
+from dataclasses import dataclass
 import ifcopenshell
 import ifcopenshell.util.representation as ifcrep
 import ifcopenshell.util.unit as ifcunit
 import ifcopenshell.util.placement as ifcplace
+import ifcopenshell.api
 import numpy as np
-from structure.conceptmodel import classBeam, classConceptModel, SectionType, classSegment
+from structure.conceptmodel import classBeam, classConceptModel, SectionType, classSegment, classMatList
 from datetime import datetime
 
 
 
 # CONSTANTS
 _supportedIfcClasses = ['IfcBeam','IfcColumn','IfcMember']
+_matColorList = [ # R, G, B factors (0. to 1)
+    [0. , 0. , 1. ], # blue
+    [0. , 0.8, 1. ], # light blue
+    [0. , 0.5, 0. ], # green
+    [0. , 1. , 0. ], # light green
+    [1. , 0.6, 0. ], # orange
+    [0.9, 0.8, 0. ], # dark yellow
+    [0.6, 0.0, 0.9], # purple
+]
 
 
 # CLASSES
+class getRGBcolor:
+    def __init__(self, order: int) -> None:
+        i = order % len(_matColorList)
+        color = _matColorList[i]
+        self.R = color[0]
+        self.G = color[1]
+        self.B = color[2]
+
 class bimBeam(classBeam):
     lengthTol = 0.001 
     # PredefinedType: pset dictionary key
@@ -367,7 +386,6 @@ class ifcModel(classConceptModel):
 
         self._writeProjectData(self.IfcInfo) # exports original model info
         
-
         self.IfcInfo.AxisSubContext = _createSubContext(
             self.IfcInfo.ifcFile, 'Axis', 
             self.IfcInfo.ModelContext, 
@@ -388,6 +406,12 @@ class ifcModel(classConceptModel):
                 self.IfcInfo.ExportedBeams.append(beam.exportBeamToIfc(self.IfcInfo))
 
         _createContainment(self.IfcInfo)
+
+        _exportMaterialsToIfc(self.IfcInfo, self._MaterialList)
+
+        _createMatAssociations(self.IfcInfo, self._Beams, self._MaterialList)
+        
+        _createStyles(self.IfcInfo, self._MaterialList)
 
         self.IfcInfo.ifcFile.write(ifcFilePath)
 
@@ -506,6 +530,94 @@ def GetMembersList(ifcFile: ifcopenshell.file) -> list[ifcopenshell.entity_insta
             instList.extend(add)
     print(f'{len(instList)} beams found in IFC file.')
     return instList.copy()
+
+
+def _createStyles(IfcInfo: ifcInfo, matList: classMatList):   
+    for i, mat in enumerate(matList):
+        color = getRGBcolor(i)
+
+        # Create a new surface style
+        style = ifcopenshell.api.run("style.add_style", IfcInfo.ifcFile)
+
+        # Create a simple shading colour and transparency.
+        ifcopenshell.api.run("style.add_surface_style", IfcInfo.ifcFile,
+            style=style, ifc_class="IfcSurfaceStyleShading", attributes={
+                "SurfaceColour": { "Name": None, "Red": color.R, "Green": color.G, "Blue": color.B},
+                "Transparency": 0., # 0 is opaque, 1 is transparent
+            })
+
+        ifcopenshell.api.run(
+            "style.assign_material_style", 
+            IfcInfo.ifcFile, 
+            material=mat.IfcMat, 
+            style=style, 
+            context=IfcInfo.BodySubContext
+        )
+
+
+def _createMatAssociations(IfcInfo: ifcInfo, 
+                           beamList: ifcBeamList, 
+                           matList: classMatList):
+    matAssociations = {}
+    for mat in matList: matAssociations[mat.name] = [mat.IfcMat, []]
+
+    for beam in beamList:
+        for i in range(1, len(beam.SegmentList)): 
+            if beam.SegmentList[i].properties.material != \
+                beam.SegmentList[i-1].properties.material:
+                print(f'Warning! Beam {beam.name} has segments with ' + \
+                       'different materials. Only the material of the '+\
+                       'first segment will be considered.')
+
+        matName = beam.SegmentList[0].properties.material
+        ifcBeam = beam.IfcBeam
+        matAssociations[matName][1].append(ifcBeam)
+        
+    
+    for matName, matIfcAndBeams in matAssociations.items():
+        matIfc = matIfcAndBeams[0]
+        beams = matIfcAndBeams[1]
+        IfcInfo.ifcFile.create_entity(
+            type = 'IfcRelAssociatesMaterial',
+            GlobalId = ifcopenshell.guid.new(),
+            RelatedObjects = beams,
+            RelatingMaterial = matIfc,
+        )
+
+
+def _exportMaterialsToIfc(IfcInfo: ifcInfo, matList: classMatList):
+    props = []
+    for mat in matList:
+        ifcMat = IfcInfo.ifcFile.create_entity(
+            type='IfcMaterial', Name=mat.name
+        )
+        props.append(_setPropValue(IfcInfo, ifcMat, 'Pset_MaterialCommon', 'MassDensity', mat.density))
+        props.append(_setPropValue(IfcInfo, ifcMat, 'Pset_MaterialSteel', 'YieldStress', mat.Sadm))
+        props.append(_setPropValue(IfcInfo, ifcMat, 'Pset_MaterialMechanical', 'YoungModulus', mat.YoungModulus)) 
+        props.append(_setPropValue(IfcInfo, ifcMat, 'Pset_MaterialMechanical', 'PoissonRatio', mat.PoissonCoef))
+        props.append(_setPropValue(IfcInfo, ifcMat, 'Pset_MaterialMechanical', 'ThermalExpansionCoefficient', mat.alpha))
+        mat.IfcMat = ifcMat
+
+
+def _setPropValue(IfcInfo: ifcInfo, 
+                  ifcMaterial: ifcopenshell.entity_instance,
+                  pset: str, # e.g., Pset_MaterialCommon
+                  prop: str, # identifier of the property
+                  value: float
+                  ) -> ifcopenshell.entity_instance:
+   
+
+    psetEntity = ifcopenshell.api.run("pset.add_pset", IfcInfo.ifcFile, product=ifcMaterial, name=pset)
+    ifcopenshell.api.run("pset.edit_pset", IfcInfo.ifcFile, pset=psetEntity, properties={prop: value})
+    '''
+    return IfcInfo.ifcFile.create_entity(
+        type = 'IfcPropertySingleValue',
+        Name = prop,
+        NominalValue = value
+    ) 
+    '''
+    return pset
+
 
 def _createRelAggreg(IfcInfo: ifcInfo, 
                      parentObj: ifcopenshell.entity_instance,
