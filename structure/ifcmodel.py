@@ -250,10 +250,12 @@ class bimBeam(classBeam):
         ifcObjPlace = self.__createPlacement(IfcInfo.ifcFile, IfcInfo.WorldCoordSys, refPosition)
 
         # creates the object 'Axis' representation
+        ini = [0., 0., 0.] # relative to obj place
+        end = np.array(self.LastPos)- np.array(self.IniPos) # relative to obj place
         AxisRep = _createAxisRep(
             IfcInfo,
-            self.IniPos, 
-            self.LastPos, 
+            ini, 
+            end.tolist(), 
         )
 
         # creates the object 'Body' represenation
