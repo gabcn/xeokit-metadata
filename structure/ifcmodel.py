@@ -20,6 +20,7 @@ from structure.conceptmodel \
         classSegment, classMatList, classISection, classPipeSection, \
         classBoxSection
 from datetime import datetime
+import math
 
 
 
@@ -834,15 +835,7 @@ def _createIfcObjPlace(beam: classBeam,
 
     return prevPlace
 
-'''    
-def _createProdDefShape(ifcFile: ifcopenshell.file,
-                        name: str = None,
-                        description: str = None
-                       ) -> ifcopenshell.entity_instance:
-    """Creates the product definition shape"""
-    return
 
-'''
 def _createIfcLine(ifcFile: ifcopenshell.file,
                    pointA: list[float],
                    pointB: list[float]
@@ -993,16 +986,22 @@ def _createSegBodyRep(
         relIniPos.tolist()
         )
     
-    vecA = np.array(segment.Direction)
-    if segment.Direction[0] != 0 or segment.Direction[2] != 0:
-        vecB = np.array([0.,1.,0])
+    vecA = segment.Direction
+    if vecA[0] != 0. or vecA[1] != 0.:
+        if vecA[1] == 0:
+            y = abs(vecA[0])/vecA[0]
+            vecRef = [0., y, 0.]
+        else:
+            x = math.sqrt(vecA[1]**2/(vecA[0]**2 + vecA[1]**2))
+            sign = abs(vecA[1])/vecA[1]
+            x = -x*sign
+            y = -vecA[0]/vecA[1]*x
+            vecRef = [x, y, 0.]
     else:
-        vecB = np.array([0.,0.,-1.])
+        vecRef = [1., 0., 0.]
 
-    RefDir = np.cross(vecB,vecA).tolist()
-    RefDirection = _createDirection(IfcInfo, RefDir)
-
-    Axis = _createDirection(IfcInfo, segment.Direction)
+    RefDirection = _createDirection(IfcInfo, vecRef)
+    Axis = _createDirection(IfcInfo, vecA)
 
     ExtrudAreaPos = _createAxis2Place3D(
         IfcInfo.ifcFile,
@@ -1025,15 +1024,15 @@ def _createSegBodyRep(
     return ExtrudArea
 
 
-def __createExtrudAreaPosition(
+def __createExtrudSweptAreaPosition(
                       IfcInfo: ifcInfo,
                      ) -> ifcopenshell.entity_instance:
-    ExtrudAreaLoc = _createCartesianPnt(IfcInfo.ifcFile, [0.,0.,0.])
-    ExtrudAreaDir = _createDirection(IfcInfo, [1.,0.])
+    ExtrudAreaLoc = _createCartesianPnt(IfcInfo.ifcFile, [0.,0.])
+    #ExtrudAreaDir = _createDirection(IfcInfo, [1.,0.]) # default is already [1.,0.]
     ExtredAreaPos = IfcInfo.ifcFile.create_entity(
         type='IfcAxis2Placement2D',
         Location=ExtrudAreaLoc,
-        RefDirection=ExtrudAreaDir
+        #RefDirection=ExtrudAreaDir # default is [1.,0.]
     )    
     return ExtredAreaPos
 
@@ -1042,7 +1041,7 @@ def __createCircleHollowProfile(
                       section: classPipeSection
                      ) -> ifcopenshell.entity_instance:
 
-    ExtrudAreaPosition = __createExtrudAreaPosition(IfcInfo)
+    ExtrudAreaPosition = __createExtrudSweptAreaPosition(IfcInfo)
     CircleHollowProf = IfcInfo.ifcFile.create_entity(
         type='IfcCircleHollowProfileDef',
         ProfileType='AREA',
@@ -1058,7 +1057,7 @@ def __createIProfile(
                       section: classISection,
                      ) -> ifcopenshell.entity_instance:
 
-    ExtrudAreaPos = __createExtrudAreaPosition(IfcInfo)
+    ExtrudAreaPos = __createExtrudSweptAreaPosition(IfcInfo)
     ProfName = f'I section h={section.h*1e3:.1f}; b={section.b*1e3:.1f}; '+\
         f'tw={section.tw*1e3:.1f}; tf={section.tf*1e3:.1f}mm'
     ISectionProf = IfcInfo.ifcFile.create_entity(
@@ -1080,7 +1079,7 @@ def __createBoxProfile(
                       section: classBoxSection,
                      ) -> ifcopenshell.entity_instance:
 
-    ExtrudAreaPos = __createExtrudAreaPosition(IfcInfo)
+    ExtrudAreaPos = __createExtrudSweptAreaPosition(IfcInfo)
     thickness = 0.5*(section.tftop+section.tfbot)
     ProfName = f'Box section h={section.h*1e3:.1f}; b={section.b*1e3:.1f}; '+\
         f'tw={thickness*1e3:.1f}mm'
@@ -1106,7 +1105,7 @@ def __createBarProfile(
                       section: classBoxSection,
                      ) -> ifcopenshell.entity_instance:
 
-    ExtrudAreaPos = __createExtrudAreaPosition(IfcInfo)
+    ExtrudAreaPos = __createExtrudSweptAreaPosition(IfcInfo)
     ProfName = f'Bar section h={section.h*1e3:.1f}; b={section.b*1e3:.1f}mm'
 
     if section.tw != section.tfbot or section.tw != section.tftop:
