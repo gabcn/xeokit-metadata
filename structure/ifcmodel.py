@@ -15,7 +15,10 @@ import ifcopenshell.util.unit as ifcunit
 import ifcopenshell.util.placement as ifcplace
 import ifcopenshell.api
 import numpy as np
-from structure.conceptmodel import classBeam, classConceptModel, SectionType, classSegment, classMatList
+from structure.conceptmodel \
+    import classBeam, classConceptModel, SectionType, \
+        classSegment, classMatList, classISection, classPipeSection, \
+        classBoxSection
 from datetime import datetime
 
 
@@ -406,11 +409,8 @@ class ifcModel(classConceptModel):
                 self.IfcInfo.ExportedBeams.append(beam.exportBeamToIfc(self.IfcInfo))
 
         _createContainment(self.IfcInfo)
-
         _exportMaterialsToIfc(self.IfcInfo, self._MaterialList)
-
         _createMatAssociations(self.IfcInfo, self._Beams, self._MaterialList)
-        
         _createStyles(self.IfcInfo, self._MaterialList)
 
         self.IfcInfo.ifcFile.write(ifcFilePath)
@@ -964,7 +964,6 @@ def _createBodyRep(
     return Representation
 
 
-
 def _createSegBodyRep(
                       IfcInfo: ifcInfo,
                       beam: bimBeam,
@@ -972,10 +971,17 @@ def _createSegBodyRep(
                      ) -> ifcopenshell.entity_instance:
 
     sectype = segment.properties.sectionPointer.sectype
+    secptr = segment.properties.sectionPointer
 
     # cross section
     if sectype == SectionType.pipe_section:
-        CrossSection = __createCircleHollowProfile(IfcInfo, segment)
+        CrossSection = __createCircleHollowProfile(IfcInfo, secptr)
+    elif sectype == SectionType.i_section:
+        CrossSection = __createIProfile(IfcInfo, secptr)
+    elif sectype == SectionType.box_section:
+        CrossSection = __createBoxProfile(IfcInfo, secptr)
+    elif sectype == SectionType.bar_section:
+        CrossSection = __createBarProfile(IfcInfo, secptr)
     else:
         print(f'Section type {sectype} not supported yet.')
         return None
@@ -1018,31 +1024,106 @@ def _createSegBodyRep(
 
     return ExtrudArea
 
+
+def __createExtrudAreaPosition(
+                      IfcInfo: ifcInfo,
+                     ) -> ifcopenshell.entity_instance:
+    ExtrudAreaLoc = _createCartesianPnt(IfcInfo.ifcFile, [0.,0.,0.])
+    ExtrudAreaDir = _createDirection(IfcInfo, [1.,0.])
+    ExtredAreaPos = IfcInfo.ifcFile.create_entity(
+        type='IfcAxis2Placement2D',
+        Location=ExtrudAreaLoc,
+        RefDirection=ExtrudAreaDir
+    )    
+    return ExtredAreaPos
+
 def __createCircleHollowProfile(
                       IfcInfo: ifcInfo,
-                      segment: classSegment
+                      section: classPipeSection
                      ) -> ifcopenshell.entity_instance:
 
-    section = segment.properties.sectionPointer
-    ExtrudAreaCircleLoc = _createCartesianPnt(IfcInfo.ifcFile, [0.,0.,0.])
-    ExtrudAreaCircleDir = _createDirection(IfcInfo, [1.,0.])
-    ExtredAreaCirclePos = IfcInfo.ifcFile.create_entity(
-        type='IfcAxis2Placement2D',
-        Location=ExtrudAreaCircleLoc,
-        RefDirection=ExtrudAreaCircleDir
-    )
-
+    ExtrudAreaPosition = __createExtrudAreaPosition(IfcInfo)
     CircleHollowProf = IfcInfo.ifcFile.create_entity(
         type='IfcCircleHollowProfileDef',
         ProfileType='AREA',
-        ProfileName=f'Pipe {section.OD*1e3}mm x {section.th}mm',
-        Position=ExtredAreaCirclePos,
+        ProfileName=f'Pipe {section.OD*1e3:.1f}x{section.th*1e3:.1f}mm', # TODO: handle units
+        Position=ExtrudAreaPosition,
         Radius=section.OD/2.,
         WallThickness=section.th
     )
-
     return CircleHollowProf
     
+def __createIProfile(
+                      IfcInfo: ifcInfo,
+                      section: classISection,
+                     ) -> ifcopenshell.entity_instance:
+
+    ExtrudAreaPos = __createExtrudAreaPosition(IfcInfo)
+    ProfName = f'I section h={section.h*1e3:.1f}; b={section.b*1e3:.1f}; '+\
+        f'tw={section.tw*1e3:.1f}; tf={section.tf*1e3:.1f}mm'
+    ISectionProf = IfcInfo.ifcFile.create_entity(
+        type='IfcIShapeProfileDef',
+        ProfileType='AREA',
+        ProfileName=ProfName,
+        Position=ExtrudAreaPos,
+        OverallWidth=section.b,
+        OverallDepth=section.h,
+        WebThickness=section.tw,
+        FlangeThickness=section.tf,
+        FilletRadius=section.fillet_radius
+    )
+    return ISectionProf
+
+
+def __createBoxProfile(
+                      IfcInfo: ifcInfo,
+                      section: classBoxSection,
+                     ) -> ifcopenshell.entity_instance:
+
+    ExtrudAreaPos = __createExtrudAreaPosition(IfcInfo)
+    thickness = 0.5*(section.tftop+section.tfbot)
+    ProfName = f'Box section h={section.h*1e3:.1f}; b={section.b*1e3:.1f}; '+\
+        f'tw={thickness*1e3:.1f}mm'
+
+    if section.tw != section.tfbot or section.tw != section.tftop:
+        print('Warning! Diference between flanges of box sections will be '+\
+            'disregarded.') # TODO: Handle this case
+        
+    BoxSectionProf = IfcInfo.ifcFile.create_entity(
+        type='IfcRectangleHollowProfileDef',
+        ProfileType='AREA',
+        ProfileName=ProfName,
+        Position=ExtrudAreaPos,
+        XDim=section.b,
+        YDim=section.h,
+        WallThickness=thickness
+    )
+    return BoxSectionProf
+
+ 
+def __createBarProfile(
+                      IfcInfo: ifcInfo,
+                      section: classBoxSection,
+                     ) -> ifcopenshell.entity_instance:
+
+    ExtrudAreaPos = __createExtrudAreaPosition(IfcInfo)
+    ProfName = f'Bar section h={section.h*1e3:.1f}; b={section.b*1e3:.1f}mm'
+
+    if section.tw != section.tfbot or section.tw != section.tftop:
+        print('Warning! Diference between flanges of box sections will be '+\
+            'disregarded.') # TODO: Handle this case
+        
+    BarSectionProf = IfcInfo.ifcFile.create_entity(
+        type='IfcRectangleProfileDef',
+        ProfileType='AREA',
+        ProfileName=ProfName,
+        Position=ExtrudAreaPos,
+        XDim=section.b,
+        YDim=section.h,
+    )
+    return BarSectionProf
+
+
 
 
 def _createDirection(ifcInfo: ifcInfo, dirRatios: list[float]
