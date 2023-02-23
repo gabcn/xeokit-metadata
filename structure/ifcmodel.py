@@ -1100,7 +1100,7 @@ def __createBoxProfile(
     )
     return BoxSectionProf
 
-
+ 
 def __createBarProfile(
                       IfcInfo: ifcInfo,
                       section: classBoxSection,
