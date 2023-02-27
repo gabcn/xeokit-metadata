@@ -7,6 +7,7 @@ from structure.sesam.sections import ImporSectionstFromSesam
 from structure.sesam.hydro import ImportHydroPropsFromSesam
 from structure.sesam.beams import ImportStraightBeam
 from structure.sesam.supports import ImportSupport
+from structure.sesam.sets import ImportSets
 import xml.etree.ElementTree as ET
 
 class cSesamModel(classConceptModel):
@@ -40,13 +41,15 @@ class cSesamModel(classConceptModel):
         self.Units = classSesamUnits(xml_model)
         ImportMaterialsFromSesam(self._MaterialList, xml_model, self.Units)
         ImporSectionstFromSesam(xml_model, self._SectionList, self)
-        ImportHydroPropsFromSesam(xml_model, self._HydroProps, self)
+        ImportHydroPropsFromSesam(xml_model, self._HydroProps, self)        
 
         structure_domain = xml_model.find('structure_domain')
         structures = structure_domain.find('structures')   
         self._ImportStructures(structures, self.Selections)        
         #self._Beams.DetectIntersections()        
         #self._Connections.print()
+
+        ImportSets(structure_domain, self.SetList, self.Selections.ExcludeSets)
 
     def _ImportAdmInfo(self, xml_root: ET.Element):
         xml_adm = xml_root.find('administrative')

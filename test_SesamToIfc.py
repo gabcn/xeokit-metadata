@@ -3,7 +3,11 @@ outIfcFilePath = r'C:\Temp\from_sesam.ifc'
 
 import structure.ifcsesam
 
-model = structure.ifcsesam.modelIfcSesam(xmlSesamFile=sesamFilePath)
-#model.ExportToIFC(outIfcFilePath, slice(1))
+#model = structure.ifcsesam.modelIfcSesam(xmlSesamFile=sesamFilePath)
+model = structure.ifcsesam.modelIfcSesam()
+model.Selections.ExcludeSets.extend(
+    ['_ALL','Bucking_KY_1_0','Buckling_BeC','Buckling_KY_0_7','Buckling_KY_0_8',
+     'Buckling_Lenght','BuoyancyArea','JACKET_analysis'])
+model.ImportFromSesamConceptModel(sesamFilePath)
 model.ExportToIFC(outIfcFilePath)
 

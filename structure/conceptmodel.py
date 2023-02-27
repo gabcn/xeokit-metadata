@@ -31,7 +31,8 @@ class classOptions:
     def __init__(self) -> None:
         self.MinLength = 0
         self.ProximityTol = 0.1
-        self.ExcludeSections = list()        
+        self.ExcludeSections = list()      
+        self.ExcludeSets = list()  
         self.Xlimits = [None, None]
         self.Ylimits = [None, None]
         self.Zlimits = [None, None]
@@ -734,6 +735,15 @@ class classBeamList(list[classBeam]):
     def RemoveBeam(self, beam: classBeam):
         super().remove(beam)
 
+    def FindByName(self, name: str) -> classBeam:
+        """Returns the first occurence of beam with the specified name"""
+        found = None
+        for beam in self:
+            if beam.name == name:
+                found = beam
+                break
+        return found
+
     def DetectIntersections(self): 
         tolerance = self.conceptModel.Selections.ProximityTol
         i = 0
@@ -860,7 +870,12 @@ class classBeamList(list[classBeam]):
                 # TODO: import mesh refinement from source model 
             line = self.AddBeam(name, beam.IniPos, beam.LastPos, LineType, Weighting)
 
-
+    def nameList(self) -> list[str]:
+        """Returns a list of the beam names"""
+        namelist = []
+        for beam in self:
+            namelist.append(beam.name)
+        return namelist.copy()
 
 # ==== PRIVATE METHODS ==== #
 def _CalcBarSecProps(h, b):
@@ -1158,8 +1173,62 @@ def _InterpHydCoeffsByDiameter(D: float, HydroCoeffs: classMorisonCoeffs) -> cla
     return classMorCoeffPoint(D, cd_D(D), cm_D(D), cd_nf_D(D), cm_nf_D(D))
 
 
+class classSet(list[str]):
+    """
+    Class of set (group of entities)
+    """
+    def __init__(self, name: str) -> None:
+        """ 
+        Initiates a class of set (group of entities)
+        * name: name of the set
+        """
+        super().__init__()
+        self.name = name
 
-# classOrcBeamTools class
+    def getNitems(self) -> int:
+        return len(self)
+    
+    nItems = property(getNitems)
+
+    def listItems(self) -> None:
+        print('Items: ', end=' ')
+        for item in self: print(item, end='; ')
+        print('')
+
+    #def copyItemsFrom(self, set: classSet) -> None:
+    #    for item in set: self.append(item)
+
+
+class classSetList(list[classSet]):
+    def __init__(self, conceptModel: classConceptModel):
+        super().__init__()
+        self.conceptModel = conceptModel
+
+    def getNsets(self) -> int:
+        return len(self)
+    nSets = property(getNsets)    
+    """Number of sets"""
+
+    def Add(self, name: str) -> classSet:
+        newset = classSet(name)
+        self.append(newset)
+        return newset
+
+    def PrintAll(self) -> None:
+        for set in self:
+            print(f'\nSet "{set.name}":')
+            set.listItems()
+
+    def listSetsWith(self, member: str) -> list[classSet]:
+        setsfound = []
+        for set in self:
+            if member in set:
+                setsfound.append(set)
+        return setsfound.copy()
+
+
+
+# ==== classConceptModel ==== #
 class classConceptModel():
     """
     Includes functions (tools) to insert beams into OrcaFlex model as 'line' object
@@ -1175,6 +1244,7 @@ class classConceptModel():
         self._SectionList = classSectionList()#self)
         self._MaterialList = classMatList()
         self._HydroProps = classHPropsList()
+        self.SetList = classSetList(self)
         self.LogFile = open('log.txt', 'w')
         self.OriginInfo = {} # e.g., 'Program', 'Version', 'User'
         self.ConversionInfo = {} # e.g., 'Date'

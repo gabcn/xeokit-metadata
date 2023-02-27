@@ -333,6 +333,8 @@ class ifcBeamList(list[bimBeam]):
                 break
         return result
 
+    def FindByName(self, name: str) -> bimBeam:
+        return super().FindByName(name)
 
 # ==== ifcModel CLASS DEFINITION ==== #
 class ifcInfo:
@@ -351,7 +353,8 @@ class ifcInfo:
         self.Project: ifcopenshell.entity_instance  # (IfcProject)
         self.Site: ifcopenshell.entity_instance # (IfcSite)
         self.Building: ifcopenshell.entity_instance  # (IfcBuilding)
-        self.Storey: ifcopenshell.entity_instance  # (IfcBuildingStorey)
+        self.Storeys: list[ifcopenshell.entity_instance]  # (IfcBuildingStorey)
+        self.Storeys = []
         self.ExportedBeams = list() # list of IfcBeams
         
 
@@ -411,7 +414,7 @@ class ifcModel(classConceptModel):
             for beam in self._Beams[beamIndexes]:
                 self.IfcInfo.ExportedBeams.append(beam.exportBeamToIfc(self.IfcInfo))
 
-        _createContainment(self.IfcInfo)
+        self._createContainment(self.IfcInfo)
         _exportMaterialsToIfc(self.IfcInfo, self._MaterialList)
         _createMatAssociations(self.IfcInfo, self._Beams, self._MaterialList)
         _createStyles(self.IfcInfo, self._MaterialList)
@@ -499,23 +502,46 @@ class ifcModel(classConceptModel):
             # TODO: include "IfcPostalAddress" (geo location)
         )
 
-        IfcInfo.Storey = _createBuildingOrStorey(
-            IfcInfo,
-            'IfcBuildingStorey',
-            'Unique level', # TODO: include different levels (storeys)
-            'Level',
-            IfcInfo.WorldLocPlace, # TODO: improve (with level definition)
-            'UNique Level',
-            Elevation=IfcInfo.WorldCoords[2] # TODO: revise
-        )
+        for set in self.SetList:
+            newstorey = _createBuildingOrStorey(
+                IfcInfo,
+                'IfcBuildingStorey',
+                set.name, #'Unique level', # TODO: include different levels (storeys)
+                'Level',
+                IfcInfo.WorldLocPlace, # TODO: improve (with level definition)
+                set.name, #'UNique Level',
+                Elevation=IfcInfo.WorldCoords[2] # TODO: revise
+            )
+            set.IfcBuildingStorey = newstorey
+            IfcInfo.Storeys.append(newstorey)
 
-        _createRelAggreg(IfcInfo, IfcInfo.Building, [IfcInfo.Storey])
+        _createRelAggreg(IfcInfo, IfcInfo.Building, IfcInfo.Storeys)
         _createRelAggreg(IfcInfo, IfcInfo.Site, [IfcInfo.Building])
         _createRelAggreg(IfcInfo, IfcInfo.Project, [IfcInfo.Site])
 
         return IfcInfo.Project
 
 
+    def _createContainment(self, IfcInfo: ifcInfo):
+        notContainedBeams = self._Beams.nameList()
+
+        for storey in self.SetList:
+            beamList = []
+            for name in storey:
+                if name in notContainedBeams:
+                    beam = self._Beams.FindByName(name)
+                    beamList.append(beam.IfcBeam)
+                    notContainedBeams.remove(name)
+
+            IfcInfo.ifcFile.create_entity(
+                type='IfcRelContainedInSpatialStructure',
+                GlobalId=ifcopenshell.guid.new(),
+                OwnerHistory=IfcInfo.ownerHistory,
+                RelatedElements=beamList,
+                RelatingStructure=storey.IfcBuildingStorey
+            )
+            
+                
 
 
 
@@ -634,15 +660,6 @@ def _createRelAggreg(IfcInfo: ifcInfo,
         RelatedObjects = relatedObjs
     )
 
-def _createContainment(IfcInfo: ifcInfo):
-    return IfcInfo.ifcFile.create_entity(
-        type='IfcRelContainedInSpatialStructure',
-        GlobalId=ifcopenshell.guid.new(),
-        OwnerHistory=IfcInfo.ownerHistory,
-        RelatedElements=IfcInfo.ExportedBeams,
-        RelatingStructure=IfcInfo.Storey
-    )
-    
 
 def _createBuildingOrStorey(IfcInfo: ifcInfo, 
                             Type: str, # 'IfcBuilding' or 'IfcBuildingStorey'

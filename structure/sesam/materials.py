@@ -4,9 +4,8 @@ from structure.conceptmodel import MaterialProps, classMatList
 from structure.sesam.units import classSesamUnits
 #from typing import Tuple
 
-# ======== CLASSES ========== #
-
-    
+# ======== PROCEDURES ========== #
+ 
 def ImportMaterialsFromSesam(MaterialList: classMatList, xml_model: ET.Element, Units: classSesamUnits):
     """
     Import materials from a Sesam model
