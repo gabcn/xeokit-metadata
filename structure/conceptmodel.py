@@ -225,6 +225,28 @@ class classHPropsList(list[classMorisonCoeffs]):
         return super().append(__object)
     """
 
+# ==== EQUIPMENTS ==== #
+class classEquipment:
+    def __init__(self, name: str) -> None:
+        """
+        Equipment
+            * name
+        """
+        self.name = name
+        self.mass: float # (in kg)
+        self.origin: list[float] # (in meters) [x, y, z]
+        self.CoG: list[float] # (in meters) [x, y, z] relative to origin
+        self.dimensions: list[float] # (in meters) [x, y, z] 
+        self.footprint: list[float] # (in meters) [x1, y1, x2, y2] relative to origin
+        self.OrientationMatrix = [[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]]
+        self.LoadCase: str
+
+class classEquipList(list[classEquipment]):
+    def __init__(self, conceptModel: classConceptModel) -> None:
+        super().__init__()
+        self.conceptModel = conceptModel
+
+
 # ==== sections ==== #
 class SectionType(Enum):
     pipe_section = 1
@@ -927,24 +949,6 @@ class classLineTypeList(list[classSegProps]):
         return ok
 
 
-def _InterpHydCoeffsByDiameter(D: float, HydroCoeffs: classMorisonCoeffs) -> classMorCoeffPoint:
-    _D_list, _cd_list, _cm_list, _cd_nf_list, _cm_nf_list = [], [], [], [], []
-    
-    for pnt in HydroCoeffs.points:
-        _D_list.append(pnt.diameter)
-        _cd_list.append(pnt.cd)
-        _cm_list.append(pnt.cm)
-        _cd_list.append(pnt.cd)
-        _cm_list.append(pnt.cm)
-    
-    cd_D = interpolate.interp1d(_D_list, _cd_list)
-    cm_D = interpolate.interp1d(_D_list, _cm_list)
-    cd_nf_D = interpolate.interp1d(_D_list, _cm_list)
-    cm_nf_D = interpolate.interp1d(_D_list, _cm_list)
-    
-    return classMorCoeffPoint(D, cd_D(D), cm_D(D), cd_nf_D(D), cm_nf_D(D))
-
-
 class classSet(list[str]):
     """
     Class of set (group of entities)
@@ -1010,6 +1014,7 @@ class classConceptModel():
         self.IncludeTorsion = True
         self.Selections = classOptions()
         self.Environment = classEnvironment()
+        self.EquipmentList = classEquipList(self)
         self._Connections = classConnectList()#self)
         self._Beams = classBeamList(self)
         self.Supports = classSupportList(self)
@@ -1041,6 +1046,24 @@ class classConceptModel():
 
 
 # ==== PRIVATE METHODS ==== #
+def _InterpHydCoeffsByDiameter(D: float, HydroCoeffs: classMorisonCoeffs) -> classMorCoeffPoint:
+    _D_list, _cd_list, _cm_list, _cd_nf_list, _cm_nf_list = [], [], [], [], []
+    
+    for pnt in HydroCoeffs.points:
+        _D_list.append(pnt.diameter)
+        _cd_list.append(pnt.cd)
+        _cm_list.append(pnt.cm)
+        _cd_list.append(pnt.cd)
+        _cm_list.append(pnt.cm)
+    
+    cd_D = interpolate.interp1d(_D_list, _cd_list)
+    cm_D = interpolate.interp1d(_D_list, _cm_list)
+    cd_nf_D = interpolate.interp1d(_D_list, _cm_list)
+    cm_nf_D = interpolate.interp1d(_D_list, _cm_list)
+    
+    return classMorCoeffPoint(D, cd_D(D), cm_D(D), cd_nf_D(D), cm_nf_D(D))
+
+
 def _CalcBarSecProps(h, b):
     """
     Calcuate the properties of a bar (rectangular) section

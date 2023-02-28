@@ -1,6 +1,7 @@
 
 # LIBS
 from structure.conceptmodel import *
+from structure.sesam.equipment import ImportEquipmentsFromSesamm
 from structure.sesam.units import classSesamUnits
 from structure.sesam.materials import ImportMaterialsFromSesam
 from structure.sesam.sections import ImporSectionstFromSesam
@@ -19,6 +20,8 @@ class cSesamModel(classConceptModel):
         super().__init__()
         if xmlFile:
             self.ImportFromSesamConceptModel(xmlFile)
+
+        self.Selections.ExcludedEquipsLoadCases = []
 
     def _OpenXmlFile(self, xmlfile: str) -> ET.Element:        
         xml_tree = ET.parse(xmlfile)
@@ -49,6 +52,8 @@ class cSesamModel(classConceptModel):
         #self._Beams.DetectIntersections()        
 
         ImportSets(structure_domain, self.SetList, self.Selections.ExcludeSets, self._Message)
+
+        ImportEquipmentsFromSesamm(self, xml_model)
 
         print(self.Status())
 

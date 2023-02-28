@@ -66,7 +66,7 @@ def __ImpHydroProps(coeffs: ET.Element, hproplist: classHPropsList, funcErroMsg:
 
 def __ImportAllHydroCoeffs(morisoncoeffs: ET.Element, hproplist: classHPropsList, conceptModel: classConceptModel):
     for coeffs in morisoncoeffs:
-        __ImpHydroProps(coeffs, hproplist, conceptModel, conceptModel._Message)
+        __ImpHydroProps(coeffs, hproplist, conceptModel._Message)
 
 
 def ImportHydroPropsFromSesam(xml_model: ET.Element, hproplist: classHPropsList, conceptModel: classConceptModel):
