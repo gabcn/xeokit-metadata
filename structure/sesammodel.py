@@ -49,7 +49,7 @@ class cSesamModel(classConceptModel):
         #self._Beams.DetectIntersections()        
         #self._Connections.print()
 
-        ImportSets(structure_domain, self.SetList, self.Selections.ExcludeSets)
+        ImportSets(structure_domain, self.SetList, self.Selections.ExcludeSets, self._Message)
 
     def _ImportAdmInfo(self, xml_root: ET.Element):
         xml_adm = xml_root.find('administrative')

@@ -1,16 +1,6 @@
 # bim-tools
 Tools for BIM models
 
-# Building dependencies:
-    * Install Node.js (https://nodejs.org/en/download/)
-    * .NET 7.0 Runtime (https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/runtime-7.0.2-windows-x64-installer?cid=getdotnetcore)
-    * xeokit/xeokit-convert (https://github.com/xeokit/xeokit-convert)
-        - npm i @xeokit/xeokit-convert
-    * ifcConvert (https://github.com/IfcOpenShell/IfcOpenShell)
-    * COLLADA2GLTF (https://github.com/KhronosGroup/COLLADA2GLTF)
-    * xeokit-metadata (https://github.com/bimspot/xeokit-metadata)
-
-
 # Importing from Sesam:
     * `import structure.ifcsesam`
     * `model = structure.ifcsesam.modelIfcSesam(xmlSesamFile=sesamFilePath)`
@@ -31,3 +21,11 @@ Tools for BIM models
 ![Conversion scheme](oss_xkt_conversion.png "Conversion scheme")
 
 
+# Building dependencies:
+    * Install Node.js (https://nodejs.org/en/download/)
+    * .NET 7.0 Runtime (https://dotnet.microsoft.com/pt-br/download/dotnet/thank-you/runtime-7.0.2-windows-x64-installer?cid=getdotnetcore)
+    * xeokit/xeokit-convert (https://github.com/xeokit/xeokit-convert)
+        - npm i @xeokit/xeokit-convert
+    * ifcConvert (https://github.com/IfcOpenShell/IfcOpenShell)
+    * COLLADA2GLTF (https://github.com/KhronosGroup/COLLADA2GLTF)
+    * xeokit-metadata (https://github.com/bimspot/xeokit-metadata)
