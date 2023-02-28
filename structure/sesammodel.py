@@ -47,9 +47,10 @@ class cSesamModel(classConceptModel):
         structures = structure_domain.find('structures')   
         self._ImportStructures(structures, self.Selections)        
         #self._Beams.DetectIntersections()        
-        #self._Connections.print()
 
         ImportSets(structure_domain, self.SetList, self.Selections.ExcludeSets, self._Message)
+
+        print(self.Status())
 
     def _ImportAdmInfo(self, xml_root: ET.Element):
         xml_adm = xml_root.find('administrative')
@@ -80,7 +81,7 @@ class cSesamModel(classConceptModel):
                         self
                         )                    
                 elif structure.tag == 'support_point':
-                    ImportSupport(self.Supports, structure)
+                    ImportSupport(self.Supports, structure, self._Message)
                 else:
                     name = structure.get('name')
                     self._Message(f'Warning! The structure "{name}" type is "{structure.tag}", which is not supported '

@@ -1017,17 +1017,26 @@ class classConceptModel():
         self._MaterialList = classMatList()
         self._HydroProps = classHPropsList()
         self.SetList = classSetList(self)
-        self.LogFile = open('log.txt', 'w')
+        self.__LogFileName = 'log.txt'
+        self.LogFile = open(self.__LogFileName, 'w')
         self.OriginInfo = {} # e.g., 'Program', 'Version', 'User'
         self.ConversionInfo = {} # e.g., 'Date'
+        self.__nMessages = 0
 
    
     def _Message(self, text: str, end: str = '\n') -> None:
         #print(text, end=end)
+        self.__nMessages += 1
         if end != '\n': ftxt = str(text).rstrip('\n')
         else: ftxt = text+end #+"\n"
         self.LogFile.write(ftxt)
        
+    def Status(self) -> str:
+        txt = 'There are no error/warning messages reported.'
+        if self.__nMessages > 0:
+            txt = f'\nThere are {self.__nMessages} error/warning mensages.' + \
+                  f' See file {self.__LogFileName} for more details.'
+        return(txt)
 
 
 

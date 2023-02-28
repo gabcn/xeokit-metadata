@@ -24,7 +24,6 @@ def __GetStraightSegments(xml_structure: ET.Element,
         nseg += 1
         if seg.tag != 'straight_segment':
             conceptModel._Message(f'Warning! Segments which are not straight ({seg.tag}) are not supported in this version of the converter.')
-            #print(f'Warning! Segments which are not straight ({seg.tag}) are not supported in this version of the converter.')
         else:
             __ProcStraightSeg(seg, sections, beam, env, conceptModel)    
 
@@ -42,12 +41,9 @@ def __ProcStraightSeg(segment: ET.Element,
     if section not in sections.SectionNames():
         conceptModel._Message(f'Warning! A segment of the structure {beam.name} is defined ' +\
               f'with the section {section}, which could not be imported.')
-        #print(f'Warning! A segment of the structure {beam.name} is defined ' +\
-        #      f'with the section {section}, which could not be imported.')
     else:
         EndA, EndB = _GetCoordsABfromSeg(segment)
         if (EndA[0], EndA[1], EndA[2]) != (beam.LastPos[0], beam.LastPos[1], beam.LastPos[2]):
-            #print(f'Warning! Discontinuities between segments will be disregarded.')
             conceptModel._Message(
                 f'Warning! Discontinuities between segments will be disregarded. ' + \
                 '\nEnd position of the previous segment: ' + \

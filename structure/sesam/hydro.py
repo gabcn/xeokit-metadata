@@ -1,34 +1,37 @@
 # ========== LIBS =========== #
 import xml.etree.ElementTree as ET
 from structure.conceptmodel import classMorisonCoeffs, classDirections, classHPropsList, classMorCoeffPoint, classConceptModel
+from pyclbr import Function
 
 # ======= CONSTANTS ========= #
 
 
 # ======== METHODS ========== #   
-def __ImportConstDrag(coeffs: ET.Element) -> classMorisonCoeffs:
+def __ImportConstDrag(coeffs: ET.Element, funcErroMsg: Function) -> classMorisonCoeffs:
     name = coeffs.get('name')
     cd = classDirections()
     try:
         # TODO: include local reference system
         cd.z, cd.x, cd.y = float(coeffs[0].get('c_dx')), float(coeffs[0].get('c_dy')), float(coeffs[0].get('c_dz'))   
     except:
-        print('Error trying to obtain drag coefficients from the xml file!')
+        funcErroMsg('Error trying to obtain drag coefficients from the xml file!')
+        #print('Error trying to obtain drag coefficients from the xml file!')
     else:
         return classMorisonCoeffs(name, cd)
 
-def __ImpMorisonCoefs(coeffs: ET.Element, hpropitem: classMorisonCoeffs) -> None:
+def __ImpMorisonCoefs(coeffs: ET.Element, hpropitem: classMorisonCoeffs, funcErroMsg: Function) -> None:
     cm, ca = classDirections(), classDirections()
     try:
         cm.z, cm.x, cm.y = float(coeffs[0].get('c_mx')), float(coeffs[0].get('c_my')), float(coeffs[0].get('c_mz'))   
     except:
-        print('Error trying to obtain Morison coefficients from the xml file!')
+        funcErroMsg('Error trying to obtain Morison coefficients from the xml file!')
+        #print('Error trying to obtain Morison coefficients from the xml file!')
     else:
         ca.x, ca.y, ca.z = max(0,cm.x-1), max(0,cm.y-1), max(0,cm.z-1) # TODO: revise ca (added mass coeff.) calculation according to Sesam (marine growth)
         # TODO: revise ca (added mass coeff.) calculation according to Sesam (marine growth)
         hpropitem.cm, hpropitem.ca = cm, ca
 
-def __ImpMorisonCoefsByD(coeffs: ET.Element) -> classMorisonCoeffs:
+def __ImpMorisonCoefsByD(coeffs: ET.Element, funcErroMsg: Function) -> classMorisonCoeffs:
     name = coeffs.get('name')
     if coeffs[0][0].tag != 'morison_coefficients_curve':
         raise Exception(f'Hydrod. coeff. by diameter data type {coeffs[0][0].tag} not supported.')
@@ -40,21 +43,22 @@ def __ImpMorisonCoefsByD(coeffs: ET.Element) -> classMorisonCoeffs:
             try:
                 D, cd, cm, cd_nf, cm_nf = float(_D), float(_cd), float(_cm), float(_cd_nf), float(_cm_nf)
             except:
-                print('Error trying to obtain hydrodynamic coefficients from the xml file!')
+                funcErroMsg('Error trying to obtain hydrodynamic coefficients from the xml file!')
+                #print('Error trying to obtain hydrodynamic coefficients from the xml file!')
             pnt = classMorCoeffPoint(D, cd, cm, cd_nf, cm_nf)
             newitem.points.append(pnt)    
     return newitem
 
-def __ImpHydroProps(coeffs: ET.Element, hproplist: classHPropsList, conceptModel: classConceptModel):
+def __ImpHydroProps(coeffs: ET.Element, hproplist: classHPropsList, funcErroMsg: Function):
     name = coeffs.get('name')
     type = coeffs[0].tag
     if type == 'constant_air_drag_coefficient':
-        newitem = __ImportConstDrag(coeffs)
+        newitem = __ImportConstDrag(coeffs, funcErroMsg)
     elif type == 'constant_morison_coefficients':
-        newitem = __ImportConstDrag(coeffs)
-        __ImpMorisonCoefs(coeffs, newitem)
+        newitem = __ImportConstDrag(coeffs, funcErroMsg)
+        __ImpMorisonCoefs(coeffs, newitem, funcErroMsg)
     elif type == 'morison_coefficients_by_diameter': 
-        newitem = __ImpMorisonCoefsByD(coeffs)
+        newitem = __ImpMorisonCoefsByD(coeffs, funcErroMsg)
     else: 
         raise Exception(f'Hydrodynamic coefficient type {type} not recognized by the current converter version.')
 
@@ -62,7 +66,7 @@ def __ImpHydroProps(coeffs: ET.Element, hproplist: classHPropsList, conceptModel
 
 def __ImportAllHydroCoeffs(morisoncoeffs: ET.Element, hproplist: classHPropsList, conceptModel: classConceptModel):
     for coeffs in morisoncoeffs:
-        __ImpHydroProps(coeffs, hproplist, conceptModel)
+        __ImpHydroProps(coeffs, hproplist, conceptModel, conceptModel._Message)
 
 
 def ImportHydroPropsFromSesam(xml_model: ET.Element, hproplist: classHPropsList, conceptModel: classConceptModel):

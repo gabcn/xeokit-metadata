@@ -9,6 +9,7 @@ Required packages:
 # LIBS
 from __future__ import annotations
 from dataclasses import dataclass
+from pyclbr import Function
 import ifcopenshell
 import ifcopenshell.util.representation as ifcrep
 import ifcopenshell.util.unit as ifcunit
@@ -107,7 +108,9 @@ class bimBeam(classBeam):
                       ifcFile: ifcopenshell.file, 
                       ifcBeam: ifcopenshell.entity_instance, 
                       context: str, 
-                      subcontext: str) -> None:
+                      subcontext: str,
+                      funcErrorMsg: Function
+                      ) -> None:
         """
         Imports the beam information from an IFC file
         * ifcFile: IFC file loaded by ifcopenshell.open()
@@ -224,7 +227,8 @@ class bimBeam(classBeam):
             calcLength = self.length
             # verify the length
             if abs(calcLength-ifcLength)/ifcLength > self.lengthTol:
-                print(f'Warning! Calculated length {calcLength}m different of the IFC pset data length {ifcLength}m.')
+                funcErrorMsg(f'Warning! Calculated length {calcLength}m different of the IFC pset data length {ifcLength}m.')
+                #print(f'Warning! Calculated length {calcLength}m different of the IFC pset data length {ifcLength}m.')
         
         id1 = self.PropSet[psetKeysID[0]][psetKeysID[1]]
         id2 = ifcBeam.GlobalId
@@ -338,7 +342,8 @@ class ifcBeamList(list[bimBeam]):
 
 # ==== ifcModel CLASS DEFINITION ==== #
 class ifcInfo:
-    def __init__(self) -> None:
+    def __init__(self, funcErrorMsg: Function) -> None:
+        self.ErrorMsg = funcErrorMsg # error/warning issue method
         self.ifcFile: ifcopenshell.file 
         self.ownerHistory: ifcopenshell.entity_instance # (IfcOwnerHistory)
         self.WorldCoords: list[float] # [x, y, z]
@@ -362,7 +367,7 @@ class ifcModel(classConceptModel):
     def __init__(self, ifcFilePath: str = None) -> None:
         super().__init__()
         self._Beams = ifcBeamList(self, ifcFilePath)
-        self.IfcInfo = ifcInfo()        
+        self.IfcInfo = ifcInfo(self._Message)        
 
     def ExportToIFC(self, ifcFilePath: str, beamIndexes: slice = None) -> None:
         self.IfcInfo.ifcFile = ifcopenshell.file(schema='IFC4')
@@ -420,6 +425,8 @@ class ifcModel(classConceptModel):
         _createStyles(self.IfcInfo, self._MaterialList)
 
         self.IfcInfo.ifcFile.write(ifcFilePath)
+
+        print(self.Status())
 
 
     def _writeProjectData(self, IfcInfo: ifcInfo) -> ifcopenshell.entity_instance:
@@ -594,9 +601,12 @@ def _createMatAssociations(IfcInfo: ifcInfo,
         for i in range(1, len(beam.SegmentList)): 
             if beam.SegmentList[i].properties.material != \
                 beam.SegmentList[i-1].properties.material:
-                print(f'Warning! Beam {beam.name} has segments with ' + \
+                IfcInfo.ErrorMsg(f'Warning! Beam {beam.name} has segments with ' + \
                        'different materials. Only the material of the '+\
                        'first segment will be considered.')
+                #print(f'Warning! Beam {beam.name} has segments with ' + \
+                #       'different materials. Only the material of the '+\
+                #       'first segment will be considered.')
 
         matName = beam.SegmentList[0].properties.material
         ifcBeam = beam.IfcBeam
@@ -857,14 +867,16 @@ def _createIfcObjPlace(beam: classBeam,
 
 def _createIfcLine(ifcFile: ifcopenshell.file,
                    pointA: list[float],
-                   pointB: list[float]
+                   pointB: list[float],
+                   funcErrorMsg: Function
                   ) -> tuple[ifcopenshell.entity_instance,
                              ifcopenshell.entity_instance]:
     pnt = _createCartesianPnt(ifcFile, pointA)
     adir = np.array(pointB) - np.array(pointA)
     length = np.linalg.norm(adir)
     if length == 0: 
-        print(f'Warning! Beam with zero length')
+        funcErrorMsg(f'Warning! Beam with zero length')
+        #print(f'Warning! Beam with zero length')
         length = 1
     adirnorm = adir*(1./length)
     dir = adirnorm.tolist()
@@ -882,7 +894,7 @@ def _createAxisRep(
                    ) -> ifcopenshell.entity_instance:
     
     
-    ifcLine, trimm1 = _createIfcLine(ifcInfo.ifcFile, pointA, pointB)
+    ifcLine, trimm1 = _createIfcLine(ifcInfo.ifcFile, pointA, pointB, ifcInfo.ErrorMsg)
     trimm2 = _createCartesianPnt(ifcInfo.ifcFile, pointB)
     trimmedCurve = ifcInfo.ifcFile.create_entity(
         type='IfcTrimmedCurve',
@@ -995,7 +1007,8 @@ def _createSegBodyRep(
     elif sectype == SectionType.bar_section:
         CrossSection = __createBarProfile(IfcInfo, secptr)
     else:
-        print(f'Section type {sectype} not supported yet.')
+        IfcInfo.ErrorMsg(f'Warning! Section type {sectype} not supported yet.')
+        #print(f'Section type {sectype} not supported yet.')
         return None
     
     relIniPos = np.array(segment.IniPos) - np.array(beam.IniPos) # relative position to the object placement
@@ -1104,8 +1117,10 @@ def __createBoxProfile(
         f'tw={thickness*1e3:.1f}mm'
 
     if section.tw != section.tfbot or section.tw != section.tftop:
-        print('Warning! Diference between flanges of box sections will be '+\
+        IfcInfo.ErrorMsg('Warning! Diference between flanges of box sections will be '+\
             'disregarded.') # TODO: Handle this case
+        #print('Warning! Diference between flanges of box sections will be '+\
+        #    'disregarded.') # TODO: Handle this case
         
     BoxSectionProf = IfcInfo.ifcFile.create_entity(
         type='IfcRectangleHollowProfileDef',
@@ -1128,8 +1143,10 @@ def __createBarProfile(
     ProfName = f'Bar section h={section.h*1e3:.1f}; b={section.b*1e3:.1f}mm'
 
     if section.tw != section.tfbot or section.tw != section.tftop:
-        print('Warning! Diference between flanges of box sections will be '+\
+        IfcInfo.ErrorMsg('Warning! Diference between flanges of box sections will be '+\
             'disregarded.') # TODO: Handle this case
+        #print('Warning! Diference between flanges of box sections will be '+\
+        #    'disregarded.') # TODO: Handle this case
         
     BarSectionProf = IfcInfo.ifcFile.create_entity(
         type='IfcRectangleProfileDef',

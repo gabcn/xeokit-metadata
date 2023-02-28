@@ -1,4 +1,5 @@
 # ========== LIBS =========== #
+from pyclbr import Function
 import xml.etree.ElementTree as ET
 from structure.conceptmodel import classPipeSection, classISection, classSectionList, classBoxSection, classConceptModel
 
@@ -20,12 +21,12 @@ def __ProcessSections(xml_sections: ET.Element, seclist: classSectionList, conce
     for section in xml_sections.findall('section'):
         secname = section.get('name')
         SecType = _GetSectionType(section)
-        if SecType == 'pipe_section': sectionobj = __ProcPipeSection(section)   
+        if SecType == 'pipe_section': sectionobj = __ProcPipeSection(section, conceptModel._Message)   
         elif SecType == 'i_section': sectionobj = __ProcISection(section)       
         elif SecType == 'pgd_section': sectionobj = __ProcISection(section)     # double I
-        elif SecType == 'bar_section': sectionobj = __ProcBarSection(section)
-        elif SecType == 'box_section': sectionobj = __ProcBoxSection(section)
-        elif SecType == 'pgb_section': sectionobj = __ProcBoxSection(section)   # double box
+        elif SecType == 'bar_section': sectionobj = __ProcBarSection(section, conceptModel._Message)
+        elif SecType == 'box_section': sectionobj = __ProcBoxSection(section, conceptModel._Message)
+        elif SecType == 'pgb_section': sectionobj = __ProcBoxSection(section, conceptModel._Message)   # double box
         else: conceptModel._Message(f'Warning! The beam section "{secname}" type is "{SecType}", which is not recognized.')   
 
         props = section[0]
@@ -41,15 +42,17 @@ def __ProcessSections(xml_sections: ET.Element, seclist: classSectionList, conce
 
         seclist.Add(sectionobj)
 
-def __ProcPipeSection(section: ET.Element) -> classPipeSection:
+def __ProcPipeSection(section: ET.Element, funcErroMsg: Function) -> classPipeSection:
     secname = section.get('name')
     props = section[0]
     _od, _th = props.get('od'), props.get('th')
     try:
         od, th = float(_od), float(_th)
     except:
-        print('Error converting pipe sections parameters '
+        funcErroMsg('Error converting pipe sections parameters '
             + f'({_od}, {_th})from text to float.')
+        #print('Error converting pipe sections parameters '
+        #    + f'({_od}, {_th})from text to float.')
     else:        
         sectionobj = classPipeSection(secname, od, th)
         return sectionobj
@@ -70,13 +73,15 @@ def __ProcISection(section: ET.Element):
 
     return sectionobj
 
-def __ProcBarSection(section: ET.Element):
+def __ProcBarSection(section: ET.Element, funcErroMsg: Function):
     secname = section.get('name')
     props = section[0]
     _h, _b, _sfy, _sfz = props.get('h'), props.get('b'), props.get('sfy'), props.get('sfz')
     if _sfy != '1' or _sfz != '1': 
-        print(f'Warning! Bar section {secname} has sfy <> sfz ({_sfy} and {_sfz}), ' \
+        funcErroMsg(f'Warning! Bar section {secname} has sfy <> sfz ({_sfy} and {_sfz}), ' \
                'which is not supported by the current version of the converter.')
+        #print(f'Warning! Bar section {secname} has sfy <> sfz ({_sfy} and {_sfz}), ' \
+        #       'which is not supported by the current version of the converter.')
     try:
         h, b = float(_h), float(_b)
     except:
@@ -87,15 +92,17 @@ def __ProcBarSection(section: ET.Element):
 
     return sectionobj          
 
-def __ProcBoxSection(section: ET.Element):
+def __ProcBoxSection(section: ET.Element, funcErroMsg: Function):
     secname = section.get('name')
     p = section[0]
     _h, _b, _tw, tftop, tfbot, _sfy, _sfz, otw = \
         p.get('h'), p.get('b'), p.get('tw'), p.get('tftop'), \
         p.get('tfbot'), p.get('sfy'), p.get('sfz'), p.get('otw')
     if _sfy != '1' or _sfz != '1': 
-        print(f'Warning! Bar section {secname} has sfy <> sfz ({_sfy} and {_sfz}), ' \
+        funcErroMsg(f'Warning! Bar section {secname} has sfy <> sfz ({_sfy} and {_sfz}), ' \
                'which is not supported by the current version of the converter.')
+        #print(f'Warning! Bar section {secname} has sfy <> sfz ({_sfy} and {_sfz}), ' \
+        #       'which is not supported by the current version of the converter.')
     try:
         h, b, tw = float(_h), float(_b), float(_tw)
         if tftop != None: tftop, tfbot = float(tftop), float(tfbot)
