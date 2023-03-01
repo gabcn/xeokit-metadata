@@ -17,26 +17,29 @@ import os
 # FUNCTION
 class ConvIfcToXkt:
         """Conversion from .IFC file to .XKT"""
-        def __init__(self, ifcFile: str) -> None:
+        def __init__(self, ifcFile: str, output: str = None) -> None:
                 self.ifcFile = ifcFile
                 self.daeFile = ifcFile.replace('.ifc', '.dae')
                 self.gltfFile = ifcFile.replace('.ifc', '.gltf') 
                 self.jsonFile = ifcFile.replace('.ifc', '.json')
-                self.xktFile = ifcFile.replace('.ifc', '.xkt')
+                if output: self.xktFile = output
+                else: self.xktFile = ifcFile.replace('.ifc', '.xkt')
+                
                 if self.__convIfcToXkt():
                         print('Successfull file conversion .')
                 else:
                         print('Erro converting file.')
 
-        def __checkfile(self, file: str) -> bool:
+        def __checkfile(self, file: str, errorMsg: bool = True) -> bool:
                 if not os.path.isfile(file):
-                        print(f'ERROR! File {file} not created.')
+                        if errorMsg: print(f'ERROR! File {file} not created.')
                         return False
                 else:
                         return True
 
         def __convIfcToDae(self) -> bool:
                 print('\n\n==== Converting from .ifc to .dae (COLLADA) ====')
+                if self.__checkfile(self.daeFile): os.remove(self.daeFile)                        
                 cmdline = f'"{ifcConvPath}" --use-element-guids '+\
                           f'{self.ifcFile} {self.daeFile} --exclude=entities IfcOpeningElement'
                 os.system(cmdline)
