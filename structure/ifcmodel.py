@@ -657,7 +657,6 @@ def _setPropValue(IfcInfo: ifcInfo,
     '''
     return pset
 
-
 def _createRelAggreg(IfcInfo: ifcInfo, 
                      parentObj: ifcopenshell.entity_instance,
                      relatedObjs: list[ifcopenshell.entity_instance]
