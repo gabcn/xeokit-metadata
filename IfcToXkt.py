@@ -53,6 +53,7 @@ class ConvIfcToXkt:
                 cmdline = rf'"{colladaPath}" --materialsCommon' + \
                         f' -i {self.daeFile} -o {self.gltfFile}'
                 os.system(cmdline)
+                os.remove(self.daeFile)  # erase file
                 if self.__checkfile(self.gltfFile): 
                         return True
                 else:
@@ -79,6 +80,8 @@ class ConvIfcToXkt:
                 cmdline =  'node.exe conv-gltf-and-json-to-xkt.js '+\
                            f'{self.gltfFile} {self.jsonFile} {self.xktFile} -l'
                 os.system(cmdline)
+                os.remove(self.gltfFile) # erase file
+                os.remove(self.jsonFile) # erase file
                 return self.__checkfile(self.xktFile)
 
         def __uninstallXeoKit(self):
