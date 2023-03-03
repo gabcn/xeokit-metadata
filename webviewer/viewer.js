@@ -1,17 +1,25 @@
 //const modelFile = "../models/2023.02.28.FRADE_SRU.ifc";
 //const modelFile = "../models/2023.02.28.FRADE_SRU.xkt";
 const modelFile = "../models/example2.xkt";
+const csvFile = '../models/example2.csv';
 
+//------------------------------------------------------------------------------------------------------------------
+// LIBS
+//------------------------------------------------------------------------------------------------------------------
 import {Viewer, WebIFCLoaderPlugin, XKTLoaderPlugin, TreeViewPlugin} from
     "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+
+import {csvDataBase, getFatigueResults} 
+    from "./assessrst.js";
+
+const csvDB = new csvDataBase(csvFile);
+var model; 
+var buttons = new Object();
 
 const viewer = new Viewer({
     canvasId: "myCanvas",
     transparent: true
 });
-
-var model;
-
 viewer.camera.eye = [-3.933, 2.855, 27.018];
 viewer.camera.look = [4.400, 3.724, 8.899];
 viewer.camera.up = [-0.018, 0.999, 0.039];
@@ -36,7 +44,7 @@ const treeView = new TreeViewPlugin(viewer, {
 
 
 //------------------------------------------------------------------------------------------------------------------
-// Funcions to load the file
+// Funcions to load the model file
 //------------------------------------------------------------------------------------------------------------------
 function loadIFCfile(file) {
     const webIFCLoader = new WebIFCLoaderPlugin(viewer, {
@@ -44,7 +52,7 @@ function loadIFCfile(file) {
     });
     model = webIFCLoader.load({
         src: file, //"../models/2023.02.28.FRADE_SRU.ifc",
-        edges: true
+        edges: true        
     });    
 }
 
@@ -54,7 +62,8 @@ function loadXKTfile(file) {
         id: "myModel",
         src: file, 
         //excludeTypes: ["IfcSpace"],
-        edges: true
+        edges: true,
+        //globalizeObjectIds: true
     });
    
 }
@@ -65,39 +74,61 @@ function getFileExt(file) {
     return splited[n-1];
 }
 
-function loadModelFile(file){
+
+function loadModelFile(file) {
+
     const fileExt = getFileExt(file);
     if (fileExt == 'ifc') {
         loadIFCfile(modelFile);
     } else if (fileExt == 'xkt') {
         loadXKTfile(modelFile);
     }    
+    console.log(viewer.metaScene)
 }
 
-function getULSresults() {
-    console.log("ULS");
-    console.log(model.entityList)
+function plotULSresults() {
     for (const obj of model.entityList) {
-        console.log(obj.id);
-        console.log(obj.Name);
-        obj.colorize = [1, 0, 0];
+        const id = obj.id;
+        const valueUC = csvDB.getUC(id);
+        if (valueUC) {
+            console.log('Member: ' + id + ' UC = ' + valueUC )
+            obj.colorize = csvDB.getUCColor(id);
+            obj.opacity = 1;
+        } else {
+            obj.opacity = 0.2;
+        }
     }
-    //model.objects.forEach( obj =>
-    //    console.log(obj.id)
-    //) 
-    
+    console.log(csvDB.getUC('1j4GtMWkT5re2FwlxmMXH2'));
+    setBtnActiveColor('ULS');
 }
 
-function getFatigueResults() {
-    console.log("Fatigue");
+function plotFatigueResults() {
+    //getFatigueResults;
+
+    setBtnActiveColor('Fatigue');
+}
+
+
+function setBtnActiveColor(btnName) {
+    for (const [key, btn] of Object.entries(buttons)) {
+        if (key == btnName) {
+            btn.style['background-color'] = 'orange'
+        } else {
+            btn.style['background-color'] = 'lightgray'
+        }
+    }
 }
 
 
 loadModelFile(modelFile)
 
 
+
 let btnULS = document.getElementById("btnULS")
-btnULS.onclick = getULSresults;
+btnULS.onclick = plotULSresults;
+buttons['ULS'] = btnULS
 
 let btnFatigue = document.getElementById("btnFatigue")
-btnFatigue.onclick = getFatigueResults;
+btnFatigue.onclick = plotFatigueResults;
+buttons['Fatigue'] = btnFatigue
+

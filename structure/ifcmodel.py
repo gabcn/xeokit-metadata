@@ -769,8 +769,8 @@ def _exportEquipToIfc(IfcInfo: ifcInfo, Equipment: classEquipment
     data['ObjectPlacement'] = ObjPlacement
     data['Representation'] = ifcProdDefShape
 
-    #IfcEquip = IfcInfo.ifcFile.create_entity(type = 'IfcElement',**data)
-    IfcEquip = IfcInfo.ifcFile.create_entity(type = 'IfcBeam',**data) # TODO: testin IfcBeam or IfcElement
+    IfcEquip = IfcInfo.ifcFile.create_entity(type = 'IfcElement',**data)
+    #IfcEquip = IfcInfo.ifcFile.create_entity(type = 'IfcBeam',**data) # TODO: testin IfcBeam or IfcElement
     return IfcEquip, BodyRep
 
 def _createBoxSolid(

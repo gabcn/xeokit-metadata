@@ -81,7 +81,7 @@ class ConvIfcToXkt:
                            f'{self.gltfFile} {self.jsonFile} {self.xktFile} -l'
                 os.system(cmdline)
                 os.remove(self.gltfFile) # erase file
-                os.remove(self.jsonFile) # erase file
+                #os.remove(self.jsonFile) # erase file
                 return self.__checkfile(self.xktFile)
 
         def __uninstallXeoKit(self):
