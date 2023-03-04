@@ -6,8 +6,10 @@ const csvFile = '../models/example2.csv';
 //------------------------------------------------------------------------------------------------------------------
 // LIBS
 //------------------------------------------------------------------------------------------------------------------
+//import {Viewer, WebIFCLoaderPlugin, XKTLoaderPlugin, TreeViewPlugin} from
+//    "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
 import {Viewer, WebIFCLoaderPlugin, XKTLoaderPlugin, TreeViewPlugin} from
-    "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
+    "./dist/xeokit-sdk.min.es.js";
 
 import {csvDataBase, getFatigueResults} 
     from "./assessrst.js";
@@ -51,9 +53,10 @@ function loadIFCfile(file) {
         wasmPath: "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/"
     });
     model = webIFCLoader.load({
-        src: file, //"../models/2023.02.28.FRADE_SRU.ifc",
+        src: file, 
         edges: true        
-    });    
+    });
+    
 }
 
 function loadXKTfile(file) {
@@ -65,7 +68,7 @@ function loadXKTfile(file) {
         edges: true,
         //globalizeObjectIds: true
     });
-   
+    return xktLoader   
 }
 
 function getFileExt(file) {
@@ -75,31 +78,43 @@ function getFileExt(file) {
 }
 
 
+
 function loadModelFile(file) {
 
     const fileExt = getFileExt(file);
     if (fileExt == 'ifc') {
-        loadIFCfile(modelFile);
+        return loadIFCfile(modelFile);
     } else if (fileExt == 'xkt') {
-        loadXKTfile(modelFile);
+        return loadXKTfile(modelFile);
     }    
-    console.log(viewer.metaScene)
 }
 
 function plotULSresults() {
     for (const obj of model.entityList) {
+        //console.log(obj.colorize)
         const id = obj.id;
         const valueUC = csvDB.getUC(id);
+        obj.colorize = csvDB.getUCColor(id);
         if (valueUC) {
-            console.log('Member: ' + id + ' UC = ' + valueUC )
-            obj.colorize = csvDB.getUCColor(id);
+            //console.log('Member: ' + id + ' UC = ' + valueUC )
             obj.opacity = 1;
         } else {
-            obj.opacity = 0.2;
+            obj.opacity = 0.4;
+        }        
+
+        //const metaObj = (viewer.metaScene.metaObjects)[id];
+        //console.log(metaObj);//["3tCw4OaF14lRBNgCr7cdqX"]);
+
+    setBtnActiveColor('ULS');
+    /*
+    for (const [key, value] of Object.entries(viewer.metaScene.metaObjects)) {
+        //console.log(key);
+        if (value.type != 'IfcBeam') {
+            console.log(value)
         }
     }
-    console.log(csvDB.getUC('1j4GtMWkT5re2FwlxmMXH2'));
-    setBtnActiveColor('ULS');
+    */
+}    
 }
 
 function plotFatigueResults() {
@@ -120,7 +135,7 @@ function setBtnActiveColor(btnName) {
 }
 
 
-loadModelFile(modelFile)
+let loader = loadModelFile(modelFile)
 
 
 

@@ -1,5 +1,4 @@
 
-export {csvDataBase, getFatigueResults};
 
 //var resultData;
 
@@ -75,4 +74,5 @@ function getFatigueResults() {
     console.log("Fatigue");
 }
 
+export {csvDataBase, getFatigueResults};
 
