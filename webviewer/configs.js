@@ -16,7 +16,7 @@ const colorsBlueToRed6colors = [
 
 const valuesExtractGeni = [0.01, 0.5, 0.8, 1.0, 1.33];
 const colorsExtractGeni = [
-    'rgb(200,200,200)', 'rgb(127,178,255)', 'green', 
+    'rgb(200,200,200)', 'rgb(127,178,255)', 'rgb(0,255,0)', 
     'yellow', 'rgb(255,150,50)','rgb(255,0,0)'
 ];
 
