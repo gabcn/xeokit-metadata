@@ -8,23 +8,28 @@ const csvFile = '../models/example2.csv';
 //------------------------------------------------------------------------------------------------------------------
 //import {Viewer, WebIFCLoaderPlugin, XKTLoaderPlugin, TreeViewPlugin} from
 //    "https://cdn.jsdelivr.net/npm/@xeokit/xeokit-sdk/dist/xeokit-sdk.es.min.js";
-import {Viewer, WebIFCLoaderPlugin, XKTLoaderPlugin, TreeViewPlugin} from
+import { Viewer, WebIFCLoaderPlugin, XKTLoaderPlugin, TreeViewPlugin } from
     "./dist/xeokit-sdk.min.es.js";
 
-import {csvDataBase, getFatigueResults} 
-    from "./assessrst.js";
+import { csvDataBase, getFatigueResults } from "./assessrst.js";
+import { classColorScale } from "./colorscale.js";
+import { colorsBlueToRed, colorsBelowAndAboveAll, minAndMaxUC } from "./configs.js"
 
 const csvDB = new csvDataBase(csvFile);
 var model; 
 var buttons = new Object();
 
 const viewer = new Viewer({
-    canvasId: "myCanvas",
+    canvasId: "cavas3Dview",
     transparent: true
 });
 viewer.camera.eye = [-3.933, 2.855, 27.018];
 viewer.camera.look = [4.400, 3.724, 8.899];
 viewer.camera.up = [-0.018, 0.999, 0.039];
+
+const scaleBarUC = new classColorScale(
+    "canvasColorScale", minAndMaxUC, colorsBlueToRed, colorsBelowAndAboveAll
+    );
 
 
 //------------------------------------------------------------------------------------------------------------------
@@ -41,7 +46,7 @@ const treeView = new TreeViewPlugin(viewer, {
     // we derive the center of each storey from, which we use to spatially sort the storeys on the
     // vertical axis. By default, this is all types, but sometimes some types of element will
     // span multiple storeys, so we have the ability to refine which types contribute to those center points.
-    sortableStoreysTypes: ["IfcBeam"]
+    sortableStoreysTypes: ["IfcBeam", "IfcElement"]
 });
 
 
@@ -54,7 +59,8 @@ function loadIFCfile(file) {
     });
     model = webIFCLoader.load({
         src: file, 
-        edges: true        
+        edges: true,
+        excludeUnclassifiedObjects: false        
     });
     
 }
@@ -67,6 +73,7 @@ function loadXKTfile(file) {
         //excludeTypes: ["IfcSpace"],
         edges: true,
         //globalizeObjectIds: true
+        excludeUnclassifiedObjects: false
     });
     return xktLoader   
 }
@@ -94,17 +101,20 @@ function plotULSresults() {
         //console.log(obj.colorize)
         const id = obj.id;
         const valueUC = csvDB.getUC(id);
-        obj.colorize = csvDB.getUCColor(id);
+        //obj.colorize = csvDB.getUCColor(id);
+        //console.log(scaleBarUC.colorForValue(valueUC));
+        obj.colorize = scaleBarUC.colorForValueNormalized(valueUC);
         if (valueUC) {
             //console.log('Member: ' + id + ' UC = ' + valueUC )
             obj.opacity = 1;
         } else {
             obj.opacity = 0.4;
         }        
+    }    
 
         //const metaObj = (viewer.metaScene.metaObjects)[id];
         //console.log(metaObj);//["3tCw4OaF14lRBNgCr7cdqX"]);
-
+    scaleBarUC.drawUCscaleBar();
     setBtnActiveColor('ULS');
     /*
     for (const [key, value] of Object.entries(viewer.metaScene.metaObjects)) {
@@ -114,7 +124,6 @@ function plotULSresults() {
         }
     }
     */
-}    
 }
 
 function plotFatigueResults() {
@@ -134,10 +143,20 @@ function setBtnActiveColor(btnName) {
     }
 }
 
+function hideShowTView() {
+    const container = document.getElementById("treeViewContainer");
+    //cont show = treeView.
+    //console.log(container.style.width);
+    if (container.style.width == "0px") {
+        container.style.width = "350px";        
+        btnHideShowTView.style.left = "360px";
+    } else {
+        container.style.width = "0px";
+        btnHideShowTView.style.left = "10px";
+    }
+}
 
 let loader = loadModelFile(modelFile)
-
-
 
 let btnULS = document.getElementById("btnULS")
 btnULS.onclick = plotULSresults;
@@ -145,5 +164,8 @@ buttons['ULS'] = btnULS
 
 let btnFatigue = document.getElementById("btnFatigue")
 btnFatigue.onclick = plotFatigueResults;
-buttons['Fatigue'] = btnFatigue
+buttons['Fatigue'] = btnFatigue;
+
+let btnHideShowTView = document.getElementById("btnHideShowTView");
+btnHideShowTView.onclick = hideShowTView;
 

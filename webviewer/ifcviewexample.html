@@ -8,18 +8,23 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <table>
-            <tr>
-                <td><img src="./img/nsg.png" alt="NSG logo" width="100"></td>
-                <td><p style="font-family:'Verdana'; font-size:25px">NSG Digital Twin</p></td>
-                <td><button id="btnULS" type="button">ULS</button></td>
-                <td><button id="btnFatigue" type="button">Fatigue</button></td>
-                <td>User name<br>Role</td>
-            </tr>
-        </table>
-
-        <canvas id="myCanvas"></canvas>
-        <div id="treeViewContainer"></div>
-    </body>
+        <div id="headerContainer">
+            <table>
+                <tr>
+                    <td><img id="logoNSG" src="./img/nsg.png" alt="NSG logo"></td>
+                    <td><p style="font-family:'Verdana'; font-size:25px">NSG Digital Twin</p></td>
+                    <td><button id="btnULS" class="results" type="button">ULS</button></td>
+                    <td><button id="btnFatigue" class="results" type="button">Fatigue</button></td>
+                    <td><p class="loginInfo">User name<br>Role</p></td>
+                </tr>
+            </table>
+        </div>
+        <div id="container3Dview">
+            <canvas id="cavas3Dview"></canvas>        
+            <button id="btnHideShowTView" type="button">&#9776</button>
+            <div id="treeViewContainer"></div>
+            <canvas id="canvasColorScale" width="1000px" height="100px"></canvas>        
+        </div>
+</body>
     <script src="viewer.js" type="module"></script>
 </html>

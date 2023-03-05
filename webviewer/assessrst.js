@@ -54,7 +54,7 @@ class csvDataBase {
         }
     }
 
-
+    /* 
     getUCColor(id) {
         const valueUC = this.getUC(id);
         if (valueUC) {
@@ -67,6 +67,7 @@ class csvDataBase {
         }
 
     }
+     */
 }
 
 
