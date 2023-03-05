@@ -1,4 +1,8 @@
-import "./libs/chroma.min.js"; // https://gka.github.io/chroma.js/
+import "./libs/chroma.min.js"; //Chroma API: https://gka.github.io/chroma.js/
+// canvas documentation:  https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas
+// text in canvas: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillText
+// rectangle: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillRect
+
 
 const digits = 2;
 const marginY = 10;
