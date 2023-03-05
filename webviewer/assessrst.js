@@ -37,7 +37,7 @@ class csvDataBase {
             const beamName = items[1];
             const valueUC = items[2];
             if (valueUC != 'N/A') {
-                newValues = new dbValues(beamName, valueUC, 0.);
+                newValues = new dbValues(beamName, parseFloat(valueUC), 0.);
                 this.data[id] = newValues;
                 //console.log(row);
             }

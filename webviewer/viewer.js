@@ -13,7 +13,11 @@ import { Viewer, WebIFCLoaderPlugin, XKTLoaderPlugin, TreeViewPlugin } from
 
 import { csvDataBase, getFatigueResults } from "./assessrst.js";
 import { classColorScale } from "./colorscale.js";
-import { colorsBlueToRed, colorsBelowAndAboveAll, minAndMaxUC } from "./configs.js"
+import { 
+    valuesExtractGeni, colorsExtractGeni,
+    valuesBlueToRed10colors, colorsBlueToRed10colors,
+    valuesBlueToRed6colors, colorsBlueToRed6colors
+    } from "./configs.js"
 
 const csvDB = new csvDataBase(csvFile);
 var model; 
@@ -28,8 +32,10 @@ viewer.camera.look = [4.400, 3.724, 8.899];
 viewer.camera.up = [-0.018, 0.999, 0.039];
 
 const scaleBarUC = new classColorScale(
-    "canvasColorScale", minAndMaxUC, colorsBlueToRed, colorsBelowAndAboveAll
-    );
+    "canvasColorScale", valuesExtractGeni, colorsExtractGeni
+//    "canvasColorScale", valuesBlueToRed10colors, colorsBlueToRed10colors
+//    "canvasColorScale", valuesBlueToRed6colors, colorsBlueToRed6colors
+);
 
 
 //------------------------------------------------------------------------------------------------------------------
@@ -102,13 +108,14 @@ function plotULSresults() {
         const id = obj.id;
         const valueUC = csvDB.getUC(id);
         //obj.colorize = csvDB.getUCColor(id);
-        //console.log(scaleBarUC.colorForValue(valueUC));
-        obj.colorize = scaleBarUC.colorForValueNormalized(valueUC);
-        if (valueUC) {
+        //console.log([valueUC, scaleBarUC.colorForValueNormalized(valueUC)]);
+        if (valueUC) { // if UC result is available
             //console.log('Member: ' + id + ' UC = ' + valueUC )
             obj.opacity = 1;
+            obj.colorize = scaleBarUC.colorForValueNormalized(valueUC);
         } else {
             obj.opacity = 0.4;
+            obj.colorize = [1.,1.,1.];
         }        
     }    
 

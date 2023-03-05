@@ -1,5 +1,6 @@
-import "./libs/chroma.min.js"
+import "./libs/chroma.min.js"; // https://gka.github.io/chroma.js/
 
+const digits = 2;
 const marginY = 10;
 const marginX = 10;
 const blwAbvWidth = 20;
@@ -15,28 +16,28 @@ const y0 = marginY + valuesTxtHeight + gapValuesColors;
  * @param {string} canvasId id of the canvas where the color bar will be draw
  * @param {array} extremeValues 
  * @param {array} colors
- * @param {array} colorsOusideExtreme colors to represenet values outside the extremeValues
  */   
 class classColorScale {
-    #colorPalette; 
+    //#colorPalette; 
     colorList = [];
     colorBelowAndAboveAll = [];
     constructor(
         canvasId,
-        extremeValues, 
+        limitingValues, 
         colors, 
-        colorsOusideExtreme,        
         ) {
         this.canvas = document.getElementById(canvasId);
         this.context2d = this.canvas.getContext("2d");
-        this.extremeValues = extremeValues;
+        this.limitingValues = limitingValues;
+        //this.extremeValues = extremeValues;
         //this.colorList = colors;
         this.#copyColorArray(colors, this.colorList);
-        this.#copyColorArray(colorsOusideExtreme, this.colorBelowAndAboveAll);
-        this.nSteps = colors.length;
-        this.deltValue = (extremeValues[1]-extremeValues[0])/this.nSteps;
-        this.domainValues = [extremeValues[0] + this.deltValue/2., extremeValues[1] - this.deltValue/2.];
-        this.#colorPalette = chroma.scale(colors).domain(this.domainValues);
+        //this.#copyColorArray(colorsOusideExtreme, this.colorBelowAndAboveAll);
+        this.nSteps = limitingValues.length-1;
+        //this.deltValue = (extremeValues[1]-extremeValues[0])/this.nSteps;
+        //this.domainValues = [extremeValues[0] + this.deltValue/2., extremeValues[1] - this.deltValue/2.];
+        //this.limitingValues = 
+        //this.#colorPalette = chroma.scale(colors).domain(this.domainValues);
 
         this.Width = this.canvas.width;
         this.Height = this.canvas.height;
@@ -72,8 +73,9 @@ class classColorScale {
      */
 
     colorForValue(value) {
-        var color;
+        //var color;
         //console.log(this.colorBelowAndAboveAll[1]);
+        /*
         if (value < this.extremeValues[0])
             color = this.colorBelowAndAboveAll[0];
         else if (value <= this.extremeValues[1])
@@ -81,6 +83,13 @@ class classColorScale {
         else
             color = this.colorBelowAndAboveAll[1];
         return color;    
+        */
+       //var color;
+       var i = -1;
+       while (++i<this.limitingValues.length) {
+        if (value < this.limitingValues[i]) { break; }
+       }
+       return this.colorList[i];
     }
 
     #drawRectangle(x, y, width, height, fillColor, lineColor) {        
@@ -101,10 +110,10 @@ class classColorScale {
 
             // below and above all colors
             this.#drawRectangle(
-                x0, y0, blwAbvWidth, this.rectHeight, this.colorBelowAndAboveAll[0], "black"
+                x0, y0, blwAbvWidth, this.rectHeight, this.colorList[0], "black"
                 );
             this.#drawRectangle(
-                this.Width-marginX-blwAbvWidth, y0, blwAbvWidth, this.rectHeight, this.colorBelowAndAboveAll[1], "black"
+                this.Width-marginX-blwAbvWidth, y0, blwAbvWidth, this.rectHeight, this.colorList[this.colorList.length-1], "black"
                 );
           
             // colors and text from Ini do End
@@ -113,16 +122,17 @@ class classColorScale {
             for (var i=0; i<=this.nSteps; i++) {
                 x = x0 + this.rectWidth*i;
                 y = y0;
-                valueRefColor = this.extremeValues[0] + (i+0.5)*this.deltValue;
+                valueRefColor = this.limitingValues[i]; //this.extremeValues[0] + (i+0.5)*this.deltValue;
                 if (i<this.nSteps) {
-                        color = this.colorForValue(valueRefColor);            
+                        color = this.colorList[i+1] //this.colorForValue(valueRefColor);            
                         //console.log(color);
                         this.#drawRectangle(x, y, this.rectWidth, this.rectHeight, color, "black");
                 }
     
                 // values
-                valueBoundary = valueRefColor - 0.5*this.deltValue;
-                valueTxt = valueBoundary.toFixed(1)
+                //valueBoundary = valueRefColor - 0.5*this.deltValue;
+                //valueTxt = valueBoundary.toFixed(digits)
+                valueTxt = valueRefColor.toFixed(digits);
                 this.context2d.font = "normal normal 400 " + valuesTxtHeight.toString() + "px arial";
                 this.context2d.fillStyle = "black";
                 txtWidth = this.context2d.measureText(valueTxt).width;
