@@ -1,0 +1,215 @@
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    user-select: none;
+}
+
+#headerContainer {
+    position: absolute;
+    height: 50px !important;
+    width: 100%;
+    padding: 0px;
+}
+
+#container3Dview{
+    position: absolute;
+    top: 50px; /* 100px; */
+    width: 100%; 
+    height: calc(100% - 50px);
+}
+
+#headerContainer p{
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+
+table {
+    position: relative;
+    border-collapse: collapse;
+    width: 100%;
+    height: inherit;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+}
+tr {
+    padding: 0px;
+}
+td {
+    text-align: center;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;    
+}
+
+#logoNSG{
+    height: 50px; /* 100%;  */
+}
+
+
+.results {
+    border: none;
+    color: blue;
+    padding: 10px 32px;
+    margin: 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: lightgray;
+  }
+
+.results:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* 
+iframe {
+    width: 100%;
+    height: 800px;
+} */
+
+
+
+#cavas3Dview {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: lightblue;
+    background-image: linear-gradient(lightblue, white);
+} 
+
+
+#canvasColorScale{
+    position: absolute;
+    /*right: 0;*/
+    left: calc(350px + 0.05*(100% - 350px)); /* 400px; */
+    /* right: 50px; */
+    bottom: 0;
+    width: calc(0.9*(100% - 350px));
+    /* width: 350px; */
+    /* height: 50px;     */
+    user-select: none;
+    visibility: hidden;
+    /* background-color: #ffffff; */
+    background-color: white;
+    /* opacity: 0.5; */
+}
+
+#btnHideShowTView {
+    position: absolute;
+    left: 360px;
+    transition: 0.5s; 
+
+    font-size: 15px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.534);
+    color: white;
+    padding: 5px 10px;
+    border: none;
+}
+
+/* ----------------------------------------------------------------------------------------------------------*/
+/* TreeViewPlugin */
+/* ----------------------------------------------------------------------------------------------------------*/
+
+#treeViewContainer {
+    pointer-events: all;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    position: relative; /* absolute; */
+    background-color: rgba(255, 255, 255, 0.2);
+    color: black;
+    /* top: 80px; */
+    z-index: 200000;
+    float: left;
+    left: 0;
+    padding-left: 10px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    width: 350px;
+    transition: 0.5s; 
+}
+
+#treeViewContainer ul {
+    list-style: none;
+    padding-left: 1.75em;
+    pointer-events: none;
+}
+
+#treeViewContainer ul li {
+    position: relative;
+    width: 500px;
+    pointer-events: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    vertical-align: middle;
+}
+
+#treeViewContainer ul li a {
+    background-color: #eee;
+    border-radius: 50%;
+    color: #000;
+    display: inline-block;
+    height: 1.5em;
+    left: -1.5em;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    width: 1.5em;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li a.plus {
+    background-color: #ded;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li a.minus {
+    background-color: #eee;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li a:active {
+    top: 1px;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li span:hover {
+    color: white;
+    cursor: pointer;
+    background: black;
+    padding-left: 2px;
+    pointer-events: all;
+}
+
+#treeViewContainer ul li span {
+    display: inline-block;
+    width: calc(100% - 50px);
+    padding-left: 2px;
+    pointer-events: all;
+    height: 23px;
+}
+
+#treeViewContainer .highlighted-node { /* Appearance of node highlighted with TreeViewPlugin#showNode() */
+    border: black solid 1px;
+    background: yellow;
+    color: black;
+    padding-left: 1px;
+    padding-right: 5px;
+    pointer-events: all;
+}
+
+

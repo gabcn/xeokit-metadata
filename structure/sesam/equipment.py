@@ -35,7 +35,8 @@ def ImportEquipmentsFromSesamm(conceptModel: classConceptModel, xml_model: ET.El
                         conceptModel._Message(f'Warning! Equip. load type {xml_item.tag} no supported.')
                     else:
                         newEqp = __ImportEqpLoad(conceptModel, sesamEqpList, xml_item)
-                        conceptModel.EquipmentList.append(newEqp)
+                        if newEqp:
+                            conceptModel.EquipmentList.append(newEqp)
                             
     
 def __ImportEqpLoad(conceptModel: classConceptModel, sesamEqpList: cSesamEqpList, xml_eqpLoad: ET.Element) -> classEquipment:

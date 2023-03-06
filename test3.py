@@ -1,6 +1,8 @@
-d = {}
-d['a'] = 1
-d['b'] = 2
+axis = 'z'
+index = {'x': 0, 'y': 1, 'z': 2}
+i = index[axis]
 
-for i in d.items():
-    print(i)
+lista = [0, 1, 2]
+
+
+print(lista[i])

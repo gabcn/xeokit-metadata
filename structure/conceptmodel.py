@@ -241,6 +241,14 @@ class classEquipment:
         self.footprint: list[float] # (in meters) [x1, y1, x2, y2] relative to origin
         self.OrientationMatrix = [[1.,0.,0.],[0.,1.,0.],[0.,0.,1.]]
         self.LoadCase: str
+    
+    def AxisVec(self, axis: str = 'x') -> list[float]:
+        """ Returns the vector [x, y, z] of the local axis of the equipment """
+        M = self.OrientationMatrix
+        index = {'x': 0, 'y': 1, 'z': 2}
+        i = index[axis]
+        zaxis = [M[0][i], M[1][i], M[2][i]]
+        return zaxis.copy()
 
 class classEquipList(list[classEquipment]):
     def __init__(self, conceptModel: classConceptModel) -> None:
@@ -1004,6 +1012,13 @@ class classSetList(list[classSet]):
             if member in set:
                 setsfound.append(set)
         return setsfound.copy()
+
+    def ListOfNames(self) -> list[str]:
+        """ Returns a list with all set names """
+        names = []
+        for set in self:
+            names.append(set.name)
+        return names.copy()
 
 
 

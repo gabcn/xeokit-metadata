@@ -2471,3 +2471,7 @@ Warning! Equip. load type equipment_rep no supported.
 Warning! Equip. load type equipment_rep no supported.
 Warning! Equip. load type equipment_rep no supported.
 Warning! Equip. load type equipment_rep no supported.
+Warning! Diference between flanges of box sections will be disregarded.
+Warning! Diference between flanges of box sections will be disregarded.
+Warning! Beam CELLAR_SEC_3Bm3122 has segments with different materials. Only the material of the first segment will be considered.
+Warning! Beam CELLAR_SEC_3Bm3122 has segments with different materials. Only the material of the first segment will be considered.
